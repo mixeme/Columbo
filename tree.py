@@ -17,16 +17,18 @@ class FileTreeWorker(QRunnable):
         self.icon_file = QIcon.fromTheme("text-x-generic", QIcon("icons/file.png"))
 
     def create_folder(self, path):
-        return QStandardItem(self.icon_folder, path)
+        return [QStandardItem(self.icon_folder, path), QStandardItem("Folder"), QStandardItem("---")]
 
     def create_file(self, path):
-        return QStandardItem(self.icon_file, path)
+        return [QStandardItem(self.icon_file, path), QStandardItem("File"), QStandardItem("XXX")]
 
     def run(self):
         root_node = self.create_folder(self.path)
+
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
         model.setHorizontalHeaderLabels(self.columns)
+
         self.tree_view.setModel(model)
         self.tree_view.header().resizeSection(0, 400)
 
@@ -34,7 +36,7 @@ class FileTreeWorker(QRunnable):
             # Normalize path with path separator "/" and remove root path component
             parts = root.replace("\\", "/").removeprefix(self.path).split("/")
 
-            current = root_node
+            current = root_node[0]
             for i in range(1, len(parts)):
                 found = False
                 for j in range(0, current.rowCount()):          # Find existing folder
@@ -45,16 +47,13 @@ class FileTreeWorker(QRunnable):
                 if not found:                                   # If such a folder does not exist
                     new_node = self.create_folder(parts[i])
                     current.appendRow(new_node)
-                    current = new_node
+                    current = new_node[0]
 
-            #for i in map(lambda x: self.create_folder(x), dirs):
-            #    current.appendRows(map(lambda x: self.create_folder(x), dirs))
+            for i in map(lambda x: self.create_folder(x), dirs):
+                current.appendRow(i)
 
-
-
-            current.appendRows(map(lambda x: self.create_folder(x), dirs))
-            current.appendRows(map(lambda x: self.create_file(x), files))
-
+            for i in map(lambda x: self.create_file(x), files):
+                current.appendRow(i)
 
 #a = FileTreeWorker("D:\\Local\\Загрузки", None)
 #a.run()
