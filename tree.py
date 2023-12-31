@@ -3,6 +3,8 @@ import os
 from PyQt5.QtCore import QRunnable
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 
+import file
+
 
 class FileTreeWorker(QRunnable):
     columns = ["Name", "Last modified", "Snapshot"]
@@ -17,10 +19,15 @@ class FileTreeWorker(QRunnable):
         self.icon_file = QIcon.fromTheme("text-x-generic", QIcon("icons/file.png"))
 
     def create_folder(self, path):
-        return [QStandardItem(self.icon_folder, path), QStandardItem("Folder"), QStandardItem("---")]
+        return [QStandardItem(self.icon_folder, path),
+                QStandardItem("Folder"),
+                QStandardItem("---")]
 
-    def create_file(self, path):
-        return [QStandardItem(self.icon_file, path), QStandardItem("File"), QStandardItem("XXX")]
+    def create_file(self, filename, root):
+
+        return [QStandardItem(self.icon_file, filename),
+                QStandardItem(file.get_last_modified(os.path.join(root, filename))),
+                QStandardItem(file.get_snapshot(filename))]
 
     def run(self):
         root_node = self.create_folder(self.path)
@@ -52,8 +59,5 @@ class FileTreeWorker(QRunnable):
             for i in map(lambda x: self.create_folder(x), dirs):
                 current.appendRow(i)
 
-            for i in map(lambda x: self.create_file(x), files):
+            for i in map(lambda x: self.create_file(x, root), files):
                 current.appendRow(i)
-
-#a = FileTreeWorker("D:\\Local\\Загрузки", None)
-#a.run()
