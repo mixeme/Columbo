@@ -16,8 +16,14 @@ class FileTreeWorker(QRunnable):
         self.icon_folder = QIcon.fromTheme("folder", QIcon("icons/folder.png"))
         self.icon_file = QIcon.fromTheme("text-x-generic", QIcon("icons/file.png"))
 
+    def create_folder(self, path):
+        return QStandardItem(self.icon_folder, path)
+
+    def create_file(self, path):
+        return QStandardItem(self.icon_file, path)
+
     def run(self):
-        root_node = QStandardItem(self.icon_folder, self.path) #[QStandardItem(self.icon_folder, self.path), QStandardItem("-"), QStandardItem("-")]
+        root_node = self.create_folder(self.path)
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
         model.setHorizontalHeaderLabels(self.columns)
@@ -37,11 +43,17 @@ class FileTreeWorker(QRunnable):
                         found = True
                         break
                 if not found:                                   # If such a folder does not exist
-                    new_node = QStandardItem(self.icon_folder, parts[i])
+                    new_node = self.create_folder(parts[i])
                     current.appendRow(new_node)
                     current = new_node
-            current.appendRows(map(lambda x: QStandardItem(self.icon_folder, x), dirs))
-            current.appendRows(map(lambda x: QStandardItem(self.icon_file, x), files))
+
+            #for i in map(lambda x: self.create_folder(x), dirs):
+            #    current.appendRows(map(lambda x: self.create_folder(x), dirs))
+
+
+
+            current.appendRows(map(lambda x: self.create_folder(x), dirs))
+            current.appendRows(map(lambda x: self.create_file(x), files))
 
 
 #a = FileTreeWorker("D:\\Local\\Загрузки", None)
