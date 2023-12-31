@@ -21,6 +21,9 @@ class history_ui(QtWidgets.QMainWindow):
             self.path_field.setText(selected_dir)
             QThreadPool.globalInstance().start(tree.FileTreeWorker(selected_dir, self.fileTreeView))
 
+    def scan_action(self):
+        pass
+
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
