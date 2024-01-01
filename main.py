@@ -6,6 +6,8 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QThreadPool
 from PyQt5.QtWidgets import QApplication, QFileDialog
 
+from tree import TreeType
+
 
 class history_ui(QtWidgets.QMainWindow):
     def __init__(self):
@@ -13,16 +15,35 @@ class history_ui(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi('gui/history.ui', self)
 
+    def from_checked(self):
+        if self.from_unified.isChecked():
+            return TreeType.UNIFIED
+
+        if self.from_bydate.isChecked():
+            return TreeType.BYDATE
+
+    def to_checked(self):
+        if self.to_unified.isChecked():
+            return TreeType.UNIFIED
+
+        if self.to_bydate.isChecked():
+            return TreeType.BYDATE
+
+    def checked(self):
+        return self.from_checked(), self.to_checked()
+
     def browse_action(self):
         dialog = QFileDialog(self)
         dialog.setFileMode(QFileDialog.FileMode.Directory)
         if dialog.exec():
             selected_dir = dialog.selectedFiles()[0]
             self.path_field.setText(selected_dir)
-            QThreadPool.globalInstance().start(tree.FileTreeWorker(selected_dir, self.fileTreeView))
 
     def scan_action(self):
-        pass
+        if self.path_field.text():
+            QThreadPool.globalInstance().start(tree.FileTreeWorker(self.path_field.text(),
+                                                                   self.fileTreeView,
+                                                                   self.checked()))
 
 
 def except_hook(cls, exception, traceback):
