@@ -4,8 +4,8 @@ Columbo is an observer of a syncronization/backup (futher just "sync") history. 
 
 ## What is the problem?
 Sync applications collect the history of changes (deleted, overwritten or, sometimes, moved files) in some folder (futher "history folder") in one of 2 ways: unified or by date.
-Unified (tree) way means that file tree in history folder repeats original file tree, and each changed file is marked with a timestamp suffix in its filename.
-By date way means that each sync provides a snapshot idetified by timestamp. Each snapshot has own history folder, and all changes are stored this folder.
+*Unified (tree)* way means that file tree in history folder repeats original file tree, and each changed file is marked with a timestamp suffix in its filename.
+*By date* way means that each sync provides a snapshot idetified by timestamp. Each snapshot has own history folder, and all changes are stored this folder.
 Both ways are reasonable. However, changes should be stored in only the one way.
 
 ## What does Columbo provide?
