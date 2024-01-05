@@ -4,12 +4,12 @@ Columbo is an observer of a syncronization/backup (futher just "sync") history. 
 
 ## What is the problem?
 Sync applications collect the history of changes (deleted, overwritten or, sometimes, moved files) in some folder (futher "history folder") in one of 2 ways: unified or by date.
-*Unified (tree)* way means that file tree in history folder repeats original file tree, and each changed file is marked with a timestamp suffix in its filename.
-*By date* way means that each sync provides a snapshot idetified by timestamp. Each snapshot has own history folder, and all changes are stored this folder.
-Both ways are reasonable. However, changes should be stored in only the one way.
+_Unified (tree)_ way means that file tree in history folder repeats original file tree, and each changed file is marked with a timestamp suffix in its filename.
+*By date* way means that each sync provides a snapshot identified by a timestamp. Each snapshot has its own history folder, and all changes are stored this folder.
+Both ways are reasonable and sometimes it is needed to switch from One to another. However, changes should be stored in the only one way.
 
 ## What does Columbo provide?
-Columbo aims to provide a convinient graphical interface to investigate the syncronization history regardless of which way has been used for storage and which way you prefer for investigation.
+Columbo aims to provide a convinient graphical interface to investigate the syncronization history regardless of which a way has been used for the storage and which a way you currently prefer for investigation.
 
 ## Technology stack
 + Python 3
