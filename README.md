@@ -11,10 +11,10 @@ Sync applications collect the history of changes (deleted, overwritten or, somet
 history
   |-- Folder_1
   | |-- Folder_3
-  |   |-- File_1_2022-01-01_10-00-00
-  |     |-- File_1_2022-01-02_06-00-00
+  | | |-- File_1_2022-01-01_10-00-00
+  | | | |-- File_1_2022-01-02_06-00-00
   |-- Folder_2
-    |-- File_2_2022-01-02_06-00-00
+  | |-- File_2_2022-01-02_06-00-00
 ```
 
 **By date (tree)** way means that each sync keeps changes in a separate folder inside the history folder (separated by date history). Each separate folder is marked with a timestamp in its name.
@@ -23,14 +23,14 @@ history
 history
   |-- 2022-01-01_10-00-00
   | |-- Folder 1
-  |   |-- Folder 3
-  |     |-- File_1
+  | | |-- Folder 3
+  | | | |-- File_1
   |-- 2022-01-02_06-00-00
-    |-- Folder_1
-    | |-- Folder_3
-    |   |-- File_1
-    |-- Folder_2
-      |-- File_2
+  | |-- Folder_1
+  | | |-- Folder_3
+  | | | |-- File_1
+  | |-- Folder_2
+  | | |-- File_2
 ```
 
 Both ways are reasonable. For example, the unified way helps to understand what and when was changed in a certain place. The by date way helps to understand what was changes at the certain time. So it is sometimes needed to switch from one view to another. However, the history can be stored in the only one way.
