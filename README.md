@@ -7,7 +7,7 @@ Sync applications collect the history of changes (deleted, overwritten or, somet
 
 **Unified (tree)** way means that each sync keeps changes directly in the history folder (unified history). Each changed file is marked with a timestamp suffix in its name.
 
-'''
+```
 history
   |-- Folder_1
     |-- Folder_3
@@ -15,7 +15,7 @@ history
       |-- File_1_2022-01-02_06-00-00
   |-- Folder_2
     |-- File_2_2022-01-02_06-00-00
-'''
+```
 
 **By date (tree)** way means that each sync keeps changes in a separate folder inside the history folder (separated by date history). Each separate folder is marked with a timestamp in its name.
 
