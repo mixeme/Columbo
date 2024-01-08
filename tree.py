@@ -1,7 +1,6 @@
 import os
 from enum import Enum
 
-from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 
