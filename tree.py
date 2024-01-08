@@ -54,6 +54,7 @@ class FileTreeWorker(QRunnable):
         self.path = path
         self.root_node = None
         self.tree_view = tree_view
+        self.sort_rows = None
 
         # Load icons
         self.icon_folder = QIcon.fromTheme("folder", QIcon("icons/folder.png"))
@@ -100,23 +101,16 @@ class FileTreeWorker(QRunnable):
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
         model.setHorizontalHeaderLabels(self.columns)
-
-        self.proxy_model = FileSortFilterProxyModel()
-        self.proxy_model.setSourceModel(model)
-
-
+        # Create proxy data model to customizing sorting
+        proxy_model = FileSortFilterProxyModel()
+        proxy_model.setSourceModel(model)
+        self.sort_rows = lambda: proxy_model.sort(0, QtCore.Qt.AscendingOrder)
         # Setup QTreeView
-        #self.tree_view.setModel(model)
-        self.tree_view.setModel(self.proxy_model)
-
+        self.tree_view.setModel(proxy_model)
         self.tree_view.header().resizeSection(0, 400)
-
-
-
-
-
         # Store root node
         self.root_node = root_node[0]
+
         return self.root_node
 
     def get_dir_node(self, parent, val):
@@ -195,8 +189,7 @@ class FileTreeWorker(QRunnable):
                 self.create_bydate_unified()
 
         # Sort nodes
-        self.proxy_model.sort(0, QtCore.Qt.AscendingOrder)
-        #self.root_node.sortChildren(2)
+        self.sort_rows()
 
         # Update tree
         self.tree_view.update()
