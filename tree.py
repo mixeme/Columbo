@@ -7,6 +7,11 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 import file
 
 
+class TreeType(Enum):
+    UNIFIED = 0
+    BYDATE = 1
+
+
 class FileTreeWorker(QRunnable):
     columns = ["Name", "Last modified", "Snapshot"]
 
@@ -124,8 +129,3 @@ class FileTreeWorker(QRunnable):
             if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.UNIFIED):
                 self.create_bydate_unified()
         self.tree_view.update()
-
-
-class TreeType(Enum):
-    UNIFIED = 0
-    BYDATE = 1
