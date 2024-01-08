@@ -25,11 +25,13 @@ class FileTreeWorker(QRunnable):
                 QStandardItem("Folder"),
                 QStandardItem("---")]
 
-    def create_file(self, filename, root):
-
+    def create_file2(self, filename, root, snapshot):
         return [QStandardItem(self.icon_file, filename),
                 QStandardItem(file.get_last_modified(os.path.join(root, filename))),
-                QStandardItem(file.get_snapshot(filename))]
+                QStandardItem(snapshot)]
+
+    def create_file(self, filename, root):
+        return self.create_file2(filename, root, file.get_snapshot(filename))
 
     def init_root(self):
         # Create root node
@@ -52,6 +54,7 @@ class FileTreeWorker(QRunnable):
         # If such a folder does not exist
         new_node = self.create_folder(val)
         parent.appendRow(new_node)
+        parent.sortChildren(0)
         return new_node[0]
 
     def create_tree(self):
@@ -96,20 +99,21 @@ class FileTreeWorker(QRunnable):
         for root, dirs, files in os.walk(self.path):
             # Normalize path with path separator "/" and remove root path component
             parts = root.replace("\\", "/").removeprefix(self.path).split("/")
-            snapshot = parts[1]
 
-            for i in files:
-                snapshot = file.get_snapshot(i)
-                current = root_node
-                # Find corresponding node for the snapshot
-                current = self.get_node(current, snapshot)
-                # Find corresponding node for the root
-                for j in range(1, len(parts)):
-                    current = self.get_node(current, parts[j])
-                # Place file in tree
-                current.appendRow(self.create_file(i, root))
-        # Sort snapshot nodes
-        root_node.sortChildren(0)
+            if root == self.path:
+                continue
+            snapshot = parts[1]
+            # Find corresponding node for the root
+            current = root_node
+            for i in range(2, len(parts)):
+                current = self.get_node(current, parts[i])
+            # Add folders
+            #for i in map(lambda x: self.create_folder(x), dirs):
+            #    current.appendRow(i)
+            # Add files
+            for i in map(lambda x: self.create_file2(x, root, snapshot), files):
+                current.appendRow(i)
+            current.sortChildren(0)
 
     def run(self):
         if self.checked[0] == self.checked[1]:
@@ -117,6 +121,8 @@ class FileTreeWorker(QRunnable):
         else:
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BYDATE):
                 self.create_unified_bydate()
+            if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.UNIFIED):
+                self.create_bydate_unified()
         self.tree_view.update()
 
 
