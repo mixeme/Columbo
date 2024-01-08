@@ -118,11 +118,15 @@ class FileTreeWorker(QRunnable):
             current.sortChildren(0)
 
     def run(self):
+        # Resolve the required tree type
         if self.checked[0] == self.checked[1]:
+            # Unified -> unified | by date -> by date
             self.create_tree()
         else:
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BYDATE):
+                # Unified -> by date
                 self.create_unified_bydate()
             if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.UNIFIED):
+                # By date -> unified
                 self.create_bydate_unified()
         self.tree_view.update()
