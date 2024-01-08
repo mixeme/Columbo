@@ -132,4 +132,10 @@ class FileTreeWorker(QRunnable):
             if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.UNIFIED):
                 # By date -> unified
                 self.create_bydate_unified()
+
+        # Sort nodes
+        self.root_node.sortChildren(2)
+
+        # Update tree
+        #self.tree_view.expandAll()
         self.tree_view.update()
