@@ -38,9 +38,6 @@ class FileTreeWorker(QRunnable):
                 QStandardItem(file.get_last_modified(os.path.join(root, filename))),
                 QStandardItem(snapshot)]
 
-    def create_file(self, filename, root):
-        return self.create_file2(filename, root, file.get_snapshot(filename))
-
     def init_root(self):
         # Create root node
         root_node = self.create_folder(self.path)
@@ -116,7 +113,7 @@ class FileTreeWorker(QRunnable):
             for i in range(2, len(parts)):
                 current = self.get_node(current, parts[i])
             # Add files
-            for i in map(lambda x: self.create_file2(x, root, snapshot), files):
+            for i in map(lambda x: self.create_file(x, root, snapshot), files):
                 current.appendRow(i)
             current.sortChildren(0)
 
