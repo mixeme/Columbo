@@ -115,9 +115,6 @@ class FileTreeWorker(QRunnable):
             current = root_node
             for i in range(2, len(parts)):
                 current = self.get_node(current, parts[i])
-            # Add folders
-            #for i in map(lambda x: self.create_folder(x), dirs):
-            #    current.appendRow(i)
             # Add files
             for i in map(lambda x: self.create_file2(x, root, snapshot), files):
                 current.appendRow(i)
