@@ -73,6 +73,39 @@ class FileTreeWorker(QRunnable):
                 QStandardItem(file.get_last_modified(os.path.join(root, filename))),
                 QStandardItem(snapshot)]
 
+    def create_file2(self, filename):
+        return [QStandardItem(self.icon_file, filename),
+                QStandardItem("File version"),
+                QStandardItem("---")]
+
+    def add_file_composite(self, dir_node, filename, root, snapshot):
+        node = self.get_file_node(dir_node, filename)
+        node.appendRow(self.create_file(filename, root, snapshot))
+
+    def get_file_node(self, parent, val):
+        for i in range(0, parent.rowCount()):  # Find existing folder
+            if parent.child(i).text() == val:
+                return parent.child(i)  # Return existing node
+
+                """
+                if parent.child(i, 1).text() == "File version":
+                    return parent.child(i)  # Return existing node
+                else:
+                    name = parent.child(i, 0)
+                    date = parent.child(i, 1)
+                    snapshot = parent.child(i, 2)
+                    parent.removeRow(i)
+                    new_node = self.create_file2(val)
+                    new_node.appendRow(self.create_file())
+                    parent.appendRow(new_node)
+                """
+
+        # If such a folder does not exist
+        new_node = self.create_file2(val)
+        parent.appendRow(new_node)
+
+        return new_node[0]              # Return new node
+
     def init_root(self):
         # Create root node
         root_node = self.create_folder(self.path)
@@ -80,14 +113,26 @@ class FileTreeWorker(QRunnable):
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
         model.setHorizontalHeaderLabels(self.columns)
+
+        self.proxy_model = FileSortFilterProxyModel()
+        self.proxy_model.setSourceModel(model)
+
+
         # Setup QTreeView
-        self.tree_view.setModel(model)
+        #self.tree_view.setModel(model)
+        self.tree_view.setModel(self.proxy_model)
+
         self.tree_view.header().resizeSection(0, 400)
+
+
+
+
+
         # Store root node
         self.root_node = root_node[0]
         return self.root_node
 
-    def get_node(self, parent, val):
+    def get_dir_node(self, parent, val):
         for i in range(0, parent.rowCount()):  # Find existing folder
             if parent.child(i).text() == val:
                 return parent.child(i)  # Return existing node
@@ -95,22 +140,28 @@ class FileTreeWorker(QRunnable):
         # If such a folder does not exist
         new_node = self.create_folder(val)
         parent.appendRow(new_node)
-        parent.sortChildren(0)
-        return new_node[0]
 
-    def create_tree(self):
+        return new_node[0]              # Return new node
+
+    def descend(self, parent, parts):
+        current = parent
+        for i in range(0, len(parts)):
+            current = self.get_dir_node(current, parts[i])
+        return current
+
+    def create_simple(self):
         root_node = self.init_root()
 
         for root, dirs, files in os.walk(self.path):
-            # Normalize path with path separator "/" and remove root path component
-            parts = root.replace("\\", "/").removeprefix(self.path).split("/")
-            # Find corresponding node for the root
-            current = root_node
-            for i in range(1, len(parts)):
-                current = self.get_node(current, parts[i])
+            # Remove root path component and convert to array
+            parts = root.removeprefix(self.path).split(os.sep)
+
+            current = self.descend(root_node, parts[1:])        # Find corresponding node for the root
+
             # Add folders
             for i in map(lambda x: self.create_folder(x), dirs):
                 current.appendRow(i)
+
             # Add files
             for i in map(lambda x: self.create_file(x, root), files):
                 current.appendRow(i)
@@ -124,41 +175,30 @@ class FileTreeWorker(QRunnable):
 
             for i in files:
                 snapshot = file.get_snapshot(i)
-                current = root_node
-                # Find corresponding node for the snapshot
-                current = self.get_node(current, snapshot)
-                # Find corresponding node for the root
-                for j in range(1, len(parts)):
-                    current = self.get_node(current, parts[j])
-                # Place file in tree
-                current.appendRow(self.create_file(i, root))
-        # Sort snapshot nodes
-        root_node.sortChildren(0)
+                current = self.get_dir_node(root_node, snapshot)    # Find corresponding node for the snapshot
+                current = self.descend(current, parts[1:])      # Find corresponding node for the root
+                current.appendRow(self.create_file(i, root))    # Place file in tree
 
     def create_bydate_unified(self):
         root_node = self.init_root()
 
         for root, dirs, files in os.walk(self.path):
-            # Normalize path with path separator "/" and remove root path component
-            parts = root.replace("\\", "/").removeprefix(self.path).split("/")
+            # Remove root path component and convert to array
+            parts = root.removeprefix(self.path).split(os.sep)
 
             if root == self.path:
                 continue
-            snapshot = parts[1]
-            # Find corresponding node for the root
-            current = root_node
-            for i in range(2, len(parts)):
-                current = self.get_node(current, parts[i])
-            # Add files
-            for i in map(lambda x: self.create_file(x, root, snapshot), files):
-                current.appendRow(i)
-            current.sortChildren(0)
+
+            current = self.descend(root_node, parts[2:])  # Find corresponding node for the root
+
+            for f in files:
+                self.add_file_composite(current, f, root, parts[1])
 
     def run(self):
         # Resolve the required tree type
         if self.checked[0] == self.checked[1]:
             # Unified -> unified | by date -> by date
-            self.create_tree()
+            self.create_simple()
         else:
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BYDATE):
                 # Unified -> by date
@@ -168,8 +208,8 @@ class FileTreeWorker(QRunnable):
                 self.create_bydate_unified()
 
         # Sort nodes
-        self.root_node.sortChildren(2)
+        self.proxy_model.sort(0, QtCore.Qt.AscendingOrder)
+        #self.root_node.sortChildren(2)
 
         # Update tree
-        #self.tree_view.expandAll()
         self.tree_view.update()
