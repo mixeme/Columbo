@@ -43,6 +43,12 @@ class HistoryUI(QtWidgets.QMainWindow):
                                                                    self.fileTreeView,
                                                                    self.checked()))
 
+    def expand_action(self):
+        self.fileTreeView.expandAll()
+
+    def collapse_action(self):
+        self.fileTreeView.collapseAll()
+
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)

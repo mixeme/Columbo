@@ -172,6 +172,20 @@
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="collapse_button">
+          <property name="text">
+           <string>Collapse all</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="expand_button">
+          <property name="text">
+           <string>Expand all</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="pushButton_8">
           <property name="text">
            <string>Restore</string>
@@ -233,10 +247,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>collapse_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>collapse_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>584</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>expand_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>expand_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>665</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>browse_action()</slot>
   <slot>scan_action()</slot>
+  <slot>expand_action()</slot>
+  <slot>collapse_action()</slot>
  </slots>
  <buttongroups>
   <buttongroup name="buttonGroup"/>
