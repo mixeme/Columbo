@@ -57,7 +57,7 @@ class FileTreeWorker(QRunnable):
     def get_node(self, parent, val):
         for i in range(0, parent.rowCount()):  # Find existing folder
             if parent.child(i).text() == val:
-                return parent.child(i)
+                return parent.child(i)  # Return existing node
 
         # If such a folder does not exist
         new_node = self.create_folder(val)
