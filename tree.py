@@ -86,8 +86,9 @@ class FileTreeWorker(QRunnable):
         root_node = self.init_root()
 
         for root, dirs, files in os.walk(self.path):
-            # Normalize path with path separator "/" and remove root path component
-            parts = root.replace("\\", "/").removeprefix(self.path).split("/")
+            # Remove root path component and convert to array
+            parts = root.removeprefix(self.path).split(os.sep)
+
             for i in files:
                 snapshot = file.get_snapshot(i)
                 current = root_node
