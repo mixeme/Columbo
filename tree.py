@@ -18,7 +18,8 @@ class FileTreeWorker(QRunnable):
 
     def __init__(self, path, tree_view, checked):
         super().__init__()
-        self.path = path.replace(os.sep, "/")
+        self.path = path
+        self.root = None
         self.tree_view = tree_view
 
         # Load icons
