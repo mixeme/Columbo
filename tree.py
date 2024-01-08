@@ -87,19 +87,6 @@ class FileTreeWorker(QRunnable):
             if parent.child(i).text() == val:
                 return parent.child(i)  # Return existing node
 
-                """
-                if parent.child(i, 1).text() == "File version":
-                    return parent.child(i)  # Return existing node
-                else:
-                    name = parent.child(i, 0)
-                    date = parent.child(i, 1)
-                    snapshot = parent.child(i, 2)
-                    parent.removeRow(i)
-                    new_node = self.create_file2(val)
-                    new_node.appendRow(self.create_file())
-                    parent.appendRow(new_node)
-                """
-
         # If such a folder does not exist
         new_node = self.create_file2(val)
         parent.appendRow(new_node)
