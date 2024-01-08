@@ -30,7 +30,10 @@ class FileTreeWorker(QRunnable):
                 QStandardItem("Folder"),
                 QStandardItem("---")]
 
-    def create_file2(self, filename, root, snapshot):
+    def create_file(self, filename, root, snapshot=None):
+        if snapshot is None:
+            snapshot = file.get_snapshot(filename)
+
         return [QStandardItem(self.icon_file, filename),
                 QStandardItem(file.get_last_modified(os.path.join(root, filename))),
                 QStandardItem(snapshot)]
