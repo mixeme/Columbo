@@ -18,4 +18,3 @@ def get_snapshot(filename):
         dot = len(filename)
 
     return filename[sep+1:dot]
-
