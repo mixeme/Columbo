@@ -50,8 +50,9 @@ class FileTreeWorker(QRunnable):
         # Setup QTreeView
         self.tree_view.setModel(model)
         self.tree_view.header().resizeSection(0, 400)
-
-        return root_node[0]
+        # Store root node
+        self.root_node = root_node[0]
+        return self.root_node
 
     def get_node(self, parent, val):
         for i in range(0, parent.rowCount()):  # Find existing folder
