@@ -6,10 +6,8 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QThreadPool
 from PyQt5.QtWidgets import QApplication, QFileDialog
 
-from tree import TreeType
 
-
-class history_ui(QtWidgets.QMainWindow):
+class HistoryUI(QtWidgets.QMainWindow):
     def __init__(self):
         # Load GUI layout
         super().__init__()
@@ -17,17 +15,17 @@ class history_ui(QtWidgets.QMainWindow):
 
     def from_checked(self):
         if self.from_unified.isChecked():
-            return TreeType.UNIFIED
+            return tree.TreeType.UNIFIED
 
         if self.from_bydate.isChecked():
-            return TreeType.BYDATE
+            return tree.TreeType.BYDATE
 
     def to_checked(self):
         if self.to_unified.isChecked():
-            return TreeType.UNIFIED
+            return tree.TreeType.UNIFIED
 
         if self.to_bydate.isChecked():
-            return TreeType.BYDATE
+            return tree.TreeType.BYDATE
 
     def checked(self):
         return self.from_checked(), self.to_checked()
@@ -57,8 +55,7 @@ if __name__ == "__main__":
     # Create application object
     app = QApplication(sys.argv)
 
-    history_win = history_ui()
-    history_win.show()  # Show window
+    history_win = HistoryUI()
+    history_win.show()      # Show window
 
-    sys.exit(app.exec())          # Start application
-
+    sys.exit(app.exec())    # Start application
