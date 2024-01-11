@@ -57,9 +57,7 @@ class FileTreeWorker(QRunnable):
         self.sort_rows = None
 
         # Load icons
-        icons_loader = icons.IconsLoader()
-        self.icon_folder = icons_loader.folder
-        self.icon_file = icons_loader.file
+        icons.IconsLoader()
         self.checked = checked
 
     def create_folder(self, path):
