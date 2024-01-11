@@ -28,16 +28,24 @@ def create_file(filename: str, root=None, snapshot=None) -> TreeNode:
             QStandardItem(snapshot)]
 
 
-def get_dir_node(parent: QStandardItem, val: str) -> QStandardItem:
+def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
     for i in range(0, parent.rowCount()):   # Find existing folder
         if parent.child(i).text() == val:
             return parent.child(i)          # Return existing node
 
     # If such a folder does not exist
-    new_node = create_folder(val)
+    new_node = create_fun(val)
     parent.appendRow(new_node)
 
     return new_node[0]                      # Return 1st column of the new node
+
+
+def get_dir_node(parent: QStandardItem, val: str) -> QStandardItem:
+    return get_node(parent, val, create_folder)
+
+
+def get_file_node(parent: QStandardItem, val: str):
+    return get_node(parent, val, create_file)
 
 
 def descend(parent: QStandardItem, parts: list[str]):
