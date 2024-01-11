@@ -53,3 +53,8 @@ def descend(parent: QStandardItem, parts: list[str]):
     for i in range(0, len(parts)):
         current = get_dir_node(current, parts[i])       # Get the next node with name from parts
     return current
+
+
+def add_versioned_file(dir_node, filename, root, snapshot):
+    node = get_file_node(dir_node, filename)
+    node.appendRow(create_file(filename, root, snapshot))
