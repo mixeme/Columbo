@@ -3,9 +3,10 @@ from enum import Enum
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QStandardItemModel
 
 from pkg import file, icons, nodes
+from pkg.nodes import get_dir_node, descend
 
 
 class TreeType(Enum):
@@ -94,23 +95,6 @@ class FileTreeWorker(QRunnable):
 
         return self.root_node
 
-    def get_dir_node(self, parent, val):
-        for i in range(0, parent.rowCount()):  # Find existing folder
-            if parent.child(i).text() == val:
-                return parent.child(i)  # Return existing node
-
-        # If such a folder does not exist
-        new_node = nodes.create_folder(val)
-        parent.appendRow(new_node)
-
-        return new_node[0]              # Return new node
-
-    def descend(self, parent, parts):
-        current = parent
-        for i in range(0, len(parts)):
-            current = self.get_dir_node(current, parts[i])
-        return current
-
     def create_simple(self):
         root_node = self.init_root()
 
@@ -118,7 +102,7 @@ class FileTreeWorker(QRunnable):
             # Remove root path component and convert to array
             parts = root.removeprefix(self.path).split(os.sep)
 
-            current = self.descend(root_node, parts[1:])        # Find corresponding node for the root
+            current = descend(root_node, parts[1:])        # Find corresponding node for the root
 
             # Add folders
             for i in map(lambda x: nodes.create_folder(x), dirs):
@@ -137,8 +121,8 @@ class FileTreeWorker(QRunnable):
 
             for i in files:
                 snapshot = file.get_snapshot(i)
-                current = self.get_dir_node(root_node, snapshot)    # Find corresponding node for the snapshot
-                current = self.descend(current, parts[1:])      # Find corresponding node for the root
+                current = get_dir_node(root_node, snapshot)    # Find corresponding node for the snapshot
+                current = descend(current, parts[1:])      # Find corresponding node for the root
                 current.appendRow(nodes.create_file(i, root))    # Place file in tree
 
     def create_bydate_unified(self):
@@ -151,7 +135,7 @@ class FileTreeWorker(QRunnable):
             if root == self.path:
                 continue
 
-            current = self.descend(root_node, parts[2:])  # Find corresponding node for the root
+            current = descend(root_node, parts[2:])  # Find corresponding node for the root
 
             for f in files:
                 self.add_file_composite(current, f, root, parts[1])
