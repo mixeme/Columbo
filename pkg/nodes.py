@@ -5,6 +5,7 @@ from pkg import file, icons
 
 icon_loader = None
 
+TreeNode = list[QStandardItem]      # Type alias for return values
 
 def create_folder(path):
     return [QStandardItem(icon_loader.folder, path),
