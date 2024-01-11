@@ -5,7 +5,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
-from pkg import file, icons
+from pkg import file, icons, nodes
 
 
 class TreeType(Enum):
