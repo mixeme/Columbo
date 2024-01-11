@@ -3,10 +3,9 @@ from enum import Enum
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
-import file
-import pkg.icons
+from pkg import file, icons
 
 
 class TreeType(Enum):
@@ -58,9 +57,9 @@ class FileTreeWorker(QRunnable):
         self.sort_rows = None
 
         # Load icons
-        icons = pkg.icons.IconsLoader()
-        self.icon_folder = icons.folder
-        self.icon_file = icons.file
+        icons_loader = icons.IconsLoader()
+        self.icon_folder = icons_loader.folder
+        self.icon_file = icons_loader.file
         self.checked = checked
 
     def create_folder(self, path):
