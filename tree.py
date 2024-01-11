@@ -6,6 +6,7 @@ from PyQt5.QtCore import QRunnable
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 
 import file
+import pkg.icons
 
 
 class TreeType(Enum):
@@ -57,8 +58,9 @@ class FileTreeWorker(QRunnable):
         self.sort_rows = None
 
         # Load icons
-        self.icon_folder = QIcon.fromTheme("folder", QIcon("icons/folder.png"))
-        self.icon_file = QIcon.fromTheme("text-x-generic", QIcon("icons/file.png"))
+        icons = pkg.icons.IconsLoader()
+        self.icon_folder = icons.folder
+        self.icon_file = icons.file
         self.checked = checked
 
     def create_folder(self, path):
