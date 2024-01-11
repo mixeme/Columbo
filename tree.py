@@ -60,27 +60,9 @@ class FileTreeWorker(QRunnable):
         icons.IconsLoader()
         self.checked = checked
 
-    def create_folder(self, path):
-        return [QStandardItem(self.icon_folder, path),
-                QStandardItem("Folder"),
-                QStandardItem("---")]
-
-    def create_file(self, filename, root, snapshot=None):
-        if snapshot is None:
-            snapshot = file.get_snapshot(filename)
-
-        return [QStandardItem(self.icon_file, filename),
-                QStandardItem(file.get_last_modified(os.path.join(root, filename))),
-                QStandardItem(snapshot)]
-
-    def create_file2(self, filename):
-        return [QStandardItem(self.icon_file, filename),
-                QStandardItem("File version"),
-                QStandardItem("---")]
-
     def add_file_composite(self, dir_node, filename, root, snapshot):
         node = self.get_file_node(dir_node, filename)
-        node.appendRow(self.create_file(filename, root, snapshot))
+        node.appendRow(nodes.create_file(filename, root, snapshot))
 
     def get_file_node(self, parent, val):
         for i in range(0, parent.rowCount()):  # Find existing folder
@@ -88,14 +70,14 @@ class FileTreeWorker(QRunnable):
                 return parent.child(i)  # Return existing node
 
         # If such a folder does not exist
-        new_node = self.create_file2(val)
+        new_node = nodes.create_file(val)
         parent.appendRow(new_node)
 
         return new_node[0]              # Return new node
 
     def init_root(self):
         # Create root node
-        root_node = self.create_folder(self.path)
+        root_node = nodes.create_folder(self.path)
         # Create data model
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
@@ -118,7 +100,7 @@ class FileTreeWorker(QRunnable):
                 return parent.child(i)  # Return existing node
 
         # If such a folder does not exist
-        new_node = self.create_folder(val)
+        new_node = nodes.create_folder(val)
         parent.appendRow(new_node)
 
         return new_node[0]              # Return new node
@@ -139,11 +121,11 @@ class FileTreeWorker(QRunnable):
             current = self.descend(root_node, parts[1:])        # Find corresponding node for the root
 
             # Add folders
-            for i in map(lambda x: self.create_folder(x), dirs):
+            for i in map(lambda x: nodes.create_folder(x), dirs):
                 current.appendRow(i)
 
             # Add files
-            for i in map(lambda x: self.create_file(x, root), files):
+            for i in map(lambda x: nodes.create_file(x, root), files):
                 current.appendRow(i)
 
     def create_unified_bydate(self):
@@ -157,7 +139,7 @@ class FileTreeWorker(QRunnable):
                 snapshot = file.get_snapshot(i)
                 current = self.get_dir_node(root_node, snapshot)    # Find corresponding node for the snapshot
                 current = self.descend(current, parts[1:])      # Find corresponding node for the root
-                current.appendRow(self.create_file(i, root))    # Place file in tree
+                current.appendRow(nodes.create_file(i, root))    # Place file in tree
 
     def create_bydate_unified(self):
         root_node = self.init_root()
