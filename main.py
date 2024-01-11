@@ -1,3 +1,5 @@
+import os.path
+import shutil
 import sys
 
 import tree
@@ -48,6 +50,20 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def collapse_action(self):
         self.fileTreeView.collapseAll()
+
+    def restore_action(self):
+        # Get path to item
+        index = self.fileTreeView.selectedIndexes()[0]
+        source_file = index.model().data(index)
+        index = index.parent()
+        while index.isValid():
+            source_file = os.path.join(index.model().data(index), source_file)
+            index = index.parent()
+        # Get destination
+        destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", source_file, "All Files (*)")
+        # Copy
+        if destination_file:
+            shutil.copy(source_file, destination_file)
 
     def empty_dirs_action(self):
         pass
