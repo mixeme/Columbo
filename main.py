@@ -49,6 +49,9 @@ class HistoryUI(QtWidgets.QMainWindow):
     def collapse_action(self):
         self.fileTreeView.collapseAll()
 
+    def empty_dirs_action(self):
+        pass
+
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
