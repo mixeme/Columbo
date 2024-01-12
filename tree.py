@@ -49,11 +49,15 @@ class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
 class FileTreeWorker(QRunnable):
     columns = ["Name", "Last modified", "Snapshot"]
 
-    def __init__(self, path, tree_view, checked):
+    def __init__(self, root_path, tree_view, checked_options):
         super().__init__()
-        self.path = path
-        self.root_node = None
+        # Store input values
+        self.root_path = root_path
         self.tree_view = tree_view
+        self.checked = checked_options
+
+        # Declare fields
+        self.root_node = None
         self.sort_rows = None
 
         # Load icons
@@ -62,7 +66,8 @@ class FileTreeWorker(QRunnable):
 
     def init_root(self):
         # Create root node
-        root_node = nodes.create_folder(self.path)
+        root_node = nodes.create_folder(self.root_path)
+
         # Create data model
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
