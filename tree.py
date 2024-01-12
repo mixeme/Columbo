@@ -62,82 +62,85 @@ class FileTreeWorker(QRunnable):
 
         # Load icons
         icons.IconsLoader()
-        self.checked = checked
 
-    def init_root(self):
+    def init_root(self) -> None:
         # Create root node
         root_node = nodes.create_folder(self.root_path)
 
         # Create data model
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
-        model.setHorizontalHeaderLabels(self.columns)
-        # Create proxy data model to customizing sorting
+        model.setHorizontalHeaderLabels(FileTreeWorker.columns)
+
+        # Create proxy data model for sorting customisation
         proxy_model = FileSortFilterProxyModel()
         proxy_model.setSourceModel(model)
         self.sort_rows = lambda: proxy_model.sort(0, QtCore.Qt.AscendingOrder)
+
         # Setup QTreeView
         self.tree_view.setModel(proxy_model)
         self.tree_view.header().resizeSection(0, 400)
-        # Store root node
+
+        # Store 1st column of the root node
         self.root_node = root_node[0]
 
-        return self.root_node
+    def split_path(self, path: str) -> list[str]:
+        return path.removeprefix(self.root_path).split(os.sep)
 
-    def create_simple(self):
-        root_node = self.init_root()
+    def create_tree(self, routine):
+        self.init_root()
+        for root, dirs, files in os.walk(self.root_path):
+            routine(root, dirs, files)
 
-        for root, dirs, files in os.walk(self.path):
-            # Remove root path component and convert to array
-            parts = root.removeprefix(self.path).split(os.sep)
+    def routine_simple(self, root, dirs, files):
+        # Remove root path component and convert path to string array
+        path_parts = self.split_path(root)
 
-            current = nodes.descend(root_node, parts[1:])        # Find corresponding node for the root
+        # Find corresponding node for the root
+        current = nodes.descend(self.root_node, path_parts[1:])
 
-            # Add folders
-            for i in map(lambda x: nodes.create_folder(x), dirs):
-                current.appendRow(i)
+        # Add folders
+        for i in map(lambda x: nodes.create_folder(x), dirs):
+            current.appendRow(i)
 
-            # Add files
-            for i in map(lambda x: nodes.create_file(x, root), files):
-                current.appendRow(i)
+        # Add files
+        for i in map(lambda x: nodes.create_file(x, root), files):
+            current.appendRow(i)
 
-    def create_unified_bydate(self):
-        root_node = self.init_root()
+    def routine_unified_bydate(self, root, dirs, files):
+        # Remove root path component and convert to array
+        path_parts = self.split_path(root)
 
-        for root, dirs, files in os.walk(self.path):
-            # Remove root path component and convert to array
-            parts = root.removeprefix(self.path).split(os.sep)
+        for i in files:
+            snapshot = file.get_snapshot(i)
+            current = nodes.get_dir_node(self.root_node, snapshot)  # Find corresponding node for the snapshot
+            current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
+            current.appendRow(nodes.create_file(i, root))           # Place file in tree
 
-            for i in files:
-                snapshot = file.get_snapshot(i)
-                current = nodes.get_dir_node(root_node, snapshot)    # Find corresponding node for the snapshot
-                current = nodes.descend(current, parts[1:])      # Find corresponding node for the root
-                current.appendRow(nodes.create_file(i, root))    # Place file in tree
+    def routine_bydate_unified(self, root, dirs, files):
+        if root == self.root_path:  # Skip root
+            return
 
-    def create_bydate_unified(self):
-        root_node = self.init_root()
+        # Remove root path component and convert to array
+        path_parts = self.split_path(root)
 
-        for root, dirs, files in os.walk(self.path):
-            # Remove root path component and convert to array
-            parts = root.removeprefix(self.path).split(os.sep)
-
-            if root == self.path:
-                continue
-
-            current = nodes.descend(root_node, parts[2:])  # Find corresponding node for the root
-
-            for f in files:
-                nodes.add_versioned_file(current, f, root, parts[1])
+        current = nodes.descend(self.root_node, path_parts[2:])  # Find corresponding node for the root
+        for f in files:
+            nodes.add_versioned_file(current, f, root, path_parts[1])
 
     def run(self):
         # Resolve the required tree type
+        routine = None
         if self.checked[0] == self.checked[1]:
-            self.create_simple()                # Unified -> unified | by date -> by date
+            routine = self.routine_simple               # Unified -> unified | by date -> by date
         else:
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BYDATE):
-                self.create_unified_bydate()    # Unified -> by date
+                routine = self.routine_unified_bydate   # Unified -> by date
             if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.UNIFIED):
-                self.create_bydate_unified()    # By date -> unified
-        # Finishing tree build
-        self.sort_rows()            # Sort nodes
-        self.tree_view.update()     # Update tree
+                routine = self.routine_bydate_unified   # By date -> unified
+
+        if routine is not None:
+            # Finishing tree build
+            self.create_tree(routine)   # Build tree
+            self.sort_rows()            # Sort nodes
+            self.tree_view.update()     # Update tree
