@@ -111,7 +111,24 @@ class HistoryUI(QtWidgets.QMainWindow):
         self.filter_to_field.clear()
 
     def clear_all_action(self):
-        pass
+        if self.path_field.text():
+            pkg.file.clear_empty_dirs(self.path_field.text())
+
+    def delete_snapshots_action(self):
+        if self.path_field.text():
+            from_snapshot = self.filter_from_field.text()
+            to_snapshot = self.filter_to_field.text()
+
+            if self.checked()[0] == tree.TreeType.UNIFIED:
+                snapshot_fun = lambda root, file: pkg.file.get_snapshot(file)
+            if self.checked()[0] == tree.TreeType.BYDATE:
+                snapshot_fun = lambda root, file: root.split(os.sep)[1]
+
+            def test_fun(root: str, file: str) -> bool:
+                snapshot = snapshot_fun(root, file)
+                return (from_snapshot <= snapshot) and (snapshot <= to_snapshot)
+
+            pkg.file.clear_snapshots(self.path_field.text(), test_fun)
 
     def contextMenuEvent(self, event):
         context_menu = QMenu(self)
