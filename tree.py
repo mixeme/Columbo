@@ -171,9 +171,6 @@ class FileTreeWorker(QRunnable):
             current.appendRow(nodes.create_file(i, root))           # Place file in tree
 
     def routine_bydate_unified(self, root, dirs, files):
-        if root == self.root_path:  # Skip root
-            return
-
         # Remove root path component and convert to array
         path_parts = self.split_path(root)
 
