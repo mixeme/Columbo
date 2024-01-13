@@ -75,7 +75,14 @@ class HistoryUI(QtWidgets.QMainWindow):
             shutil.copy(source_file, destination_file)
 
     def filter_action(self):
-        pkg.nodes.filter_tree(self.fileTreeView.model(), self.filter_from_field, self.filter_to_field)
+        if self.path_field.text():
+            worker = tree.FileTreeWorker(self.path_field.text(),
+                                         self.fileTreeView,
+                                         self.checked(),
+                                         tree.OperatioType.FILE_TREE)
+            worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
+            QThreadPool.globalInstance().start(worker)
+        #pkg.nodes.filter_tree(self.fileTreeView.model(), self.filter_from_field, self.filter_to_field)
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
