@@ -2,6 +2,7 @@ import os.path
 import shutil
 import sys
 
+import pkg.nodes
 import tree
 
 from PyQt5 import QtWidgets, uic
@@ -43,7 +44,15 @@ class HistoryUI(QtWidgets.QMainWindow):
         if self.path_field.text():
             QThreadPool.globalInstance().start(tree.FileTreeWorker(self.path_field.text(),
                                                                    self.fileTreeView,
-                                                                   self.checked()))
+                                                                   self.checked(),
+                                                                   tree.OperatioType.FILE_TREE))
+
+    def empty_dirs_action(self):
+        if self.path_field.text():
+            QThreadPool.globalInstance().start(tree.FileTreeWorker(self.path_field.text(),
+                                                                   self.fileTreeView,
+                                                                   self.checked(),
+                                                                   tree.OperatioType.EMPTY_DIRS))
 
     def expand_action(self):
         self.fileTreeView.expandAll()
@@ -65,9 +74,8 @@ class HistoryUI(QtWidgets.QMainWindow):
         if destination_file:
             shutil.copy(source_file, destination_file)
 
-    def empty_dirs_action(self):
-        pass
-
+    def filter_action(self):
+        pkg.nodes.filter_tree(self.fileTreeView.model(), self.filter_from_field, self.filter_to_field)
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
