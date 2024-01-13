@@ -7,7 +7,7 @@ import tree
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QThreadPool
-from PyQt5.QtWidgets import QApplication, QFileDialog
+from PyQt5.QtWidgets import QApplication, QFileDialog, QMenu
 
 
 class HistoryUI(QtWidgets.QMainWindow):
@@ -60,6 +60,9 @@ class HistoryUI(QtWidgets.QMainWindow):
     def collapse_action(self):
         self.fileTreeView.collapseAll()
 
+    def get_selected_nodes(self):
+        return self.fileTreeView.selectedIndexes()
+
     def restore_action(self):
         # Get path to item
         index = self.fileTreeView.selectedIndexes()[0]
@@ -83,6 +86,21 @@ class HistoryUI(QtWidgets.QMainWindow):
             worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
             QThreadPool.globalInstance().start(worker)
         #pkg.nodes.filter_tree(self.fileTreeView.model(), self.filter_from_field, self.filter_to_field)
+
+    def contextMenuEvent(self, event):
+        contextMenu = QMenu(self)
+        from_snapshot = contextMenu.addAction("From snapshot")
+        to_snapshot = contextMenu.addAction("To snapshot")
+        action = contextMenu.exec_(self.mapToGlobal(event.pos()))
+        print(action)
+        if action == from_snapshot:
+            selected_nodes = self.get_selected_nodes()
+            snapshot = selected_nodes[0].siblingAtColumn(2).data()
+            self.filter_from_field.setText(snapshot)
+        if action == to_snapshot:
+            selected_nodes = self.get_selected_nodes()
+            snapshot = selected_nodes[0].siblingAtColumn(2).data()
+            self.filter_to_field.setText(snapshot)
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
