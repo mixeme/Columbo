@@ -187,9 +187,6 @@ class FileTreeWorker(QRunnable):
             nodes.descend(self.root_node, path_parts[1:])
 
     def run(self):
-        if self.operation == OperatioType.FILTER:
-            return
-
         routine = None
         if self.operation == OperatioType.FILE_TREE:
             # Resolve the required tree type
