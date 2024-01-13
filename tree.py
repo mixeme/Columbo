@@ -116,6 +116,21 @@ class FileTreeWorker(QRunnable):
         for i in map(lambda x: nodes.create_file(x, root), files):
             current.appendRow(i)
 
+    def routine_bydate_bydate(self, root, dirs, files):
+        # Remove root path component and convert path to string array
+        path_parts = self.split_path(root)
+
+        # Find corresponding node for the root
+        current = nodes.descend(self.root_node, path_parts[1:])
+
+        # Add folders
+        for i in map(lambda x: nodes.create_folder(x), dirs):
+            current.appendRow(i)
+
+        # Add files
+        for i in map(lambda x: nodes.create_file(x, root, path_parts[1]), files):
+            current.appendRow(i)
+
     def routine_unified_bydate(self, root, dirs, files):
         # Remove root path component and convert to array
         path_parts = self.split_path(root)
@@ -140,9 +155,12 @@ class FileTreeWorker(QRunnable):
     def run(self):
         # Resolve the required tree type
         routine = None
-        if self.checked[0] == self.checked[1]:
-            routine = self.routine_simple               # Unified -> unified | by date -> by date
-        else:
+        if self.operation == OperatioType.FILE_TREE:
+            # Resolve the required tree type
+            if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.UNIFIED):
+                routine = self.routine_simple           # Unified -> unified
+            if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.BYDATE):
+                routine = self.routine_bydate_bydate    # By date -> by date
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BYDATE):
                 routine = self.routine_unified_bydate   # Unified -> by date
             if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.UNIFIED):
