@@ -92,7 +92,6 @@ class HistoryUI(QtWidgets.QMainWindow):
         from_snapshot = contextMenu.addAction("From snapshot")
         to_snapshot = contextMenu.addAction("To snapshot")
         action = contextMenu.exec_(self.mapToGlobal(event.pos()))
-        print(action)
         if action == from_snapshot:
             selected_nodes = self.get_selected_nodes()
             snapshot = selected_nodes[0].siblingAtColumn(2).data()
