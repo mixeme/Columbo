@@ -79,12 +79,19 @@ class HistoryUI(QtWidgets.QMainWindow):
         # Get path to item
         index = self.fileTreeView.selectedIndexes()[0]
         source_file = index.model().data(index)
+        extension = pkg.file.get_extension(source_file)
         index = index.parent()
         while index.isValid():
             source_file = os.path.join(index.model().data(index), source_file)
             index = index.parent()
+
+        if extension:
+            extension_dialog = "(*." + extension + ")"
+        else:
+            extension_dialog = "All Files (*)"
+
         # Get destination
-        destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", source_file, "All Files (*)")
+        destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", source_file, extension_dialog)
         # Copy
         if destination_file:
             shutil.copy(source_file, destination_file)
