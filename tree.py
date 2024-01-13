@@ -104,16 +104,20 @@ class FileTreeWorker(QRunnable):
     def split_path(self, path: str) -> list[str]:
         return path.removeprefix(self.root_path).split(os.sep)
 
+    def test_snapshot(self, snapshot: str) -> bool:
+        return (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot)
+
     def create_tree(self, routine):
         self.init_root()
         for root, dirs, files in os.walk(self.root_path):
-            if root == self.root_path:  # Skip root
+            if root == self.root_path:              # Skip root
                 continue
-            routine(root, dirs, files)
+            path_parts = self.split_path(root)      # Remove root path component and convert to array
+            routine(root, dirs, files, path_parts)  # Perform routine
 
     def routine_simple(self, root, dirs, files, path_parts, snapshot=None):
         # Find corresponding node for the root
-        current = nodes.descend(self.root_node, path_parts[1:])
+        current = nodes.descend(self.root_node, path_parts)
 
         # Add folders
         for i in map(lambda x: nodes.create_folder(x), dirs):
@@ -136,24 +140,15 @@ class FileTreeWorker(QRunnable):
             for i in items:
                 current.appendRow(i)
 
-    def test_snapshot(self, snapshot: str) -> bool:
-        return (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot)
-
-    def routine_unified_unified(self, root, dirs, files):
-        # Remove root path component and convert path to string array
-        path_parts = self.split_path(root)
-
+    def routine_unified_unified(self, root, dirs, files, path_parts):
         if self.filter:
             self.routine_filter(path_parts[1:], files,
                                 lambda x: nodes.create_file(x, root),
                                 lambda x: self.test_snapshot(x[2].text()))
         else:
-            self.routine_simple(root, dirs, files, path_parts)
+            self.routine_simple(root, dirs, files, path_parts[1:])
 
-    def routine_bydate_bydate(self, root, dirs, files):
-        # Remove root path component and convert path to string array
-        path_parts = self.split_path(root)
-
+    def routine_bydate_bydate(self, root, dirs, files, path_parts):
         snapshot = path_parts[1]
         if self.filter:
             if self.test_snapshot(snapshot):
@@ -161,34 +156,26 @@ class FileTreeWorker(QRunnable):
                                     lambda x: nodes.create_file(x, root, snapshot),
                                     lambda x: True)
         else:
-            self.routine_simple(root, dirs, files, path_parts, snapshot)
+            self.routine_simple(root, dirs, files, path_parts[1:], snapshot)
 
-    def routine_unified_bydate(self, root, dirs, files):
-        # Remove root path component and convert to array
-        path_parts = self.split_path(root)
-
+    def routine_unified_bydate(self, root, dirs, files, path_parts):
         for i in files:
             snapshot = file.get_snapshot(i)
             if not self.filter or (self.filter and self.test_snapshot(snapshot)):
                 current = nodes.get_dir_node(self.root_node, snapshot)  # Find corresponding node for the snapshot
                 current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
-                current.appendRow(nodes.create_file(i, root))           # Place file in tree
+                current.appendRow(nodes.create_file(i, root, snapshot)) # Place file in tree
 
-    def routine_bydate_unified(self, root, dirs, files):
-        # Remove root path component and convert to array
-        path_parts = self.split_path(root)
+    def routine_bydate_unified(self, root, dirs, files, path_parts):
+        snapshot = path_parts[1]
+        if not self.filter or (self.filter and self.test_snapshot(snapshot)):
+            current = nodes.descend(self.root_node, path_parts[2:])  # Find corresponding node for the root
+            for f in files:
+                nodes.add_versioned_file(current, f, root, snapshot)
 
-        current = nodes.descend(self.root_node, path_parts[2:])  # Find corresponding node for the root
-        for f in files:
-            nodes.add_versioned_file(current, f, root, path_parts[1])
-
-    def routine_empty_dirs(self, root, dirs, files):
+    def routine_empty_dirs(self, root, dirs, files, path_parts):
         if len(dirs) == 0 and len(files) == 0:
-            # Remove root path component and convert to array
-            path_parts = self.split_path(root)
-
-            # Find corresponding node for the root
-            nodes.descend(self.root_node, path_parts[1:])
+            nodes.descend(self.root_node, path_parts[1:])   # Find corresponding node for the root
 
     def run(self):
         routine = None
