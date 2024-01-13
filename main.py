@@ -15,6 +15,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         # Load GUI layout
         super().__init__()
         uic.loadUi('gui/history.ui', self)
+        self.setWindowTitle("Columbo - Synchronization history observer")
 
     def from_checked(self):
         if self.from_unified.isChecked():
