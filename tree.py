@@ -128,18 +128,20 @@ class FileTreeWorker(QRunnable):
 
         if self.filter:
             file_nodes = list(map(lambda x: nodes.create_file(x, root), files))
-            filter_nodes = []
+            filtered_nodes = []
             for i in file_nodes:
                 snapshot = i[2].text()
                 if (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot):
-                    filter_nodes.append(i)
-            if len(dirs) > 0 or len(filter_nodes) > 0:
+                    filtered_nodes.append(i)
+            if len(filtered_nodes) > 0:
                 # Find corresponding node for the root
                 current = nodes.descend(self.root_node, path_parts[1:])
                 # Add folders
                 for i in map(lambda x: nodes.create_folder(x), dirs):
                     current.appendRow(i)
-                for i in filter_nodes:
+
+                # Add files
+                for i in filtered_nodes:
                     current.appendRow(i)
         else:
             # Find corresponding node for the root
