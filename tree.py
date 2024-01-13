@@ -169,9 +169,10 @@ class FileTreeWorker(QRunnable):
 
         for i in files:
             snapshot = file.get_snapshot(i)
-            current = nodes.get_dir_node(self.root_node, snapshot)  # Find corresponding node for the snapshot
-            current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
-            current.appendRow(nodes.create_file(i, root))           # Place file in tree
+            if not self.filter or (self.filter and self.test_snapshot(snapshot)):
+                current = nodes.get_dir_node(self.root_node, snapshot)  # Find corresponding node for the snapshot
+                current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
+                current.appendRow(nodes.create_file(i, root))           # Place file in tree
 
     def routine_bydate_unified(self, root, dirs, files):
         # Remove root path component and convert to array
