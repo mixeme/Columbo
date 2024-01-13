@@ -58,3 +58,10 @@ def descend(parent: QStandardItem, parts: list[str]):
 def add_versioned_file(dir_node, filename, root, snapshot):
     node = get_file_node(dir_node, filename)                # Get or create node with filename in dir_node
     node.appendRow(create_file(filename, root, snapshot))   # Add file version
+
+
+def filter_tree(model, from_snapshot: str, to_snapshot: str):
+    root_node = model.invisibleRootItem()
+    model.beginResetModel()
+
+
