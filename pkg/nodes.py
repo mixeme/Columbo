@@ -1,5 +1,6 @@
 import os
 
+from PyQt5.QtCore import QModelIndex
 from PyQt5.QtGui import QStandardItem
 from pkg import file, icons
 
@@ -61,7 +62,13 @@ def add_versioned_file(dir_node, filename, root, snapshot):
 
 
 def filter_tree(model, from_snapshot: str, to_snapshot: str):
-    root_node = model.invisibleRootItem()
-    model.beginResetModel()
+    root_node = model.sourceModel().invisibleRootItem().child(1)
+    #model.beginResetModel()
+    print(model)
+    print(model.sourceModel())
+    print(model.sourceModel().rowCount(QModelIndex()))
+    print(root_node.rowCount())
+    print(root_node.rowCount(QModelIndex()))
+    #current = root_node.
 
 
