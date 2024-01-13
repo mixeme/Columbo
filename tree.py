@@ -136,6 +136,9 @@ class FileTreeWorker(QRunnable):
             for i in items:
                 current.appendRow(i)
 
+    def test_snapshot(self, snapshot: str) -> bool:
+        return (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot)
+
     def routine_unified_unified(self, root, dirs, files):
         # Remove root path component and convert path to string array
         path_parts = self.split_path(root)
