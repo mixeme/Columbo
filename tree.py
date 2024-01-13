@@ -16,7 +16,6 @@ class TreeType(Enum):
 class OperatioType(Enum):
     FILE_TREE = 0
     EMPTY_DIRS = 1
-    FILTER = 3
 
 
 class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
