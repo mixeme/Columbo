@@ -252,6 +252,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="delete_button">
+        <property name="text">
+         <string>Delete snapshots</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -429,6 +436,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>delete_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>delete_snapshots_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>642</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>browse_action()</slot>
@@ -440,9 +463,10 @@
   <slot>filter_action()</slot>
   <slot>clear_action()</slot>
   <slot>clear_all_action()</slot>
+  <slot>delete_snapshots_action()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_3"/>
  </buttongroups>
 </ui>
