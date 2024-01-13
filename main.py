@@ -2,7 +2,7 @@ import os.path
 import shutil
 import sys
 
-import pkg.nodes
+import pkg.file
 import tree
 
 from PyQt5 import QtWidgets, uic
@@ -106,13 +106,22 @@ class HistoryUI(QtWidgets.QMainWindow):
             QThreadPool.globalInstance().start(worker)
         #pkg.nodes.filter_tree(self.fileTreeView.model(), self.filter_from_field, self.filter_to_field)
 
+    def clear_action(self):
+        self.filter_from_field.clear()
+        self.filter_to_field.clear()
+
+    def clear_all_action(self):
+        pass
+
     def contextMenuEvent(self, event):
-        contextMenu = QMenu(self)
-        from_snapshot = contextMenu.addAction("From snapshot")
-        to_snapshot = contextMenu.addAction("To snapshot")
-        contextMenu.addSeparator()
-        expand = contextMenu.addAction("Expand recursively")
-        action = contextMenu.exec_(self.mapToGlobal(event.pos()))
+        context_menu = QMenu(self)
+        from_snapshot = context_menu.addAction("From snapshot")
+        to_snapshot = context_menu.addAction("To snapshot")
+        context_menu.addSeparator()
+        expand = context_menu.addAction("Expand recursively")
+        context_menu.addSeparator()
+        delete = context_menu.addAction("Delete empty directory")
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
         if action == from_snapshot:
             selected_nodes = self.get_selected_nodes()
             snapshot = selected_nodes[0].siblingAtColumn(2).data()
@@ -123,6 +132,15 @@ class HistoryUI(QtWidgets.QMainWindow):
             self.filter_to_field.setText(snapshot)
         if action == expand:
             self.fileTreeView.expandRecursively(self.get_selected_nodes()[0])
+        if action == delete:
+            selected_path, _ = self.get_selected_path()
+            try:
+                os.removedirs(selected_path)
+                print("Delete", selected_path)
+            except OSError:
+                print("Failed to delete", selected_path)
+                pass
+
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
