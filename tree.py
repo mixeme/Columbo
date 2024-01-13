@@ -107,6 +107,8 @@ class FileTreeWorker(QRunnable):
     def create_tree(self, routine):
         self.init_root()
         for root, dirs, files in os.walk(self.root_path):
+            if root == self.root_path:  # Skip root
+                continue
             routine(root, dirs, files)
 
     def routine_simple(self, root, dirs, files, path_parts, snapshot=None):
