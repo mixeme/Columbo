@@ -65,6 +65,7 @@ class FileTreeWorker(QRunnable):
         # Declare fields
         self.root_node = None
         self.sort_rows = None
+        self.end_update = None
 
         # Load icons
         icons.IconsLoader()
@@ -77,11 +78,13 @@ class FileTreeWorker(QRunnable):
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
         model.setHorizontalHeaderLabels(FileTreeWorker.columns)
+        model.beginResetModel()
 
         # Create proxy data model for sorting customisation
         proxy_model = FileSortFilterProxyModel()
         proxy_model.setSourceModel(model)
         self.sort_rows = lambda: proxy_model.sort(0, QtCore.Qt.AscendingOrder)
+        self.end_update = lambda: model.endResetModel()
 
         # Setup QTreeView
         self.tree_view.setModel(proxy_model)
@@ -149,4 +152,4 @@ class FileTreeWorker(QRunnable):
             # Finishing tree build
             self.create_tree(routine)   # Build tree
             self.sort_rows()            # Sort nodes
-            self.tree_view.update()     # Update tree
+            self.end_update()           # Rebuild tree
