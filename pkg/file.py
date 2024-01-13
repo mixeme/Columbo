@@ -26,3 +26,22 @@ def get_extension(filename: str) -> str:
         return ""
     else:
         return filename[dot+1:]
+
+
+def clear_empty_dirs(root_path: str) -> None:
+    for root, dirs, files in os.walk(root_path):
+        if len(dirs) == 0 and len(files) == 0:
+            os.removedirs(root)
+
+
+def clear_snapshots(root_path: str, test_snapshot_fun) -> None:
+    for root, dirs, files in os.walk(root_path):
+        for f in files:
+            if test_snapshot_fun(root, f):
+                try:
+                    os.remove(os.path.join(root, f))
+                except OSError:
+                    print("Failed to delete", os.path.join(root, f))
+                    pass
+                #except FileNotFoundError:
+                #    pass
