@@ -54,6 +54,7 @@ class HistoryUI(QtWidgets.QMainWindow):
                                                                    self.fileTreeView,
                                                                    self.checked(),
                                                                    tree.OperatioType.EMPTY_DIRS))
+            self.clear_all_button.setEnabled(True)
 
     def expand_action(self):
         self.fileTreeView.expandAll()
