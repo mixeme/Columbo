@@ -123,6 +123,19 @@ class FileTreeWorker(QRunnable):
         for i in map(lambda x: nodes.create_file(x, root, snapshot), files):
             current.appendRow(i)
 
+    def routine_filter(self, path_parts, files, map_fun, filter_fun):
+        # Prepare list of items
+        items = tuple(filter(filter_fun, tuple(map(map_fun, files))))
+
+        # If there are items to add
+        if len(items) > 0:
+            # Find corresponding node for the root
+            current = nodes.descend(self.root_node, path_parts)
+
+            # Add files
+            for i in items:
+                current.appendRow(i)
+
     def routine_unified_unified(self, root, dirs, files):
         # Remove root path component and convert path to string array
         path_parts = self.split_path(root)
