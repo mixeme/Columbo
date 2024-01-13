@@ -55,12 +55,13 @@ class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
 class FileTreeWorker(QRunnable):
     columns = ["Name", "Last modified", "Snapshot"]
 
-    def __init__(self, root_path, tree_view, checked_options):
+    def __init__(self, root_path, tree_view, checked_options, operation: OperatioType):
         super().__init__()
         # Store input values
         self.root_path = root_path
         self.tree_view = tree_view
         self.checked = checked_options
+        self.operation = operation
 
         # Declare fields
         self.root_node = None
@@ -161,7 +162,9 @@ class FileTreeWorker(QRunnable):
             nodes.descend(self.root_node, path_parts[1:])
 
     def run(self):
-        # Resolve the required tree type
+        if self.operation == OperatioType.FILTER:
+            return
+
         routine = None
         if self.operation == OperatioType.FILE_TREE:
             # Resolve the required tree type
@@ -173,6 +176,9 @@ class FileTreeWorker(QRunnable):
                 routine = self.routine_unified_bydate   # Unified -> by date
             if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.UNIFIED):
                 routine = self.routine_bydate_unified   # By date -> unified
+
+        if self.operation == OperatioType.EMPTY_DIRS:
+            routine = self.routine_empty_dirs
 
         if routine is not None:
             # Finishing tree build
