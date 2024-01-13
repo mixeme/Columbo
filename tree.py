@@ -197,7 +197,7 @@ class FileTreeWorker(QRunnable):
         if self.operation == OperatioType.FILE_TREE:
             # Resolve the required tree type
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.UNIFIED):
-                routine = self.routine_unified_unified           # Unified -> unified
+                routine = self.routine_unified_unified  # Unified -> unified
             if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.BYDATE):
                 routine = self.routine_bydate_bydate    # By date -> by date
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BYDATE):
