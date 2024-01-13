@@ -151,6 +151,7 @@ class FileTreeWorker(QRunnable):
         # Remove root path component and convert path to string array
         path_parts = self.split_path(root)
 
+        snapshot = path_parts[1]
         if self.filter:
             snapshot = path_parts[1]
             if (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot):
@@ -158,7 +159,7 @@ class FileTreeWorker(QRunnable):
                                     lambda x: nodes.create_file(x, root, snapshot),
                                     lambda x: True)
         else:
-            self.routine_simple(root, dirs, files, path_parts, path_parts[1])
+            self.routine_simple(root, dirs, files, path_parts, snapshot)
 
     def routine_unified_bydate(self, root, dirs, files):
         # Remove root path component and convert to array
