@@ -136,9 +136,6 @@ class FileTreeWorker(QRunnable):
             if len(filtered_nodes) > 0:
                 # Find corresponding node for the root
                 current = nodes.descend(self.root_node, path_parts[1:])
-                # Add folders
-                for i in map(lambda x: nodes.create_folder(x), dirs):
-                    current.appendRow(i)
 
                 # Add files
                 for i in filtered_nodes:
