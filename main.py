@@ -91,6 +91,8 @@ class HistoryUI(QtWidgets.QMainWindow):
         contextMenu = QMenu(self)
         from_snapshot = contextMenu.addAction("From snapshot")
         to_snapshot = contextMenu.addAction("To snapshot")
+        contextMenu.addSeparator()
+        expand = contextMenu.addAction("Expand recursively")
         action = contextMenu.exec_(self.mapToGlobal(event.pos()))
         if action == from_snapshot:
             selected_nodes = self.get_selected_nodes()
@@ -100,6 +102,8 @@ class HistoryUI(QtWidgets.QMainWindow):
             selected_nodes = self.get_selected_nodes()
             snapshot = selected_nodes[0].siblingAtColumn(2).data()
             self.filter_to_field.setText(snapshot)
+        if action == expand:
+            self.fileTreeView.expandRecursively(self.get_selected_nodes()[0])
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
