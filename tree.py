@@ -146,7 +146,7 @@ class FileTreeWorker(QRunnable):
         if self.filter:
             self.routine_filter(path_parts[1:], files,
                                 lambda x: nodes.create_file(x, root),
-                                lambda x: (self.from_snapshot <= x[2].text()) and (x[2].text() <= self.to_snapshot))
+                                lambda x: self.test_snapshot(x[2].text()))
         else:
             self.routine_simple(root, dirs, files, path_parts)
 
@@ -156,7 +156,7 @@ class FileTreeWorker(QRunnable):
 
         snapshot = path_parts[1]
         if self.filter:
-            if (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot):
+            if self.test_snapshot(snapshot):
                 self.routine_filter(path_parts[1:], files,
                                     lambda x: nodes.create_file(x, root, snapshot),
                                     lambda x: True)
