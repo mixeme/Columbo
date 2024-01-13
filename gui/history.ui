@@ -215,7 +215,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="filter_from_field"/>
       </item>
       <item>
        <widget class="QLabel" name="label_3">
@@ -225,10 +225,10 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_2"/>
+       <widget class="QLineEdit" name="filter_to_field"/>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="filter_button">
         <property name="text">
          <string>Filter</string>
         </property>
@@ -364,6 +364,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>filter_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>filter_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>563</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>browse_action()</slot>
@@ -372,9 +388,10 @@
   <slot>collapse_action()</slot>
   <slot>restore_action()</slot>
   <slot>empty_dirs_action()</slot>
+  <slot>filter_action()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
