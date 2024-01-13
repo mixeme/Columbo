@@ -147,16 +147,8 @@ class FileTreeWorker(QRunnable):
         # Remove root path component and convert path to string array
         path_parts = self.split_path(root)
 
-        # Find corresponding node for the root
-        current = nodes.descend(self.root_node, path_parts[1:])
 
-        # Add folders
-        for i in map(lambda x: nodes.create_folder(x), dirs):
-            current.appendRow(i)
-
-        # Add files
-        for i in map(lambda x: nodes.create_file(x, root, path_parts[1]), files):
-            current.appendRow(i)
+            self.routine_simple(root, dirs, files, path_parts, path_parts[1])
 
     def routine_unified_bydate(self, root, dirs, files):
         # Remove root path component and convert to array
