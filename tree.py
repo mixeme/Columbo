@@ -153,7 +153,6 @@ class FileTreeWorker(QRunnable):
 
         snapshot = path_parts[1]
         if self.filter:
-            snapshot = path_parts[1]
             if (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot):
                 self.routine_filter(path_parts[1:], files,
                                     lambda x: nodes.create_file(x, root, snapshot),
