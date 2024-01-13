@@ -18,3 +18,11 @@ def get_snapshot(filename: str) -> str:
         dot = len(filename)
 
     return filename[sep+1:dot]
+
+
+def get_extension(filename: str) -> str:
+    dot = filename.rfind(".")
+    if dot == -1:
+        return ""
+    else:
+        return filename[dot+1:]
