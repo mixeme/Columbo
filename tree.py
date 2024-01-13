@@ -13,6 +13,12 @@ class TreeType(Enum):
     BYDATE = 1
 
 
+class OperatioType(Enum):
+    FILE_TREE = 0
+    EMPTY_DIRS = 1
+    FILTER = 3
+
+
 class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
     def lessThan(self, left, right):
         # Retrieve names
