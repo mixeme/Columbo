@@ -152,6 +152,14 @@ class FileTreeWorker(QRunnable):
         for f in files:
             nodes.add_versioned_file(current, f, root, path_parts[1])
 
+    def routine_empty_dirs(self, root, dirs, files):
+        if len(dirs) == 0 and len(files) == 0:
+            # Remove root path component and convert to array
+            path_parts = self.split_path(root)
+
+            # Find corresponding node for the root
+            nodes.descend(self.root_node, path_parts[1:])
+
     def run(self):
         # Resolve the required tree type
         routine = None
