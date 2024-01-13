@@ -177,6 +177,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="clear_all_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Clear all</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="collapse_button">
         <property name="text">
          <string>Collapse all</string>
@@ -231,6 +241,13 @@
        <widget class="QPushButton" name="filter_button">
         <property name="text">
          <string>Filter</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="clear_button">
+        <property name="text">
+         <string>Clear</string>
         </property>
        </widget>
       </item>
@@ -380,6 +397,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>clear_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clear_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>590</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_all_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clear_all_action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>504</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>browse_action()</slot>
@@ -389,6 +438,8 @@
   <slot>restore_action()</slot>
   <slot>empty_dirs_action()</slot>
   <slot>filter_action()</slot>
+  <slot>clear_action()</slot>
+  <slot>clear_all_action()</slot>
  </slots>
  <buttongroups>
   <buttongroup name="buttonGroup_3"/>
