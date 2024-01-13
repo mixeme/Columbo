@@ -67,9 +67,17 @@ class FileTreeWorker(QRunnable):
         self.root_node = None
         self.sort_rows = None
         self.end_update = None
+        self.filter = False
+        self.from_snapshot = None
+        self.to_snapshot = None
 
         # Load icons
         icons.IconsLoader()
+
+    def set_filter(self, from_snapshot: str, to_snapshot: str):
+        self.filter = True
+        self.from_snapshot = from_snapshot
+        self.to_snapshot = to_snapshot
 
     def init_root(self) -> None:
         # Create root node
