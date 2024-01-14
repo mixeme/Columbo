@@ -65,7 +65,10 @@ class HistoryUI(QtWidgets.QMainWindow):
         self.fileTreeView.header().resizeSection(0, 400)
         self.statusbar.showMessage("Build is finished")
 
-    def build_file_tree(self, type: OperatioType) -> None:
+    def switch_clear_all(self, op_type: OperatioType, _):
+        self.clear_all_button.setEnabled(op_type == OperatioType.EMPTY_DIRS)
+
+    def build_file_tree(self, op_type: OperatioType) -> None:
         if self.path_field.text():
             worker = tree.FileTreeWorker(self.path_field.text(),
                                          self.checked(),
