@@ -8,7 +8,7 @@ from pkg.workers import ClearEmptyDirsWorker, ClearSnapshotWorker
 from tree import OperatioType, TreeType
 
 from PyQt5 import QtWidgets, QtGui, uic
-from PyQt5.QtCore import QThreadPool, Qt
+from PyQt5.QtCore import QThreadPool, Qt, QModelIndex
 from PyQt5.QtGui import QDropEvent, QDragEnterEvent
 from PyQt5.QtWidgets import QApplication, QFileDialog, QMenu
 
@@ -48,11 +48,29 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def get_selected_path(self) -> (str, str):
         index = self.fileTreeView.selectedIndexes()[0]  # Get the selected index
-        selected_item = index.model().data(index)       # Get item for the selected index
-        selected_path = selected_item
+        snapshot = index.siblingAtColumn(2).data()      # Get snapshot
+        selected_item = index.data()                    # Get item for the selected index
+        selected_path = selected_item                   # Prepare selected path
+
+        # Go up for a versioned file
+        if (self.from_checked() == TreeType.BYDATE) and (self.to_checked() == TreeType.UNIFIED):
+            index = index.parent()
+
         index = index.parent()                          # Get its parent
-        while index.isValid():                          # Combine a path to the the selected item
-            selected_path = os.path.join(index.model().data(index), selected_path)
+        while index.isValid():                          # Combine a path to the selected item
+            parent_item = index.data()                  # Get parent name
+
+            # If we reach the root
+            if parent_item == self.path_field.text():
+                # Add snapshot to the path for By date -> Unified
+                if (self.from_checked() == TreeType.BYDATE) and (self.to_checked() == TreeType.UNIFIED):
+                    parent_item = os.path.join(parent_item, snapshot)
+
+                # Remove snapshot from the path for Unified -> By date
+                if (self.from_checked() == TreeType.UNIFIED) and (self.to_checked() == TreeType.BYDATE):
+                    selected_path = selected_path[selected_path.find(os.sep)+1:]
+
+            selected_path = os.path.join(parent_item, selected_path)
             index = index.parent()
         return selected_path, selected_item
 
