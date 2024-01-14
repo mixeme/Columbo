@@ -112,12 +112,13 @@ class HistoryUI(QtWidgets.QMainWindow):
             index = index.parent()
 
         if extension:
-            extension_dialog = "(*." + extension + ")"
+            dialog_extension = extension.upper() + " (*." + extension + ")"
         else:
-            extension_dialog = "All Files (*)"
+            dialog_extension = "All Files (*)"
 
         # Get destination
-        destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", source_file, extension_dialog)
+        destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", selected_path, dialog_extension)
+
         # Copy
         if destination_file:
             shutil.copy(source_file, destination_file)
