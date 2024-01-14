@@ -4,7 +4,7 @@ import sys
 
 import pkg.file
 import tree
-from tree import OperatioType
+from tree import OperatioType, TreeType
 
 from PyQt5 import QtWidgets, QtGui, uic
 from PyQt5.QtCore import QThreadPool, Qt
