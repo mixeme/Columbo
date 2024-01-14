@@ -72,11 +72,10 @@ class HistoryUI(QtWidgets.QMainWindow):
         if self.path_field.text():
             worker = tree.FileTreeWorker(self.path_field.text(),
                                          self.checked(),
-                                         type)
-            worker.signals.finished.connect(self.update_tree)   # Connect to slot for finishing
+                                         op_type)
 
             # Switch filter
-            if type == OperatioType.FILTERED_TREE:
+            if op_type == OperatioType.FILTERED_TREE:
                 worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
 
             # Switch Clear all button
