@@ -98,10 +98,7 @@ class FileTreeWorker(QRunnable):
         proxy_model.setSourceModel(model)
         self.sort_rows = lambda: proxy_model.sort(0, QtCore.Qt.AscendingOrder)
         self.end_update = lambda: model.endResetModel()
-
-        # Setup QTreeView
-        self.tree_view.setModel(proxy_model)
-        self.tree_view.header().resizeSection(0, 400)
+        self.model = proxy_model
 
         # Store 1st column of the root node
         self.root_node = root_node[0]
