@@ -197,7 +197,6 @@ class FileTreeWorker(QRunnable):
         if routine is not None:
             # Finishing tree build
             self.create_tree(routine)   # Build tree
-            print("Tree is build")
             self.sort_rows()            # Sort nodes
 
             # Signal object should possess the sending data
