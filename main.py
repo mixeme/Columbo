@@ -4,6 +4,7 @@ import sys
 
 import pkg.file
 import tree
+from tree import OperatioType
 
 from PyQt5 import QtWidgets, QtGui, uic
 from PyQt5.QtCore import QThreadPool, Qt
@@ -50,36 +51,35 @@ class HistoryUI(QtWidgets.QMainWindow):
         self.fileTreeView.header().resizeSection(0, 400)
         self.statusbar.showMessage("Build is finished")
 
-    def scan_action(self):
+    def build_file_tree(self, type: OperatioType) -> None:
         if self.path_field.text():
             worker = tree.FileTreeWorker(self.path_field.text(),
                                          self.checked(),
-                                         tree.OperatioType.FILE_TREE)
-            worker.signals.finished.connect(self.update_tree)
+                                         type)
+            worker.signals.finished.connect(self.update_tree)   # Connect to slot for finishing
+
+            # Switch filter
+            if type == OperatioType.FILTERED_TREE:
+                worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
+
+            # Switch Clear all button
+            if type == OperatioType.EMPTY_DIRS:
+                worker.signals.finished.connect(lambda x: self.clear_all_button.setEnabled(True))
+            else:
+                self.clear_all_button.setEnabled(False)
+
+            # Start worker in another thread
             QThreadPool.globalInstance().start(worker)
-            self.clear_all_button.setEnabled(False)
             self.statusbar.showMessage("Start tree building")
+
+    def scan_action(self):
+        self.build_file_tree(OperatioType.FILE_TREE)
 
     def filter_action(self):
-        if self.path_field.text():
-            worker = tree.FileTreeWorker(self.path_field.text(),
-                                         self.checked(),
-                                         tree.OperatioType.FILE_TREE)
-            worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
-            worker.signals.finished.connect(self.update_tree)
-            QThreadPool.globalInstance().start(worker)
-            self.clear_all_button.setEnabled(False)
-            self.statusbar.showMessage("Start tree building")
+        self.build_file_tree(OperatioType.FILTERED_TREE)
 
     def empty_dirs_action(self):
-        if self.path_field.text():
-            worker = tree.FileTreeWorker(self.path_field.text(),
-                                         self.checked(),
-                                         tree.OperatioType.EMPTY_DIRS)
-            QThreadPool.globalInstance().start(worker)
-            worker.signals.finished.connect(self.update_tree)
-            worker.signals.finished.connect(lambda x: self.clear_all_button.setEnabled(True))
-            self.statusbar.showMessage("Start tree building")
+        self.build_file_tree(OperatioType.EMPTY_DIRS)
 
     def expand_action(self):
         self.fileTreeView.expandAll()
