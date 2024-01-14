@@ -23,6 +23,9 @@ class HistoryUI(QtWidgets.QMainWindow):
 
         self.setAcceptDrops(True)
 
+        tree.FileTreeWorker.signals.finished.connect(self.update_tree)  # Connect to slot for finishing
+        tree.FileTreeWorker.signals.finished.connect(self.switch_clear_all) # Switch Clear all button
+
     def from_checked(self) -> TreeType:
         if self.from_unified.isChecked():
             return TreeType.UNIFIED
@@ -60,7 +63,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             selected_dir = dialog.selectedFiles()[0]
             self.path_field.setText(selected_dir)
 
-    def update_tree(self, model) -> None:
+    def update_tree(self, _, model) -> None:
         self.fileTreeView.setModel(model)
         self.fileTreeView.header().resizeSection(0, 400)
         self.statusbar.showMessage("Build is finished")
@@ -77,12 +80,6 @@ class HistoryUI(QtWidgets.QMainWindow):
             # Switch filter
             if op_type == OperatioType.FILTERED_TREE:
                 worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
-
-            # Switch Clear all button
-            if type == OperatioType.EMPTY_DIRS:
-                worker.signals.finished.connect(lambda x: self.clear_all_button.setEnabled(True))
-            else:
-                self.clear_all_button.setEnabled(False)
 
             # Start worker in another thread
             QThreadPool.globalInstance().start(worker)
