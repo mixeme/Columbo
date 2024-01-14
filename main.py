@@ -5,7 +5,7 @@ import sys
 import pkg.file
 import tree
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, QtGui, uic
 from PyQt5.QtCore import QThreadPool
 from PyQt5.QtWidgets import QApplication, QFileDialog, QMenu
 
@@ -16,6 +16,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi('gui/history.ui', self)
         self.setWindowTitle("Columbo - Synchronization history observer")
+        self.setWindowIcon(QtGui.QIcon('icons/search.png'))
 
     def from_checked(self):
         if self.from_unified.isChecked():
