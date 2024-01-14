@@ -100,7 +100,6 @@ class HistoryUI(QtWidgets.QMainWindow):
     def collapse_action(self):
         self.fileTreeView.collapseAll()
 
-
     def restore_action(self):
         # Get path to item
         selected_path, selected_item = self.get_selected_path()
