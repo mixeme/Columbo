@@ -24,17 +24,17 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def from_checked(self) -> TreeType:
         if self.from_unified.isChecked():
-            return tree.TreeType.UNIFIED
+            return TreeType.UNIFIED
 
         if self.from_bydate.isChecked():
-            return tree.TreeType.BYDATE
+            return TreeType.BYDATE
 
     def to_checked(self) -> TreeType:
         if self.to_unified.isChecked():
-            return tree.TreeType.UNIFIED
+            return TreeType.UNIFIED
 
         if self.to_bydate.isChecked():
-            return tree.TreeType.BYDATE
+            return TreeType.BYDATE
 
     def checked(self) -> (TreeType, TreeType):
         return self.from_checked(), self.to_checked()
