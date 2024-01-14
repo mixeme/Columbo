@@ -2,13 +2,12 @@ import os.path
 import shutil
 import sys
 
-from PyQt5.QtGui import QDropEvent, QDragEnterEvent
-
 import pkg.file
 import tree
 
 from PyQt5 import QtWidgets, QtGui, uic
 from PyQt5.QtCore import QThreadPool, Qt
+from PyQt5.QtGui import QDropEvent, QDragEnterEvent
 from PyQt5.QtWidgets import QApplication, QFileDialog, QMenu
 
 
