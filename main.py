@@ -59,6 +59,17 @@ class HistoryUI(QtWidgets.QMainWindow):
             QThreadPool.globalInstance().start(worker)
             self.statusbar.showMessage("Start tree building")
 
+    def filter_action(self):
+        if self.path_field.text():
+            worker = tree.FileTreeWorker(self.path_field.text(),
+                                         self.checked(),
+                                         tree.OperatioType.FILE_TREE)
+            worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
+            worker.signals.finished.connect(self.update_tree)
+            QThreadPool.globalInstance().start(worker)
+            self.clear_all_button.setEnabled(False)
+            self.statusbar.showMessage("Start tree building")
+
     def empty_dirs_action(self):
         if self.path_field.text():
             worker = tree.FileTreeWorker(self.path_field.text(),
@@ -109,13 +120,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         if destination_file:
             shutil.copy(source_file, destination_file)
 
-    def filter_action(self):
-        if self.path_field.text():
-            worker = tree.FileTreeWorker(self.path_field.text(),
-                                         self.checked(),
-                                         tree.OperatioType.FILE_TREE)
-            worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
-            QThreadPool.globalInstance().start(worker)
+
 
     def clear_action(self):
         self.filter_from_field.clear()
