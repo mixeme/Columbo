@@ -42,6 +42,11 @@ class HistoryUI(QtWidgets.QMainWindow):
             selected_dir = dialog.selectedFiles()[0]
             self.path_field.setText(selected_dir)
 
+    def update_tree(self, model) -> None:
+        self.fileTreeView.setModel(model)
+        self.fileTreeView.header().resizeSection(0, 400)
+        self.statusbar.showMessage("Build is finished")
+
     def scan_action(self):
         if self.path_field.text():
             QThreadPool.globalInstance().start(tree.FileTreeWorker(self.path_field.text(),
