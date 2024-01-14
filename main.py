@@ -183,10 +183,9 @@ class HistoryUI(QtWidgets.QMainWindow):
             selected_path, _ = self.get_selected_path()
             try:
                 os.removedirs(selected_path)
-                print("Delete", selected_path)
+                self.statusbar.showMessage("Delete", selected_path)
             except OSError:
-                print("Failed to delete", selected_path)
-                pass
+                self.statusbar.showMessage("Failed to delete", selected_path)
 
 
 def except_hook(cls, exception, traceback):
