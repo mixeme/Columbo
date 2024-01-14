@@ -63,7 +63,6 @@ class FileTreeWorker(QRunnable):
         super().__init__()
         # Store input values
         self.root_path = root_path
-        self.tree_view = tree_view
         self.checked = checked_options
         self.operation = operation
 
@@ -91,7 +90,6 @@ class FileTreeWorker(QRunnable):
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_node)
         model.setHorizontalHeaderLabels(FileTreeWorker.columns)
-        model.beginResetModel()
 
         # Create proxy data model for sorting customisation
         proxy_model = FileSortFilterProxyModel()
