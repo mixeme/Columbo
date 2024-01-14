@@ -124,7 +124,10 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def clear_all_action(self):
         if self.path_field.text():
-            pkg.file.clear_empty_dirs(self.path_field.text())
+            worker = ClearEmptyDirsWorker(self.path_field.text())
+            worker.signals.progress.connect(lambda x: print(x))
+            QThreadPool.globalInstance().start(worker)
+            self.statusbar.showMessage("Start clear empty directories")
 
     def delete_snapshots_action(self):
         if self.path_field.text():
@@ -140,7 +143,10 @@ class HistoryUI(QtWidgets.QMainWindow):
                 snapshot = snapshot_fun(root, file)
                 return (from_snapshot <= snapshot) and (snapshot <= to_snapshot)
 
-            pkg.file.clear_snapshots(self.path_field.text(), test_fun)
+            worker = ClearSnapshotWorker(self.path_field.text(), test_fun)
+            worker.signals.progress.connect(lambda x: print(x))
+            QThreadPool.globalInstance().start(worker)
+            self.statusbar.showMessage("Start clear snapshots")
 
     def dragEnterEvent(self, event: QDragEnterEvent):
         if event.mimeData().hasUrls():
