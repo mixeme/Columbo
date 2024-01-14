@@ -57,6 +57,7 @@ class HistoryUI(QtWidgets.QMainWindow):
                                          tree.OperatioType.FILE_TREE)
             worker.signals.finished.connect(self.update_tree)
             QThreadPool.globalInstance().start(worker)
+            self.clear_all_button.setEnabled(False)
             self.statusbar.showMessage("Start tree building")
 
     def filter_action(self):
