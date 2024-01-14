@@ -69,7 +69,6 @@ class FileTreeWorker(QRunnable):
         # Declare fields
         self.root_node = None
         self.sort_rows = None
-        self.end_update = None
         self.filter = False
         self.from_snapshot = None
         self.to_snapshot = None
@@ -96,7 +95,6 @@ class FileTreeWorker(QRunnable):
         proxy_model = FileSortFilterProxyModel()
         proxy_model.setSourceModel(model)
         self.sort_rows = lambda: proxy_model.sort(0, QtCore.Qt.AscendingOrder)
-        self.end_update = lambda: model.endResetModel()
         self.model = proxy_model
 
         # Store 1st column of the root node
