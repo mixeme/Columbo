@@ -43,7 +43,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def checked(self) -> (TreeType, TreeType):
         return self.from_checked(), self.to_checked()
 
-    def get_selected_nodes(self):
+    def get_selected_nodes(self) -> list[QModelIndex]:
         return self.fileTreeView.selectedIndexes()
 
     def get_selected_path(self) -> (str, str):
@@ -56,7 +56,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             index = index.parent()
         return selected_path, selected_item
 
-    def browse_action(self):
+    def browse_action(self) -> None:
         dialog = QFileDialog(self)
         dialog.setFileMode(QFileDialog.FileMode.Directory)
         if dialog.exec():
@@ -68,7 +68,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         self.fileTreeView.header().resizeSection(0, 400)
         self.statusbar.showMessage("Build is finished")
 
-    def switch_clear_all(self, op_type: OperatioType, _):
+    def switch_clear_all(self, op_type: OperatioType, _) -> None:
         self.clear_all_button.setEnabled(op_type == OperatioType.EMPTY_DIRS)
 
     def build_file_tree(self, op_type: OperatioType) -> None:
@@ -85,22 +85,22 @@ class HistoryUI(QtWidgets.QMainWindow):
             QThreadPool.globalInstance().start(worker)
             self.statusbar.showMessage("Start tree building")
 
-    def scan_action(self):
+    def scan_action(self) -> None:
         self.build_file_tree(OperatioType.FILE_TREE)
 
-    def filter_action(self):
+    def filter_action(self) -> None:
         self.build_file_tree(OperatioType.FILTERED_TREE)
 
-    def empty_dirs_action(self):
+    def empty_dirs_action(self) -> None:
         self.build_file_tree(OperatioType.EMPTY_DIRS)
 
-    def expand_action(self):
+    def expand_action(self) -> None:
         self.fileTreeView.expandAll()
 
-    def collapse_action(self):
+    def collapse_action(self) -> None:
         self.fileTreeView.collapseAll()
 
-    def restore_action(self):
+    def restore_action(self) -> None:
         # Get path to item
         selected_path, selected_item = self.get_selected_path()
         extension = pkg.file.get_extension(selected_item)
@@ -118,18 +118,18 @@ class HistoryUI(QtWidgets.QMainWindow):
         if destination_file:
             shutil.copy(selected_path, destination_file)
 
-    def clear_action(self):
+    def clear_action(self) -> None:
         self.filter_from_field.clear()
         self.filter_to_field.clear()
 
-    def clear_all_action(self):
+    def clear_all_action(self) -> None:
         if self.path_field.text():
             worker = ClearEmptyDirsWorker(self.path_field.text())
             worker.signals.progress.connect(lambda x: print(x))
             QThreadPool.globalInstance().start(worker)
             self.statusbar.showMessage("Start clear empty directories")
 
-    def delete_snapshots_action(self):
+    def delete_snapshots_action(self) -> None:
         if self.path_field.text():
             from_snapshot = self.filter_from_field.text()
             to_snapshot = self.filter_to_field.text()
@@ -148,7 +148,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             QThreadPool.globalInstance().start(worker)
             self.statusbar.showMessage("Start clear snapshots")
 
-    def dragEnterEvent(self, event: QDragEnterEvent):
+    def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         if event.mimeData().hasUrls():
             event.accept()
         else:
@@ -161,11 +161,11 @@ class HistoryUI(QtWidgets.QMainWindow):
         else:
             event.ignore()
 
-    def dropEvent(self, event: QDropEvent):
+    def dropEvent(self, event: QDropEvent) -> None:
         files = [url.toLocalFile() for url in event.mimeData().urls()]
         self.path_field.setText(files[0])
 
-    def contextMenuEvent(self, event):
+    def contextMenuEvent(self, event) -> None:
         context_menu = QMenu(self)
         from_snapshot = context_menu.addAction("From snapshot")
         to_snapshot = context_menu.addAction("To snapshot")
