@@ -2,11 +2,13 @@ import os.path
 import shutil
 import sys
 
+from PyQt5.QtGui import QDropEvent, QDragEnterEvent
+
 import pkg.file
 import tree
 
 from PyQt5 import QtWidgets, QtGui, uic
-from PyQt5.QtCore import QThreadPool
+from PyQt5.QtCore import QThreadPool, Qt
 from PyQt5.QtWidgets import QApplication, QFileDialog, QMenu
 
 
@@ -17,6 +19,8 @@ class HistoryUI(QtWidgets.QMainWindow):
         uic.loadUi('gui/history.ui', self)
         self.setWindowTitle("Columbo - Synchronization history observer")
         self.setWindowIcon(QtGui.QIcon('icons/search.png'))
+
+        self.setAcceptDrops(True)
 
     def from_checked(self):
         if self.from_unified.isChecked():
@@ -139,6 +143,23 @@ class HistoryUI(QtWidgets.QMainWindow):
                 return (from_snapshot <= snapshot) and (snapshot <= to_snapshot)
 
             pkg.file.clear_snapshots(self.path_field.text(), test_fun)
+
+    def dragEnterEvent(self, event: QDragEnterEvent):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event) -> None:
+        if event.mimeData().hasUrls():
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event: QDropEvent):
+        files = [url.toLocalFile() for url in event.mimeData().urls()]
+        self.path_field.setText(files[0])
 
     def contextMenuEvent(self, event):
         context_menu = QMenu(self)
