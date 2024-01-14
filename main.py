@@ -22,27 +22,27 @@ class HistoryUI(QtWidgets.QMainWindow):
 
         self.setAcceptDrops(True)
 
-    def from_checked(self):
+    def from_checked(self) -> TreeType:
         if self.from_unified.isChecked():
             return tree.TreeType.UNIFIED
 
         if self.from_bydate.isChecked():
             return tree.TreeType.BYDATE
 
-    def to_checked(self):
+    def to_checked(self) -> TreeType:
         if self.to_unified.isChecked():
             return tree.TreeType.UNIFIED
 
         if self.to_bydate.isChecked():
             return tree.TreeType.BYDATE
 
-    def checked(self):
+    def checked(self) -> (TreeType, TreeType):
         return self.from_checked(), self.to_checked()
 
     def get_selected_nodes(self):
         return self.fileTreeView.selectedIndexes()
 
-    def get_selected_path(self):
+    def get_selected_path(self) -> (str, str):
         index = self.fileTreeView.selectedIndexes()[0]  # Get the selected index
         selected_item = index.model().data(index)       # Get item for the selected index
         selected_path = selected_item
