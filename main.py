@@ -103,13 +103,8 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def restore_action(self):
         # Get path to item
-        index = self.fileTreeView.selectedIndexes()[0]
-        source_file = index.model().data(index)
-        extension = pkg.file.get_extension(source_file)
-        index = index.parent()
-        while index.isValid():
-            source_file = os.path.join(index.model().data(index), source_file)
-            index = index.parent()
+        selected_path, selected_item = self.get_selected_path()
+        extension = pkg.file.get_extension(selected_item)
 
         if extension:
             dialog_extension = extension.upper() + " (*." + extension + ")"
@@ -121,9 +116,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
         # Copy
         if destination_file:
-            shutil.copy(source_file, destination_file)
-
-
+            shutil.copy(selected_path, destination_file)
 
     def clear_action(self):
         self.filter_from_field.clear()
