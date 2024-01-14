@@ -39,6 +39,19 @@ class HistoryUI(QtWidgets.QMainWindow):
     def checked(self):
         return self.from_checked(), self.to_checked()
 
+    def get_selected_nodes(self):
+        return self.fileTreeView.selectedIndexes()
+
+    def get_selected_path(self):
+        index = self.fileTreeView.selectedIndexes()[0]  # Get the selected index
+        selected_item = index.model().data(index)       # Get item for the selected index
+        selected_path = selected_item
+        index = index.parent()                          # Get its parent
+        while index.isValid():                          # Combine a path to the the selected item
+            selected_path = os.path.join(index.model().data(index), selected_path)
+            index = index.parent()
+        return selected_path, selected_item
+
     def browse_action(self):
         dialog = QFileDialog(self)
         dialog.setFileMode(QFileDialog.FileMode.Directory)
@@ -87,18 +100,6 @@ class HistoryUI(QtWidgets.QMainWindow):
     def collapse_action(self):
         self.fileTreeView.collapseAll()
 
-    def get_selected_nodes(self):
-        return self.fileTreeView.selectedIndexes()
-
-    def get_selected_path(self):
-        index = self.fileTreeView.selectedIndexes()[0]  # Get the selected index
-        selected_item = index.model().data(index)       # Get item for the selected index
-        selected_path = selected_item
-        index = index.parent()                          # Get its parent
-        while index.isValid():                          # Combine a path to the the selected item
-            selected_path = os.path.join(index.model().data(index), selected_path)
-            index = index.parent()
-        return selected_path, selected_item
 
     def restore_action(self):
         # Get path to item
