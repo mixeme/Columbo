@@ -152,7 +152,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def dragMoveEvent(self, event) -> None:
         if event.mimeData().hasUrls():
-            event.setDropAction(Qt.CopyAction)
+            event.setDropAction(Qt.MoveAction)
             event.accept()
         else:
             event.ignore()
