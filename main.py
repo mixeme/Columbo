@@ -106,6 +106,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         selected_path, selected_item = self.get_selected_path()
         extension = pkg.file.get_extension(selected_item)
 
+        # Define file extension for dialog
         if extension:
             dialog_extension = extension.upper() + " (*." + extension + ")"
         else:
