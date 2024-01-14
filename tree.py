@@ -73,6 +73,7 @@ class FileTreeWorker(QRunnable):
         self.filter = False
         self.from_snapshot = None
         self.to_snapshot = None
+        self.model = None
 
         # Load icons
         icons.IconsLoader()
@@ -198,4 +199,9 @@ class FileTreeWorker(QRunnable):
             self.create_tree(routine)   # Build tree
             print("Tree is build")
             self.sort_rows()            # Sort nodes
-            self.end_update()           # Rebuild tree
+
+            # Signal object should possess the sending data
+            self.signals.model = self.model
+
+            # Signal tree update
+            self.signals.finished.emit(self.model)
