@@ -4,6 +4,7 @@ import sys
 
 import pkg.file
 import tree
+from pkg.workers import ClearEmptyDirsWorker, ClearSnapshotWorker
 from tree import OperatioType, TreeType
 
 from PyQt5 import QtWidgets, QtGui, uic
