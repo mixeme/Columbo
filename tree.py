@@ -196,5 +196,6 @@ class FileTreeWorker(QRunnable):
         if routine is not None:
             # Finishing tree build
             self.create_tree(routine)   # Build tree
+            print("Tree is build")
             self.sort_rows()            # Sort nodes
             self.end_update()           # Rebuild tree
