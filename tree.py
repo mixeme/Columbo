@@ -15,7 +15,8 @@ class TreeType(Enum):
 
 class OperatioType(Enum):
     FILE_TREE = 0
-    EMPTY_DIRS = 1
+    FILTERED_TREE = 1
+    EMPTY_DIRS = 2
 
 
 class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
@@ -178,7 +179,7 @@ class FileTreeWorker(QRunnable):
 
     def run(self):
         routine = None
-        if self.operation == OperatioType.FILE_TREE:
+        if (self.operation == OperatioType.FILE_TREE) or (self.operation == OperatioType.FILTERED_TREE):
             # Resolve the required tree type
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.UNIFIED):
                 routine = self.routine_unified_unified  # Unified -> unified
