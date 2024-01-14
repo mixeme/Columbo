@@ -113,12 +113,10 @@ class HistoryUI(QtWidgets.QMainWindow):
     def filter_action(self):
         if self.path_field.text():
             worker = tree.FileTreeWorker(self.path_field.text(),
-                                         self.fileTreeView,
                                          self.checked(),
                                          tree.OperatioType.FILE_TREE)
             worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
             QThreadPool.globalInstance().start(worker)
-        #pkg.nodes.filter_tree(self.fileTreeView.model(), self.filter_from_field, self.filter_to_field)
 
     def clear_action(self):
         self.filter_from_field.clear()
