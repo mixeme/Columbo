@@ -2,7 +2,7 @@ import os
 from enum import Enum
 
 from PyQt5 import QtCore
-from PyQt5.QtCore import QRunnable
+from PyQt5.QtCore import QRunnable, pyqtSignal, QObject
 from PyQt5.QtGui import QStandardItemModel
 
 from pkg import file, icons, nodes
@@ -51,8 +51,13 @@ class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
         return left_name < right_name
 
 
+class Signals(QObject):
+    finished = pyqtSignal(QStandardItemModel)
+
+
 class FileTreeWorker(QRunnable):
     columns = ["Name", "Last modified", "Snapshot"]
+    signals = Signals()
 
     def __init__(self, root_path, tree_view, checked_options, operation: OperatioType):
         super().__init__()
