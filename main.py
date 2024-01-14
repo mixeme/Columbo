@@ -49,18 +49,22 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def scan_action(self):
         if self.path_field.text():
-            QThreadPool.globalInstance().start(tree.FileTreeWorker(self.path_field.text(),
-                                                                   self.fileTreeView,
-                                                                   self.checked(),
-                                                                   tree.OperatioType.FILE_TREE))
+            worker = tree.FileTreeWorker(self.path_field.text(),
+                                         self.checked(),
+                                         tree.OperatioType.FILE_TREE)
+            worker.signals.finished.connect(self.update_tree)
+            QThreadPool.globalInstance().start(worker)
+            self.statusbar.showMessage("Start tree building")
 
     def empty_dirs_action(self):
         if self.path_field.text():
-            QThreadPool.globalInstance().start(tree.FileTreeWorker(self.path_field.text(),
-                                                                   self.fileTreeView,
-                                                                   self.checked(),
-                                                                   tree.OperatioType.EMPTY_DIRS))
-            self.clear_all_button.setEnabled(True)
+            worker = tree.FileTreeWorker(self.path_field.text(),
+                                         self.checked(),
+                                         tree.OperatioType.EMPTY_DIRS)
+            QThreadPool.globalInstance().start(worker)
+            worker.signals.finished.connect(self.update_tree)
+            worker.signals.finished.connect(lambda x: self.clear_all_button.setEnabled(True))
+            self.statusbar.showMessage("Start tree building")
 
     def expand_action(self):
         self.fileTreeView.expandAll()
