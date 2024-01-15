@@ -17,7 +17,8 @@ class HistoryUI(QtWidgets.QMainWindow):
     def __init__(self):
         # Load GUI layout
         super().__init__()
-        uic.loadUi('gui/history.ui', self)
+        uic.loadUi('gui/history.ui', self)      # Load GUI layout
+
         self.setWindowTitle("Columbo - Synchronization history observer")
         self.setWindowIcon(QtGui.QIcon('icons/search.png'))
 
