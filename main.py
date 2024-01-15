@@ -27,6 +27,9 @@ class HistoryUI(QtWidgets.QMainWindow):
         tree.FileTreeWorker.signals.finished.connect(self.update_tree)  # Connect to slot for finishing
         tree.FileTreeWorker.signals.finished.connect(self.switch_clear_all) # Switch Clear all button
 
+        ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
+        ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
+
     def from_checked(self) -> TreeType:
         if self.from_unified.isChecked():
             return TreeType.UNIFIED
