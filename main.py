@@ -24,7 +24,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
         self.setAcceptDrops(True)
 
-        tree.FileTreeWorker.signals.finished.connect(self.update_tree)  # Connect to slot for finishing
+        tree.FileTreeWorker.signals.finished.connect(self.update_tree)      # Connect to slot for finishing
         tree.FileTreeWorker.signals.finished.connect(self.switch_clear_all) # Switch Clear all button
 
         ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
