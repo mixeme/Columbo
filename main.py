@@ -3,9 +3,11 @@
 import os.path
 import shutil
 import sys
+import os
 
 import pkg.file
 import tree
+from pkg import icons
 from pkg.workers import ClearEmptyDirsWorker, ClearSnapshotWorker
 from tree import OperatioType, TreeType
 
@@ -19,10 +21,12 @@ class HistoryUI(QtWidgets.QMainWindow):
     def __init__(self):
         # Load GUI layout
         super().__init__()
-        uic.loadUi('gui/history.ui', self)      # Load GUI layout
+
+        bundle_dir = self.__get_bundle_dir()
+        uic.loadUi(os.path.join(bundle_dir, 'gui/history.ui'), self)      # Load GUI layout
 
         self.setWindowTitle("Columbo - Synchronization history observer")
-        self.setWindowIcon(QtGui.QIcon('icons/search.png'))
+        self.setWindowIcon(QtGui.QIcon(os.path.join(bundle_dir, 'icons/search.png')))
 
         self.setAcceptDrops(True)
 
