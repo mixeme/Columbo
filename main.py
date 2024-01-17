@@ -35,6 +35,16 @@ class HistoryUI(QtWidgets.QMainWindow):
         ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
         ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
 
+    @staticmethod
+    def __get_bundle_dir() -> str:
+        # Resolve project home folder
+        if getattr(sys, 'frozen', False):
+            # We are running in a bundle
+            return sys._MEIPASS
+        else:
+            # We are running in a normal Python environment
+            return os.path.dirname(os.path.abspath(__file__))
+
     def from_checked(self) -> TreeType:
         if self.from_unified.isChecked():
             return TreeType.UNIFIED
