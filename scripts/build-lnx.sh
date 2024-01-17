@@ -19,10 +19,10 @@ fi
 
 # Create executable file
 python -m PyInstaller \
-	--clean \
-	--windowed \
-	--$MODE \
 	--name columbo-$ARCH \
+	--$MODE \
+	--windowed \
+	--clean \
 	--add-data="./gui:./gui" \
 	--add-data="./icons:./icons" \
 	--icon=icons/search.ico \
