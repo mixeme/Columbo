@@ -9,11 +9,19 @@ echo "Project home:" $PWD;
 ARCH=$(uname -m);
 echo "Detected platform architecture:" $ARCH
 
+#
+if [ $# -gt 0 ];
+then
+	MODE=$1;
+else
+	MODE=onefile;
+fi
+
 # Create executable file
 python -m PyInstaller \
 	--clean \
 	--windowed \
-	--onefile \
+	--$MODE \
 	--name columbo-$ARCH \
 	--add-data="./gui:./gui" \
 	--add-data="./icons:./icons" \
