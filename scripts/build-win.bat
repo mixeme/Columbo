@@ -15,14 +15,13 @@ echo Switch to project home: %cd%
 
 :: Run PyInstaller
 python -m PyInstaller ^
+    --name columbo-win ^
+	--onefile ^
+ 	--windowed ^
 	--clean ^
-	--name columbo-win ^
 	--add-data="./gui;./gui" ^
 	--add-data="./icons;./icons" ^
 	--icon=icons/search.ico ^
 	main.py
-
-:: 	--windowed ^
-::	--onefile ^
 
 exit 0
