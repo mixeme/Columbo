@@ -2,7 +2,7 @@
 
 # wget https://github.com/mixeme/Columbo/raw/dev/scripts/install-as-source.sh | sudo bash
 
-COMMAND=$1
+COMMAND=$1;
 
 case $COMMAND in
 	source )
