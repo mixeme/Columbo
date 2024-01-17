@@ -12,7 +12,7 @@ case $COMMAND in
 	standalone )
 	;;
 	* )
-	echo "Unknown command" $COMMAND;
+	echo "Unknown command ${COMMAND}";
 	echo "Possible commands: source | binary | standalone";
 esac
 
