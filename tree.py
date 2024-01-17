@@ -75,9 +75,6 @@ class FileTreeWorker(QRunnable):
         self.to_snapshot = None
         self.model = None
 
-        # Load icons
-        icons.IconsLoader()
-
     def set_filter(self, from_snapshot: str, to_snapshot: str):
         self.filter = True
         self.from_snapshot = from_snapshot
