@@ -67,9 +67,9 @@ py <path-to-the-unpacked-repo>/main.py
 ```
 
 ## Linux
-1. Run `install.sh` from `scripts` with
+1. Run `scripts/install.sh` with
 ```shell
-wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh \
+wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh \
     && sudo bash [source | binary | standalone]
 ```
 2. Run Columbo
