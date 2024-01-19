@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
-# wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh | sudo bash
+# wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh
+# sudo bash [source | binary | standalone]
 
 COMMAND=$1;
 
