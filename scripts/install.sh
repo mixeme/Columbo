@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-# wget https://github.com/mixeme/Columbo/raw/dev/scripts/install-as-source.sh | sudo bash
+# wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh | sudo bash
 
 COMMAND=$1;
 
