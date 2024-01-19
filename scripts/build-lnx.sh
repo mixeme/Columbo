@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+# Reference: https://pyinstaller.org/en/stable/usage.html#options
+
 # Change location to project home
 cd $(dirname $0);
 cd ..;
