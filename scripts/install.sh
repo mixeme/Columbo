@@ -75,7 +75,7 @@ build() {
 		echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
 		ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
 		echo "Run Columbo as";
-		echo -e "\t$BIN_NAME | $SYSTEM_BIN | $COLUMBO_BIN";
+		echo -e "\t$(basename $SYSTEM_BIN) | $SYSTEM_BIN | $COLUMBO_BIN";
 }
 
 # Resolve command
