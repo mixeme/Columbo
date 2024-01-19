@@ -30,9 +30,10 @@ cd "$(dirname "$0")" || exit 1;
 
 BRANCH=dev;
 ARCH=$(uname -m);
-COLUMBO_HOME=/opt;
-COLUMBO_PY="$COLUMBO_HOME/Columbo/main.py";
-COLUMBO_BIN="$COLUMBO_HOME/Columbo/columbo-$ARCH";
+APP_ROOT=/opt;
+COLUMBO_HOME="$APP_ROOT/Columbo";
+COLUMBO_PY="$COLUMBO_HOME/main.py";
+COLUMBO_BIN="$COLUMBO_HOME/columbo-$ARCH";
 
 echo "+ Install packages...";
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
