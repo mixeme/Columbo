@@ -35,6 +35,7 @@ esac
 
 # Switch to scripts location
 cd "$(dirname "$0")" || exit 1;
+SCRIPT_PATH="$PWD/$(basename "$0")";
 
 # Setup variables
 ## Repo
@@ -98,8 +99,8 @@ case $COMMAND in
 esac
 
 # Remove script
-echo "Remove install script $PWD/$0";
-rm "$PWD/$0";
+echo "Remove install script $SCRIPT_PATH";
+rm "$SCRIPT_PATH";
 
 # Exit
 echo "Enjoy!";
