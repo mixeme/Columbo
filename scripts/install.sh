@@ -35,8 +35,9 @@ COLUMBO_HOME="$APP_ROOT/Columbo";
 COLUMBO_PY="$COLUMBO_HOME/main.py";
 COLUMBO_BIN="$COLUMBO_HOME/columbo-$ARCH";
 
-echo "+ Install packages...";
+echo "+ Install system packages...";
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
+echo "+ Install Python packages...";
 pip install --upgrade pyinstaller
 
 # If `pip` command is unknown then
