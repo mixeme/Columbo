@@ -1,6 +1,17 @@
 :: Run from project home with
 :: .\scripts\build-win.bat
 
+:: ----- Environment preparations -----
+:: Install CPython interpreter from
+::  https://www.python.org/downloads/windows/
+:: Install pip
+:: 	py -m ensurepip --upgrade
+:: Upgrade pip
+::  py -m pip install --upgrade pip
+:: Install PyInstaller
+:: 	py -m pip install --upgrade pyinstaller
+:: ------------------------------------
+
 :: Switch off output for each command
 @echo off
 
