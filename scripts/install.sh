@@ -13,13 +13,13 @@ fi
 
 case $COMMAND in
 	source )
-	    echo "Columbo will installed as source";
+	    echo "Columbo will be installed as source";
 	;;
 	binary )
-	  echo "Columbo will installed as regular binary";
+	  echo "Columbo will be installed as regular binary";
 	;;
 	standalone )
-	  echo "Columbo will installed as standalone binary";
+	  echo "Columbo will be installed as standalone binary";
 	;;
 	* )
 	echo "Unknown command ${COMMAND}";
