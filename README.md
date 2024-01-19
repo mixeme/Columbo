@@ -59,7 +59,7 @@ py -m pip install --upgrade pip
 ```shell
 py -m pip install --upgrade PyQt5
 ```
-6. [Download](http://github.com/mixeme/Columbo/zipball/main/) repo;
+6. Clone or [download](http://github.com/mixeme/Columbo/zipball/main/) as ZIP Columbo repo;
 7. Unpack archive;
 8. Run Columbo with
 ```shell
