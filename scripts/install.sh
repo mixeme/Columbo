@@ -27,6 +27,7 @@ case $COMMAND in
 	* )
 	echo "Unknown command ${COMMAND}";
 	echo "Possible commands: source (default) | binary | standalone";
+	echo "Exit";
 	exit 1;
 esac
 
@@ -65,6 +66,8 @@ build() {
 		chmod +x "$COLUMBO_BIN";
 		echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
 		ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
+		echo "Run Columbo as";
+		echo -e "\t$SYSTEM_BIN | $COLUMBO_BIN";
 }
 
 case $COMMAND in
