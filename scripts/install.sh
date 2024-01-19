@@ -34,7 +34,7 @@ COLUMBO_HOME=/opt;
 COLUMBO_PY="$COLUMBO_HOME/Columbo/main.py";
 COLUMBO_BIN="$COLUMBO_HOME/Columbo/columbo-$ARCH";
 
-apt install git python3 python3-pip python3-pyqt5;
+apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
 pip install --upgrade pyinstaller
 
 # If `pip` command is unknown then
