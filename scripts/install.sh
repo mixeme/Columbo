@@ -6,7 +6,7 @@
 if [ "$#" -eq 0 ];
 then
   COMMAND=source;
-  echo "No arguments are provided. Use default option '$COMMAND'";
+  echo "No arguments are provided. Default option '$COMMAND' is used";
 else
   COMMAND=$1;
 fi
@@ -67,7 +67,7 @@ case $COMMAND in
 	source )
 	  echo "+ Make script executable...";
 		chmod +x $COLUMBO_PY;
-		echo "Run Columbo with";
+		echo "Run Columbo as";
 		echo -e "\t$COLUMBO_PY | python3 $COLUMBO_PY";
 		#echo "+ Make main script executable...";
 		#ln -s $COLUMBO_PY $SYSTEM_BIN;
