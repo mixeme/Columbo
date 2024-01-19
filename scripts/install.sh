@@ -59,8 +59,7 @@ echo "+ Install system packages...";
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
 echo "+ Install Python packages...";
 pip install --upgrade pyinstaller
-
-# If `pip` command is unknown then
+# If `pip` command is unknown then use
 # 	python -m pip install --upgrade pyinstaller
 
 # Clone repo
