@@ -7,11 +7,11 @@ cd "$(dirname "$0")" || exit 1;
 cd ..;
 echo "Project home: $PWD";
 
-# Get platform architecture
+# Get a platform architecture
 ARCH=$(uname -m);
 echo "Detected platform architecture: $ARCH";
 
-#
+# Check the specified mode
 if [ $# -gt 0 ];
 then
 	MODE=$1;
