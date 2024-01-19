@@ -19,10 +19,10 @@ case $COMMAND in
 	    echo "Columbo will be installed as source";
 	;;
 	binary )
-	  echo "Columbo will be installed as regular binary";
+	  echo "Columbo will be installed as a regular binary";
 	;;
 	standalone )
-	  echo "Columbo will be installed as standalone binary";
+	  echo "Columbo will be installed as a standalone binary";
 	;;
 	* )
 	echo "Unknown command ${COMMAND}";
