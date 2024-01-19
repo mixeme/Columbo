@@ -54,4 +54,3 @@ case $COMMAND in
 		ln -s "$COLUMBO_BIN" /usr/local/bin/columbo;
 	;;
 esac
-
