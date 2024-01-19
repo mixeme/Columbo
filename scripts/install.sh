@@ -36,20 +36,25 @@ esac
 # Switch to scripts location
 cd "$(dirname "$0")" || exit 1;
 
+# Setup variables
+## Repo
 BRANCH=dev;
+## Build
 ARCH=$(uname -m);
 BIN_NAME="columbo-$ARCH";
+## Paths
 APP_ROOT=/opt;
 COLUMBO_HOME="$APP_ROOT/Columbo";
 COLUMBO_PY="$COLUMBO_HOME/main.py";
 COLUMBO_BIN="$COLUMBO_HOME/dist/$BIN_NAME";
 SYSTEM_BIN=/usr/local/bin/columbo;
-
+## Show defined values
 echo "Branch: $BRANCH";
 echo "Platform: $ARCH";
 echo "Application root: $APP_ROOT";
 echo "Columbo home: $COLUMBO_HOME";
 
+# Prepare environment
 echo "+ Install system packages...";
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
 echo "+ Install Python packages...";
