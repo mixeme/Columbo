@@ -9,12 +9,12 @@ Sync applications collect the history of changes (deleted, overwritten or, somet
 
 ```
 history
-  |-- Folder 1
-  | |-- Folder 3
-  | | |-- File 1_2024-01-01_10-00-00
-  | | |-- File 1_2024-01-02_06-00-00
-  |-- Folder 2
-  | |-- File 2_2024-01-02_06-00-00
+  ├── Folder 1
+  │   └── Folder 3
+  │       ├── File 1_2024-01-01_10-00-00
+  │       └── File 1_2024-01-02_06-00-00
+  └── Folder 2
+      └── File 2_2024-01-02_06-00-00
 ```
 
 **By date (tree)** way means that each sync keeps changes in a separate folder inside the history folder (separated by date history). Each separate folder is marked with a timestamp in its name.
@@ -62,7 +62,7 @@ py -m pip install --upgrade PyQt5
 6. [Download](http://github.com/mixeme/Columbo/zipball/main/) repo;
 7. Unpack archive;
 8. Run Columbo with
-``shell
+```shell
 py <path-to-the-unpacked-repo>/main.py
 ```
 
