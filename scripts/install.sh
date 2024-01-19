@@ -26,7 +26,7 @@ case $COMMAND in
 	echo "Possible commands: source (default) | binary | standalone";
 esac
 
-cd $(dirname $0);
+cd "$(dirname "$0")" || exit 1;
 
 BRANCH=dev;
 ARCH=$(uname -m);
@@ -42,7 +42,7 @@ pip install --upgrade pyinstaller
 # 	python -m pip install --upgrade pyinstaller
 
 echo "+ Clone Columbo repo...";
-cd "$COLUMBO_HOME";
+cd "$APP_ROOT" || exit 1;
 git clone -b $BRANCH https://github.com/mixeme/Columbo.git;
 
 case $COMMAND in
