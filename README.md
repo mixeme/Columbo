@@ -56,26 +56,21 @@ py -m ensurepip --upgrade
 py -m pip install --upgrade pip
 ```
 5. Install `PyQt5` fro
-
-
-    py -m pip install --upgrade PyQt5
-
-
+```shell
+py -m pip install --upgrade PyQt5
+```
 6. [Download](http://github.com/mixeme/Columbo/zipball/main/) repo;
 7. Unpack archive;
 8. Run Columbo with
-
-
-    py <Path-to-unpacked-repo>/main.py 
-
+````shell
+py <Path-to-unpacked-repo>/main.py
+````
 
 ## Linux
 1. Run `install.sh` from `scripts` with
-
-
-    wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
-
-
+```shell
+wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
+```
 2. Run Columbo
 ```shell
     /opt/Columbo/main.py  # `source` option
