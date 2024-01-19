@@ -63,11 +63,12 @@ pip install --upgrade pyinstaller
 # If `pip` command is unknown then
 # 	python -m pip install --upgrade pyinstaller
 
+# Clone repo
 echo "+ Clone Columbo repo...";
 cd "$APP_ROOT" || exit 1;
 git clone -b $BRANCH https://github.com/mixeme/Columbo.git;
 
-
+# Build routine
 build() {
     bash $COLUMBO_HOME/scripts/build-lnx.sh "$1";
     echo "+ Make $COLUMBO_BIN executable";
@@ -78,6 +79,7 @@ build() {
 		echo -e "\t$BIN_NAME | $SYSTEM_BIN | $COLUMBO_BIN";
 }
 
+# Resolve command
 case $COMMAND in
 	source )
 	  echo "+ Make script executable...";
