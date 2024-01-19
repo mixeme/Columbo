@@ -21,7 +21,7 @@ fi
 
 # Create executable file
 python3 -m PyInstaller \
-	--name "olumbo-$ARCH" \
+	--name "columbo-$ARCH" \
 	--$MODE \
 	--windowed \
 	--clean \
