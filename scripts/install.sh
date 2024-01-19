@@ -27,6 +27,7 @@ case $COMMAND in
 	* )
 	echo "Unknown command ${COMMAND}";
 	echo "Possible commands: source (default) | binary | standalone";
+	exit 1;
 esac
 
 cd "$(dirname "$0")" || exit 1;
