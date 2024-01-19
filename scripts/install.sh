@@ -6,16 +6,20 @@
 if [ "$#" -eq 0 ];
 then
   COMMAND=source;
+  echo "No arguments are provided. Use default option" $COMMAND;
 else
   COMMAND=$1;
 fi
 
 case $COMMAND in
 	source )
+	    echo "Columbo will installed as source";
 	;;
 	binary )
+	  echo "Columbo will installed as regular binary";
 	;;
 	standalone )
+	  echo "Columbo will installed as standalone binary";
 	;;
 	* )
 	echo "Unknown command ${COMMAND}";
