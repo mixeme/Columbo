@@ -36,6 +36,7 @@ esac
 # Switch to scripts location
 cd "$(dirname "$0")" || exit 1;
 SCRIPT_PATH="$PWD/$(basename "$0")";
+echo "Script path: $SCRIPT_PATH";
 
 # Setup variables
 ## Repo
