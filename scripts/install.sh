@@ -72,16 +72,14 @@ case $COMMAND in
 		chmod +x $COLUMBO_PY;
 		echo "Run Columbo as";
 		echo -e "\t$COLUMBO_PY | python3 $COLUMBO_PY";
-		#echo "+ Make main script executable...";
-		#ln -s $COLUMBO_PY $SYSTEM_BIN;
 	;;
 	binary )
 	  COLUMBO_BIN="$COLUMBO_BIN/$BIN_NAME";
-	  echo "+ Build regular binary...";
+	  echo "+ Build a regular binary...";
 		build onedir;
 	;;
 	standalone )
-	  echo "+ Build standalone binary...";
+	  echo "+ Build a standalone binary...";
 	  build onefile;
 	;;
 esac
