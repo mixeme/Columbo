@@ -22,6 +22,11 @@ COLUMBO_HOME=/opt
 COLUMBO_PY=Columbo/main.py
 
 apt install git python3 python3-pip python3-pyqt5;
+pip install --upgrade pyinstaller
+
+# If `pip` command is unknown then
+# 	python -m pip install --upgrade pyinstaller
+
 cd $COLUMBO_HOME;
 git clone https://github.com/mixeme/Columbo.git;
 
