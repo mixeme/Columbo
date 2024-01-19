@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
-# wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh
-# sudo bash [source | binary | standalone]
+# wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
 
 if [ "$#" -eq 0 ];
 then
