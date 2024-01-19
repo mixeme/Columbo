@@ -64,10 +64,12 @@ build() {
 
 case $COMMAND in
 	source )
-	  echo "+ Make main script executable...";
+	  echo "+ Make script executable...";
 		chmod +x $COLUMBO_PY;
+		echo "Run Columbo with";
+		echo -e "\tpython3 $COLUMBO_PY";
 		#echo "+ Make main script executable...";
-		ln -s $COLUMBO_PY $SYSTEM_BIN;
+		#ln -s $COLUMBO_PY $SYSTEM_BIN;
 	;;
 	binary )
 	  COLUMBO_BIN="$COLUMBO_BIN/$BIN_NAME";
