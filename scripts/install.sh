@@ -37,9 +37,10 @@ COLUMBO_PY="$COLUMBO_HOME/main.py";
 COLUMBO_BIN="$COLUMBO_HOME/dist/$BIN_NAME";
 SYSTEM_BIN=/usr/local/bin/columbo;
 
-echo "Used branch: $BRANCH";
+echo "Branch: $BRANCH";
 echo "Platform: $ARCH";
 echo "Application root: $APP_ROOT";
+echo "Columbo home: $COLUMBO_HOME";
 
 echo "+ Install system packages...";
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
