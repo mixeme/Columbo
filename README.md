@@ -67,7 +67,7 @@ py <path-to-the-unpacked-repo>/main.py
 ```
 
 ### Linux
-1. Run `scripts/install.sh`. For example as
+1. Run `scripts/install.sh`. For example
 ```shell
 wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh \
     && sudo bash [source | binary | standalone]
