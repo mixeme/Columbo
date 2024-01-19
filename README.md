@@ -55,7 +55,7 @@ py -m ensurepip --upgrade
 ```shell
 py -m pip install --upgrade pip
 ```
-5. Install `PyQt5` fro
+5. Install `PyQt5` package with `pip`
 ```shell
 py -m pip install --upgrade PyQt5
 ```
