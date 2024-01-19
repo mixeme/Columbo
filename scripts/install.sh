@@ -36,7 +36,6 @@ esac
 # Switch to scripts location
 cd "$(dirname "$0")" || exit 1;
 SCRIPT_PATH="$PWD/$(basename "$0")";
-echo "Script path: $SCRIPT_PATH";
 
 # Setup variables
 ## Repo
@@ -51,6 +50,7 @@ COLUMBO_PY="$COLUMBO_HOME/main.py";
 COLUMBO_BIN="$COLUMBO_HOME/dist/$BIN_NAME";
 SYSTEM_BIN=/usr/local/bin/columbo;
 ## Show defined values
+echo "Script path: $SCRIPT_PATH";
 echo "Branch: $BRANCH";
 echo "Platform: $ARCH";
 echo "Application root: $APP_ROOT";
@@ -100,9 +100,9 @@ case $COMMAND in
 esac
 
 # Remove script
-echo "Remove install script $SCRIPT_PATH";
+echo "Clean install script $SCRIPT_PATH";
 rm "$SCRIPT_PATH";
 
 # Exit
-echo "Enjoy!";
+echo "Enjoy Columbo!";
 exit 0;
