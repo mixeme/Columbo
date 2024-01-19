@@ -20,7 +20,7 @@ else
 fi
 
 # Create executable file
-python -m PyInstaller \
+python3 -m PyInstaller \
 	--name columbo-$ARCH \
 	--$MODE \
 	--windowed \
