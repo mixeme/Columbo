@@ -96,3 +96,6 @@ case $COMMAND in
 	  build onefile;
 	;;
 esac
+
+echo "Enjoy!";
+exit 0;
