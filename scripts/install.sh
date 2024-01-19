@@ -6,6 +6,7 @@
 # Make a new installation
 #   wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
 
+# Check input arguments
 if [ "$#" -eq 0 ];
 then
   COMMAND=source;
@@ -14,6 +15,7 @@ else
   COMMAND=$1;
 fi
 
+# Check command value
 case $COMMAND in
 	source )
 	    echo "Columbo will be installed as source";
@@ -31,6 +33,7 @@ case $COMMAND in
 	exit 1;
 esac
 
+# Switch to scripts location
 cd "$(dirname "$0")" || exit 1;
 
 BRANCH=dev;
