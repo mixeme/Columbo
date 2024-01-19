@@ -5,11 +5,11 @@
 # Change location to project home
 cd $(dirname $0);
 cd ..;
-echo "Project home:" $PWD;
+echo "Project home: $PWD";
 
 # Get platform architecture
 ARCH=$(uname -m);
-echo "Detected platform architecture:" $ARCH
+echo "Detected platform architecture: $ARCH";
 
 #
 if [ $# -gt 0 ];
