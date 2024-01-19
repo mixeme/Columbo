@@ -2,8 +2,8 @@
 
 # Reference: https://pyinstaller.org/en/stable/usage.html#options
 
-# Change location to project home
-cd $(dirname $0);
+# Change location to the project home
+cd "$(dirname "$0")" || exit 1;
 cd ..;
 echo "Project home: $PWD";
 
@@ -21,7 +21,7 @@ fi
 
 # Create executable file
 python3 -m PyInstaller \
-	--name columbo-$ARCH \
+	--name "olumbo-$ARCH" \
 	--$MODE \
 	--windowed \
 	--clean \
