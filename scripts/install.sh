@@ -29,10 +29,12 @@ cd "$(dirname "$0")" || exit 1;
 
 BRANCH=dev;
 ARCH=$(uname -m);
+BIN_NAME="columbo-$ARCH";
 APP_ROOT=/opt;
 COLUMBO_HOME="$APP_ROOT/Columbo";
 COLUMBO_PY="$COLUMBO_HOME/main.py";
-COLUMBO_BIN="$COLUMBO_HOME/dist/columbo-$ARCH";
+COLUMBO_BIN="$COLUMBO_HOME/dist/$BIN_NAME";
+SYSTEM_BIN=/usr/local/bin/columbo;
 
 echo "Used branch: $BRANCH";
 echo "Platform: $ARCH";
