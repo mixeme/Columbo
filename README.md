@@ -48,17 +48,13 @@ Columbo aims to provide a cross-platform convenient graphical interface to inves
 > https://www.python.org/downloads/windows/
 2. Open PowerShell as administrator;
 3. Install `pip`
-
-
-    py -m ensurepip --upgrade
-
-
+```shell
+py -m ensurepip --upgrade
+```
 4. Upgrade `pip` to the latest version
-
-
-    py -m pip install --upgrade pip
-
-
+```shell
+py -m pip install --upgrade pip
+```
 5. Install `PyQt5` fro
 
 
@@ -77,10 +73,11 @@ Columbo aims to provide a cross-platform convenient graphical interface to inves
 1. Run `install.sh` from `scripts` with
 
 
-    wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh | sudo bash
+    wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
 
 
-2. Run Columbo 
-3. 
-4. Use `install.sh` from `scripts` to .
-2. 
+2. Run Columbo
+```shell
+    /opt/Columbo/main.py  # `source` option
+    columbo               # `binary` & `standalone` options 
+```
