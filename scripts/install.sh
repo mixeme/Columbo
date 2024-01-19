@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
 
-# sudo rm -R /opt/Columbo && rm install.sh && sudo rm /usr/local/bin/columbo
-# wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
+# Clear a previous installation
+#   sudo rm -R /opt/Columbo && rm install.sh && sudo rm /usr/local/bin/columbo
+#
+# Make a new installation
+#   wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
 
 if [ "$#" -eq 0 ];
 then
