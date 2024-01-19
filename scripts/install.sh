@@ -56,12 +56,12 @@ case $COMMAND in
 	;;
 	binary )
 	  echo "+ Build regular binary...";
-		bash build-lnx.sh onedir;
+		bash $COLUMBO_HOME/scripts/build-lnx.sh onedir;
 		chmod +x "$COLUMBO_BIN";
 		ln -s "$COLUMBO_BIN" /usr/local/bin/columbo;
 	;;
 	standalone )
-		bash build-lnx.sh onefile;
+		bash $COLUMBO_HOME/scripts/build-lnx.sh onefile;
 		chmod +x "$COLUMBO_BIN";
 		ln -s "$COLUMBO_BIN" /usr/local/bin/columbo;
 	;;
