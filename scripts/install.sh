@@ -3,7 +3,12 @@
 # wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh
 # sudo bash [source | binary | standalone]
 
-COMMAND=$1;
+if [ "$#" -eq 0 ];
+then
+  COMMAND=source;
+else
+  COMMAND=$1;
+fi
 
 case $COMMAND in
 	source )
@@ -14,7 +19,7 @@ case $COMMAND in
 	;;
 	* )
 	echo "Unknown command ${COMMAND}";
-	echo "Possible commands: source | binary | standalone";
+	echo "Possible commands: source (default) | binary | standalone";
 esac
 
 cd $(dirname $0)
