@@ -35,7 +35,7 @@ pip install --upgrade pyinstaller
 # If `pip` command is unknown then
 # 	python -m pip install --upgrade pyinstaller
 
-cd $COLUMBO_HOME;
+cd "$COLUMBO_HOME";
 git clone https://github.com/mixeme/Columbo.git;
 
 case $COMMAND in
@@ -45,12 +45,12 @@ case $COMMAND in
 	;;
 	binary )
 		bash build-lnx.sh onedir;
-		chmod +x $COLUMBO_BIN;
+		chmod +x "$COLUMBO_BIN";
 		ln -s "$COLUMBO_BIN" /usr/local/bin/columbo;
 	;;
 	standalone )
 		bash build-lnx.sh onefile;
-		chmod +x $COLUMBO_BIN;
+		chmod +x "$COLUMBO_BIN";
 		ln -s "$COLUMBO_BIN" /usr/local/bin/columbo;
 	;;
 esac
