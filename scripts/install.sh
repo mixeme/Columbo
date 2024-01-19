@@ -22,7 +22,7 @@ case $COMMAND in
 	echo "Possible commands: source (default) | binary | standalone";
 esac
 
-cd $(dirname $0)
+cd $(dirname $0);
 
 ARCH=$(uname -m);
 COLUMBO_HOME=/opt;
