@@ -72,15 +72,10 @@ case $COMMAND in
 	binary )
 	  COLUMBO_BIN="$COLUMBO_BIN/$BIN_NAME";
 	  echo "+ Build regular binary...";
-		bash $COLUMBO_HOME/scripts/build-lnx.sh onedir;
-		echo "+ Make $COLUMBO_BIN executable...";
-		chmod +x "$COLUMBO_BIN";
-		echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
-		ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
+		build onedir;
 	;;
 	standalone )
-		bash $COLUMBO_HOME/scripts/build-lnx.sh onefile;
-		chmod +x "$COLUMBO_BIN";
-		ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
+	  echo "+ Build standalone binary...";
+	  build onefile;
 	;;
 esac
