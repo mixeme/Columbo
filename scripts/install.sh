@@ -40,8 +40,6 @@ echo "Used branch: $BRANCH";
 echo "Platform: $ARCH";
 echo "Application root: $APP_ROOT";
 
-
-
 echo "+ Install system packages...";
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
 echo "+ Install Python packages...";
@@ -58,18 +56,21 @@ case $COMMAND in
 	source )
 	  echo "+ Make main script executable...";
 		chmod +x $COLUMBO_PY;
-		echo "+ Make main script executable...";
-		ln -s $COLUMBO_PY /usr/local/bin/columbo;
+		#echo "+ Make main script executable...";
+		ln -s $COLUMBO_PY $SYSTEM_BIN;
 	;;
 	binary )
+	  COLUMBO_BIN="$COLUMBO_BIN/$BIN_NAME";
 	  echo "+ Build regular binary...";
 		bash $COLUMBO_HOME/scripts/build-lnx.sh onedir;
+		echo "+ Make $COLUMBO_BIN executable...";
 		chmod +x "$COLUMBO_BIN";
-		ln -s "$COLUMBO_BIN" /usr/local/bin/columbo;
+		echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
+		ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
 	;;
 	standalone )
 		bash $COLUMBO_HOME/scripts/build-lnx.sh onefile;
 		chmod +x "$COLUMBO_BIN";
-		ln -s "$COLUMBO_BIN" /usr/local/bin/columbo;
+		ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
 	;;
 esac
