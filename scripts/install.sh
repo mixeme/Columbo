@@ -6,7 +6,7 @@
 if [ "$#" -eq 0 ];
 then
   COMMAND=source;
-  echo "No arguments are provided. Use default option" $COMMAND;
+  echo "No arguments are provided. Use default option '$COMMAND'";
 else
   COMMAND=$1;
 fi
