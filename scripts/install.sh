@@ -98,8 +98,8 @@ case $COMMAND in
 esac
 
 # Remove script
-echo "Remove install script $0";
-rm "$0";
+echo "Remove install script $PWD/$0";
+rm "$PWD/$0";
 
 # Exit
 echo "Enjoy!";
