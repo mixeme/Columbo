@@ -52,6 +52,15 @@ echo "+ Clone Columbo repo...";
 cd "$APP_ROOT" || exit 1;
 git clone -b $BRANCH https://github.com/mixeme/Columbo.git;
 
+
+build() {
+    bash $COLUMBO_HOME/scripts/build-lnx.sh "$1";
+    echo "+ Make $COLUMBO_BIN executable";
+		chmod +x "$COLUMBO_BIN";
+		echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
+		ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
+}
+
 case $COMMAND in
 	source )
 	  echo "+ Make main script executable...";
