@@ -97,5 +97,10 @@ case $COMMAND in
 	;;
 esac
 
+# Remove script
+echo "Remove install script $0";
+rm "$0";
+
+# Exit
 echo "Enjoy!";
 exit 0;
