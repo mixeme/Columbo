@@ -42,8 +42,8 @@ Columbo aims to provide a cross-platform convenient graphical interface to inves
 + Python 3;
 + PyQt 5.
 
-# Run from source
-## Windows
+## Run from source
+### Windows
 1. Install CPython interpreter from
 > https://www.python.org/downloads/windows/
 2. Open PowerShell as administrator;
@@ -60,14 +60,14 @@ py -m pip install --upgrade pip
 py -m pip install --upgrade PyQt5
 ```
 6. Clone or [download](http://github.com/mixeme/Columbo/zipball/main/) as ZIP Columbo repo;
-7. Unpack archive;
+7. Unpack ZIP (if it is needed);
 8. Run Columbo with
 ```shell
 py <path-to-the-unpacked-repo>/main.py
 ```
 
-## Linux
-1. Run `scripts/install.sh` with
+### Linux
+1. Run `scripts/install.sh`. For example as
 ```shell
 wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh \
     && sudo bash [source | binary | standalone]
