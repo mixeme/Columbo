@@ -68,7 +68,7 @@ case $COMMAND in
 	  echo "+ Make script executable...";
 		chmod +x $COLUMBO_PY;
 		echo "Run Columbo with";
-		echo -e "\tpython3 $COLUMBO_PY";
+		echo -e "\t$COLUMBO_PY | python3 $COLUMBO_PY";
 		#echo "+ Make main script executable...";
 		#ln -s $COLUMBO_PY $SYSTEM_BIN;
 	;;
