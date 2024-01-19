@@ -28,6 +28,7 @@ esac
 
 cd $(dirname $0);
 
+BRANCH=dev;
 ARCH=$(uname -m);
 COLUMBO_HOME=/opt;
 COLUMBO_PY="$COLUMBO_HOME/Columbo/main.py";
@@ -40,7 +41,7 @@ pip install --upgrade pyinstaller
 # 	python -m pip install --upgrade pyinstaller
 
 cd "$COLUMBO_HOME";
-git clone https://github.com/mixeme/Columbo.git;
+git clone -b $BRANCH https://github.com/mixeme/Columbo.git;
 
 case $COMMAND in
 	source )
