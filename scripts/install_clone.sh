@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Clear a previous installation
-#   sudo rm -R /opt/Columbo && sudo rm -R Columbo && sudo rm /usr/local/bin/columbo
+#   sudo rm -R /opt/Columbo; sudo rm -R Columbo; sudo rm /usr/local/bin/columbo
 #
 # Make a new installation
 #   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh [source | binary | standalone]
