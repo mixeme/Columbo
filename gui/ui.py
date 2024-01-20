@@ -6,10 +6,10 @@ from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
-import pkg.file
+import core.file
 import tree
 from gui import icons
-from pkg.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
+from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
 from tree import FileTreeWorker
 from tree import TreeType, OperationType
 
@@ -132,7 +132,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def restore_action(self) -> None:
         # Get path to item
         selected_path, selected_item = self.get_selected_path()
-        extension = pkg.file.get_extension(selected_item)
+        extension = core.file.get_extension(selected_item)
 
         # Define file extension for dialog
         if extension:
@@ -164,7 +164,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             to_snapshot = self.filter_to_field.text()
 
             if self.checked()[0] == tree.TreeType.UNIFIED:
-                snapshot_fun = lambda root, file: pkg.file.get_snapshot(file)
+                snapshot_fun = lambda root, file: core.file.get_snapshot(file)
             if self.checked()[0] == tree.TreeType.BY_DATE:
                 snapshot_fun = lambda root, file: root.split(os.sep)[1]
 
