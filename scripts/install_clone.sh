@@ -4,10 +4,7 @@
 #   sudo rm -R /opt/Columbo; sudo rm -R Columbo; sudo rm /usr/local/bin/columbo
 #
 # Make a new installation
-#   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh [source | binary | standalone]
-#   sudo apt install -y git && git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh source
-#   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh binary
-#   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh standalone
+#   sudo apt install -y git && git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh [source | binary | standalone]
 
 # Check input arguments
 if [ "$#" -eq 0 ];
@@ -119,7 +116,7 @@ case $COMMAND in
 	;;
 esac
 
-# Remove script
+# Remove installation folder
 echo "Clean installation folder";
 rm -R ../../Columbo;
 
