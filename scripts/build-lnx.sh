@@ -16,8 +16,22 @@ if [ $# -gt 0 ];
 then
 	MODE=$1;
 else
-	MODE=onefile;
-	echo "Build mode is not setup! Default one is used...";
+  echo -e "\nBuild mode was not specified as an argument. Choose build mode:";
+  echo "[1] onedir (one executable file and a folder with supplementary files, works faster)";
+  echo -e "[2] onefile (all in one executable file, works slower)\n";
+
+	read -p "Enter a number of option or just press ENTER for 'onedir' option: " OPTION;
+	case $OPTION in
+	  1 )
+	    MODE=onedir;
+	  ;;
+	  2 )
+	    MODE=onefile;
+	  ;;
+	  * )
+	    MODE=onedir;
+	  ;;
+	esac
 fi
 echo "Mode: $MODE";
 
