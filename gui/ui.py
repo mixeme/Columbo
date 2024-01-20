@@ -11,7 +11,7 @@ import tree
 from pkg import icons
 from pkg.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
 from tree import FileTreeWorker
-from tree import TreeType, OperatioType
+from tree import TreeType, OperationType
 
 
 class HistoryUI(QtWidgets.QMainWindow):
@@ -42,14 +42,14 @@ class HistoryUI(QtWidgets.QMainWindow):
             return TreeType.UNIFIED
 
         if self.from_bydate.isChecked():
-            return TreeType.BYDATE
+            return TreeType.BY_DATE
 
     def to_checked(self) -> TreeType:
         if self.to_unified.isChecked():
             return TreeType.UNIFIED
 
         if self.to_bydate.isChecked():
-            return TreeType.BYDATE
+            return TreeType.BY_DATE
 
     def checked(self) -> (TreeType, TreeType):
         return self.from_checked(), self.to_checked()
@@ -64,7 +64,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         selected_path = selected_item                   # Prepare selected path
 
         # Go up for a versioned file
-        if (self.from_checked() == TreeType.BYDATE) and (self.to_checked() == TreeType.UNIFIED):
+        if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
             index = index.parent()
 
         index = index.parent()                          # Get its parent
@@ -74,11 +74,11 @@ class HistoryUI(QtWidgets.QMainWindow):
             # If we reach the root
             if parent_item == self.path_field.text():
                 # Add snapshot to the path for By date -> Unified
-                if (self.from_checked() == TreeType.BYDATE) and (self.to_checked() == TreeType.UNIFIED):
+                if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
                     parent_item = os.path.join(parent_item, snapshot)
 
                 # Remove snapshot from the path for Unified -> By date
-                if (self.from_checked() == TreeType.UNIFIED) and (self.to_checked() == TreeType.BYDATE):
+                if (self.from_checked() == TreeType.UNIFIED) and (self.to_checked() == TreeType.BY_DATE):
                     selected_path = selected_path[selected_path.find(os.sep)+1:]
 
             selected_path = os.path.join(parent_item, selected_path)
@@ -97,17 +97,17 @@ class HistoryUI(QtWidgets.QMainWindow):
         self.fileTreeView.header().resizeSection(0, 300)
         self.statusbar.showMessage("Build is finished")
 
-    def switch_clear_all(self, op_type: OperatioType, _) -> None:
-        self.clear_all_button.setEnabled(op_type == OperatioType.EMPTY_DIRS)
+    def switch_clear_all(self, op_type: OperationType, _) -> None:
+        self.clear_all_button.setEnabled(op_type == OperationType.EMPTY_DIRS)
 
-    def build_file_tree(self, op_type: OperatioType) -> None:
+    def build_file_tree(self, op_type: OperationType) -> None:
         if self.path_field.text():
-            worker = tree.FileTreeWorker(self.path_field.text(),
-                                         self.checked(),
-                                         op_type)
+            worker = FileTreeWorker(self.path_field.text(),
+                                    self.checked(),
+                                    op_type)
 
             # Switch filter
-            if op_type == OperatioType.FILTERED_TREE:
+            if op_type == OperationType.FILTERED_TREE:
                 worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
 
             # Start worker in another thread
@@ -115,13 +115,13 @@ class HistoryUI(QtWidgets.QMainWindow):
             self.statusbar.showMessage("Start tree building")
 
     def scan_action(self) -> None:
-        self.build_file_tree(OperatioType.FILE_TREE)
+        self.build_file_tree(OperationType.FILE_TREE)
 
     def filter_action(self) -> None:
-        self.build_file_tree(OperatioType.FILTERED_TREE)
+        self.build_file_tree(OperationType.FILTERED_TREE)
 
     def empty_dirs_action(self) -> None:
-        self.build_file_tree(OperatioType.EMPTY_DIRS)
+        self.build_file_tree(OperationType.EMPTY_DIRS)
 
     def expand_action(self) -> None:
         self.fileTreeView.expandAll()
@@ -165,7 +165,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
             if self.checked()[0] == tree.TreeType.UNIFIED:
                 snapshot_fun = lambda root, file: pkg.file.get_snapshot(file)
-            if self.checked()[0] == tree.TreeType.BYDATE:
+            if self.checked()[0] == tree.TreeType.BY_DATE:
                 snapshot_fun = lambda root, file: root.split(os.sep)[1]
 
             def test_fun(root: str, file: str) -> bool:

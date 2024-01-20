@@ -5,15 +5,15 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, pyqtSignal, QObject
 from PyQt5.QtGui import QStandardItemModel
 
-from pkg import file, icons, nodes
+from pkg import file, nodes
 
 
 class TreeType(Enum):
     UNIFIED = 0
-    BYDATE = 1
+    BY_DATE = 1
 
 
-class OperatioType(Enum):
+class OperationType(Enum):
     FILE_TREE = 0
     FILTERED_TREE = 1
     EMPTY_DIRS = 2
@@ -53,14 +53,14 @@ class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
 
 
 class Signals(QObject):
-    finished = pyqtSignal(OperatioType, QStandardItemModel)
+    finished = pyqtSignal(OperationType, QStandardItemModel)
 
 
 class FileTreeWorker(QRunnable):
     columns = ["Name", "Last modified", "Snapshot"]
     signals = Signals()
 
-    def __init__(self, root_path, checked_options, operation: OperatioType):
+    def __init__(self, root_path, checked_options, operation: OperationType):
         super().__init__()
         # Store input values
         self.root_path = root_path
@@ -176,18 +176,18 @@ class FileTreeWorker(QRunnable):
 
     def run(self):
         routine = None
-        if (self.operation == OperatioType.FILE_TREE) or (self.operation == OperatioType.FILTERED_TREE):
+        if (self.operation == OperationType.FILE_TREE) or (self.operation == OperationType.FILTERED_TREE):
             # Resolve the required tree type
             if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.UNIFIED):
                 routine = self.routine_unified_unified  # Unified -> unified
-            if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.BYDATE):
+            if (self.checked[0] == TreeType.BY_DATE) and (self.checked[1] == TreeType.BY_DATE):
                 routine = self.routine_bydate_bydate    # By date -> by date
-            if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BYDATE):
+            if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BY_DATE):
                 routine = self.routine_unified_bydate   # Unified -> by date
-            if (self.checked[0] == TreeType.BYDATE) and (self.checked[1] == TreeType.UNIFIED):
+            if (self.checked[0] == TreeType.BY_DATE) and (self.checked[1] == TreeType.UNIFIED):
                 routine = self.routine_bydate_unified   # By date -> unified
 
-        if self.operation == OperatioType.EMPTY_DIRS:
+        if self.operation == OperationType.EMPTY_DIRS:
             routine = self.routine_empty_dirs
 
         if routine is not None:
