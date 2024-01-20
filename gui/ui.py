@@ -53,10 +53,10 @@ class HistoryUI(QtWidgets.QMainWindow):
         return self.from_checked(), self.to_checked()
 
     def get_selected_nodes(self) -> list[QModelIndex]:
-        return self.fileTreeView.selectedIndexes()
+        return self.file_tree_view.selectedIndexes()
 
     def get_selected_path(self) -> (str, str):
-        index = self.fileTreeView.selectedIndexes()[0]  # Get the selected index
+        index = self.file_tree_view.selectedIndexes()[0]  # Get the selected index
         snapshot = index.siblingAtColumn(2).data()      # Get snapshot
         selected_item = index.data()                    # Get item for the selected index
         selected_path = selected_item                   # Prepare selected path
@@ -91,8 +91,8 @@ class HistoryUI(QtWidgets.QMainWindow):
             self.path_field.setText(selected_dir)
 
     def update_tree(self, _, model) -> None:
-        self.fileTreeView.setModel(model)
-        self.fileTreeView.header().resizeSection(0, 300)
+        self.file_tree_view.setModel(model)
+        self.file_tree_view.header().resizeSection(0, 300)
         self.statusbar.showMessage("Build is finished")
 
     def switch_clear_all(self, op_type: OperationType, _) -> None:
@@ -122,10 +122,10 @@ class HistoryUI(QtWidgets.QMainWindow):
         self.build_file_tree(OperationType.EMPTY_DIRS)
 
     def expand_action(self) -> None:
-        self.fileTreeView.expandAll()
+        self.file_tree_view.expandAll()
 
     def collapse_action(self) -> None:
-        self.fileTreeView.collapseAll()
+        self.file_tree_view.collapseAll()
 
     def restore_action(self) -> None:
         # Get path to item
@@ -192,8 +192,8 @@ class HistoryUI(QtWidgets.QMainWindow):
         files = [url.toLocalFile() for url in event.mimeData().urls()]
         self.path_field.setText(files[0])
 
-    def contextMenuEvent(self, event) -> None:
-        context_menu = QMenu(self)
+    def contextMenuEvent(self, position) -> None:
+        context_menu = QMenu()
         restore = context_menu.addAction("Restore")
         context_menu.addSeparator()
         from_snapshot = context_menu.addAction("From snapshot")
@@ -202,7 +202,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         expand = context_menu.addAction("Expand recursively")
         context_menu.addSeparator()
         delete = context_menu.addAction("Delete empty directory")
-        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+        action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
         if action == restore:
             self.restore_action()
         if action == from_snapshot:
@@ -214,7 +214,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             snapshot = selected_nodes[0].siblingAtColumn(2).data()
             self.filter_to_field.setText(snapshot)
         if action == expand:
-            self.fileTreeView.expandRecursively(self.get_selected_nodes()[0])
+            self.file_tree_view.expandRecursively(self.get_selected_nodes()[0])
         if action == delete:
             selected_path, _ = self.get_selected_path()
             try:
