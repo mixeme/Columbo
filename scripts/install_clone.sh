@@ -48,7 +48,6 @@ BIN_NAME="columbo-$ARCH";
 APP_ROOT=/opt;
 COLUMBO_HOME="$APP_ROOT/Columbo";
 COLUMBO_PY="$COLUMBO_HOME/main.py";
-COLUMBO_BIN="$COLUMBO_HOME/dist/$BIN_NAME";
 SYSTEM_BIN=/usr/local/bin/columbo;
 ## Show defined values
 echo "Script path: $SCRIPT_PATH";
@@ -71,16 +70,19 @@ build() {
       onedir )
         echo "+ Create application folder $COLUMBO_HOME";
         mkdir -p "$COLUMBO_HOME";
-        TARGET=$COLUMBO_HOME/;
+
+        COPY_TARGET=$COLUMBO_HOME;
+        COLUMBO_BIN="$COLUMBO_HOME/$BIN_NAME";
       ;;
       onefile )
-        TARGET=$SYSTEM_BIN;
+        COPY_TARGET=$SYSTEM_BIN;
+        COLUMBO_BIN="$SYSTEM_BIN";
       ;;
     esac
-    echo "+ Copy binary from ../dist/$BIN_NAME to $TARGET";
-    cp -R "../dist/$BIN_NAME" "$TARGET";
-    echo "+ Make $TARGET executable";
-		chmod +x "$TARGET";
+    echo "+ Copy binary from ../dist/$BIN_NAME to $COPY_TARGET";
+    cp -R "../dist/$BIN_NAME" "$COPY_TARGET";
+    echo "+ Make $COLUMBO_BIN executable";
+		chmod +x "$COLUMBO_BIN";
 
     if [ "$1" = "binary" ];
     then
