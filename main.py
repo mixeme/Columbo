@@ -208,6 +208,8 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def contextMenuEvent(self, event) -> None:
         context_menu = QMenu(self)
+        restore = context_menu.addAction("Restore")
+        context_menu.addSeparator()
         from_snapshot = context_menu.addAction("From snapshot")
         to_snapshot = context_menu.addAction("To snapshot")
         context_menu.addSeparator()
@@ -215,6 +217,8 @@ class HistoryUI(QtWidgets.QMainWindow):
         context_menu.addSeparator()
         delete = context_menu.addAction("Delete empty directory")
         action = context_menu.exec_(self.mapToGlobal(event.pos()))
+        if action == restore:
+            self.restore_action()
         if action == from_snapshot:
             selected_nodes = self.get_selected_nodes()
             snapshot = selected_nodes[0].siblingAtColumn(2).data()
