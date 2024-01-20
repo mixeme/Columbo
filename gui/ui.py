@@ -1,6 +1,5 @@
 import os
 import shutil
-import sys
 
 from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
@@ -20,11 +19,12 @@ class HistoryUI(QtWidgets.QMainWindow):
         # Load GUI layout
         super().__init__()
 
-        uic.loadUi(os.path.join(bundle_dir, 'gui/history.ui'), self)      # Load GUI layout
+        # Load GUI layout
+        uic.loadUi(os.path.join(bundle_dir, 'gui/history.ui'), self)
 
+        # Set window properties
         self.setWindowTitle("Columbo - Synchronization history observer")
         self.setWindowIcon(QtGui.QIcon(os.path.join(bundle_dir, 'icons/search.png')))
-
         self.setAcceptDrops(True)
 
         # Load icons
