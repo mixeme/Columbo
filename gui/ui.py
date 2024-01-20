@@ -11,6 +11,7 @@ import pkg.file
 import tree
 from pkg import icons
 from pkg.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
+from tree import FileTreeWorker
 from tree import TreeType, OperatioType
 
 
@@ -29,8 +30,9 @@ class HistoryUI(QtWidgets.QMainWindow):
         # Load icons
         icons.IconsLoader(bundle_dir)
 
-        tree.FileTreeWorker.signals.finished.connect(self.update_tree)      # Connect to slot for finishing
-        tree.FileTreeWorker.signals.finished.connect(self.switch_clear_all) # Switch Clear all button
+        # Connect signals
+        FileTreeWorker.signals.finished.connect(self.update_tree)      # Connect to slot for finishing
+        FileTreeWorker.signals.finished.connect(self.switch_clear_all) # Switch Clear all button
 
         ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
         ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
