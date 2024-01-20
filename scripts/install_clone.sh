@@ -44,9 +44,8 @@ cd "$(dirname "$0")" || exit 1;
 ARCH=$(uname -m);
 BIN_NAME="columbo-$ARCH";
 ## Paths
-APP_ROOT=/opt;
-COLUMBO_HOME="$APP_ROOT/Columbo";
-SYSTEM_BIN=/usr/local/bin/columbo;
+COLUMBO_HOME="/opt/Columbo";
+SYSTEM_BIN="/usr/local/bin/columbo";
 ## Show defined values
 echo "Platform: $ARCH";
 echo "Application root: $APP_ROOT";
