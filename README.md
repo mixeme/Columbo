@@ -71,6 +71,11 @@ py <path-to-the-unpacked-repo>/main.py
 ```shell
 wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh \
     && sudo bash [source | binary | standalone]
+   
+sudo apt install -y git \
+    && git clone -b main https://github.com/mixeme/Columbo.git \
+    && sudo bash Columbo/scripts/install-git.sh [source | binary | standalone]
+
 ```
 2. Run Columbo
 ```shell
