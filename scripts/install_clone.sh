@@ -67,15 +67,16 @@ pip install --upgrade pyinstaller
 # Build routine
 build() {
     bash build-lnx.sh "$1";
-    echo "+ Copy binary to $COLUMBO_HOME";
     case $1 in
       binary )
         TARGET=$COLUMBO_HOME/;
+        mkdir -p "$TARGET";
       ;;
       standalone )
         TARGET=$SYSTEM_BIN
       ;;
     esac
+    echo "+ Copy binary from ../dist/$BIN_NAME to $TARGET";
     cp -R "../dist/$BIN_NAME" "$TARGET";
     echo "+ Make $TARGET executable";
 		chmod +x "$TARGET";
