@@ -17,7 +17,7 @@ then
 	MODE=$1;
 else
 	MODE=onefile;
-	echo "Build mode is not setup. Default one is used";
+	echo "Build mode is not setup! Default one is used...";
 fi
 echo "Mode: $MODE";
 
