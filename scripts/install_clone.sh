@@ -76,7 +76,7 @@ build() {
         TARGET=$SYSTEM_BIN
       ;;
     esac
-    cp "../dist/$BIN_NAME" "$TARGET";
+    cp -R "../dist/$BIN_NAME" "$TARGET";
     echo "+ Make $TARGET executable";
 		chmod +x "$TARGET";
 
