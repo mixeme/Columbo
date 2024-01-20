@@ -68,10 +68,7 @@ build() {
     bash build-lnx.sh "$1";
     case $1 in
       onedir )
-        echo "+ Create application folder $COLUMBO_HOME";
-        mkdir -p "$COLUMBO_HOME";
-
-        COPY_TARGET=$COLUMBO_HOME;
+        COPY_TARGET="$COLUMBO_HOME";
         COLUMBO_BIN="$COLUMBO_HOME/$BIN_NAME";
       ;;
       onefile )
@@ -81,10 +78,11 @@ build() {
     esac
     echo "+ Copy binary from ../dist/$BIN_NAME to $COPY_TARGET";
     cp -R "../dist/$BIN_NAME" "$COPY_TARGET";
+
     echo "+ Make $COLUMBO_BIN executable";
 		chmod +x "$COLUMBO_BIN";
 
-    if [ "$1" = "binary" ];
+    if [ "$1" = "onedir" ];
     then
       echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
       ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
