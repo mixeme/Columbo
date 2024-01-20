@@ -507,6 +507,5 @@
  </slots>
  <buttongroups>
   <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
