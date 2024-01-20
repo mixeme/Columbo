@@ -110,8 +110,8 @@ case $COMMAND in
 esac
 
 # Remove script
-echo "Clean installation folder";
-rm -R ../../Columbo;
+#echo "Clean installation folder";
+#rm -R ../../Columbo;
 
 # Exit
 echo "Enjoy Columbo!";
