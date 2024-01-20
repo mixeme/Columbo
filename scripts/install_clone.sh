@@ -69,8 +69,9 @@ build() {
     bash build-lnx.sh "$1";
     case $1 in
       binary )
+        echo "+ Create application folder $COLUMBO_HOME";
+        mkdir -p "$COLUMBO_HOME";
         TARGET=$COLUMBO_HOME/;
-        mkdir -p "$TARGET";
       ;;
       standalone )
         TARGET=$SYSTEM_BIN
