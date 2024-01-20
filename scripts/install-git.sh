@@ -4,7 +4,7 @@
 #   sudo rm -R /opt/Columbo; sudo rm -R Columbo; sudo rm /usr/local/bin/columbo
 #
 # Make a new installation
-#   sudo apt install -y git && git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh [source | binary | standalone]
+#   sudo apt install -y git && git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install-git.sh [source | binary | standalone]
 
 # Check input arguments
 if [ "$#" -eq 0 ];
