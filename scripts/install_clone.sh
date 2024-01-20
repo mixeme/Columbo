@@ -68,13 +68,13 @@ pip install --upgrade pyinstaller
 build() {
     bash build-lnx.sh "$1";
     case $1 in
-      binary )
+      onedir )
         echo "+ Create application folder $COLUMBO_HOME";
         mkdir -p "$COLUMBO_HOME";
         TARGET=$COLUMBO_HOME/;
       ;;
-      standalone )
-        TARGET=$SYSTEM_BIN
+      onefile )
+        TARGET=$SYSTEM_BIN;
       ;;
     esac
     echo "+ Copy binary from ../dist/$BIN_NAME to $TARGET";
