@@ -15,20 +15,20 @@ from tree import TreeType, OperationType
 
 
 class HistoryUI(QtWidgets.QMainWindow):
-    def __init__(self, bundle_dir: str):
+    def __init__(self, project_home: str):
         # Load GUI layout
         super().__init__()
 
         # Load GUI layout
-        uic.loadUi(os.path.join(bundle_dir, 'gui/history.ui'), self)
+        uic.loadUi(os.path.join(project_home, 'gui/history.ui'), self)
 
         # Set window properties
         self.setWindowTitle("Columbo - Synchronization history observer")
-        self.setWindowIcon(QtGui.QIcon(os.path.join(bundle_dir, 'icons/search.png')))
+        self.setWindowIcon(QtGui.QIcon(os.path.join(project_home, 'icons/search.png')))
         self.setAcceptDrops(True)
 
         # Load icons
-        icons.IconsLoader(bundle_dir)
+        icons.IconsLoader(project_home)
 
         # Connect signals
         FileTreeWorker.signals.finished.connect(self.update_tree)      # Connect to slot for finishing
