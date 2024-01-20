@@ -25,11 +25,13 @@ def except_hook(cls, exception, traceback):
 sys.excepthook = except_hook
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)    # Create application object
+    # Create application object
+    app = QApplication(sys.argv)
 
     # Create window
     history_win = HistoryUI(__get_bundle_dir())
     # Show window
     history_win.show()
 
-    sys.exit(app.exec())            # Start application
+    # Start application
+    sys.exit(app.exec())

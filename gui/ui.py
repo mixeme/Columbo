@@ -7,11 +7,9 @@ from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
 import core.file
-import tree
-from gui import icons
+from core.tree import TreeType, OperationType, FileTreeWorker
 from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
-from tree import FileTreeWorker
-from tree import TreeType, OperationType
+from gui import icons
 
 
 class HistoryUI(QtWidgets.QMainWindow):
@@ -163,9 +161,9 @@ class HistoryUI(QtWidgets.QMainWindow):
             from_snapshot = self.filter_from_field.text()
             to_snapshot = self.filter_to_field.text()
 
-            if self.checked()[0] == tree.TreeType.UNIFIED:
+            if self.checked()[0] == TreeType.UNIFIED:
                 snapshot_fun = lambda root, file: core.file.get_snapshot(file)
-            if self.checked()[0] == tree.TreeType.BY_DATE:
+            if self.checked()[0] == TreeType.BY_DATE:
                 snapshot_fun = lambda root, file: root.split(os.sep)[1]
 
             def test_fun(root: str, file: str) -> bool:
