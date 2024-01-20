@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Clear a previous installation
-#   sudo rm -R /opt/Columbo && rm install.sh && sudo rm /usr/local/bin/columbo
+#   sudo rm -R /opt/Columbo && rm install-wget.sh && sudo rm /usr/local/bin/columbo
 #
 # Make a new installation
 #   wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
