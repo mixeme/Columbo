@@ -85,8 +85,8 @@ build() {
     echo "+ Make $COLUMBO_BIN executable";
 		chmod +x "$COLUMBO_BIN";
 
-    RUN_MESSAGE="\t$(basename $SYSTEM_BIN) | $SYSTEM_BIN";
     # Create symlink for binary in Columbo home
+    RUN_MESSAGE="\t$(basename $SYSTEM_BIN) | $SYSTEM_BIN";
     if [ "$1" = "onedir" ];
     then
       echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
