@@ -1,10 +1,13 @@
 #!/usr/bin/env sh
 
 # Clear a previous installation
-#   sudo rm -R /opt/Columbo && rm install.sh && sudo rm /usr/local/bin/columbo
+#   sudo rm -R /opt/Columbo && rm -R Columbo && sudo rm /usr/local/bin/columbo
 #
 # Make a new installation
-#   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install.sh [source | binary | standalone]
+#   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh [source | binary | standalone]
+#   sudo apt install -y git && git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh source
+#   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh binary
+#   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh standalone
 
 # Check input arguments
 if [ "$#" -eq 0 ];
@@ -49,14 +52,13 @@ COLUMBO_BIN="$COLUMBO_HOME/dist/$BIN_NAME";
 SYSTEM_BIN=/usr/local/bin/columbo;
 ## Show defined values
 echo "Script path: $SCRIPT_PATH";
-echo "Branch: $BRANCH";
 echo "Platform: $ARCH";
 echo "Application root: $APP_ROOT";
 echo "Columbo home: $COLUMBO_HOME";
 
 # Prepare environment
 echo "+ Install system packages...";
-apt update -y && apt install -y python3 python3-pip python3-pyqt5;
+apt update -y && apt install -y rsync python3 python3-pip python3-pyqt5;
 echo "+ Install Python packages...";
 pip install --upgrade pyinstaller
 # If `pip` command is unknown then use
