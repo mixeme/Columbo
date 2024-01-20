@@ -48,7 +48,6 @@ COLUMBO_HOME="/opt/Columbo";
 SYSTEM_BIN="/usr/local/bin/columbo";
 ## Show defined values
 echo "Platform: $ARCH";
-echo "Application root: $APP_ROOT";
 echo "Columbo home: $COLUMBO_HOME";
 
 # Prepare environment
