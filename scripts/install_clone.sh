@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Clear a previous installation
-#   sudo rm -R /opt/Columbo && rm -R Columbo && sudo rm /usr/local/bin/columbo
+#   sudo rm -R /opt/Columbo && sudo rm -R Columbo && sudo rm /usr/local/bin/columbo
 #
 # Make a new installation
 #   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install_clone.sh [source | binary | standalone]
@@ -47,7 +47,6 @@ BIN_NAME="columbo-$ARCH";
 ## Paths
 APP_ROOT=/opt;
 COLUMBO_HOME="$APP_ROOT/Columbo";
-COLUMBO_PY="$COLUMBO_HOME/main.py";
 SYSTEM_BIN=/usr/local/bin/columbo;
 ## Show defined values
 echo "Script path: $SCRIPT_PATH";
@@ -65,7 +64,10 @@ pip install --upgrade pyinstaller
 
 # Build routine
 build() {
+    # Run build script
     bash build-lnx.sh "$1";
+
+    # Resolve variables
     case $1 in
       onedir )
         COPY_TARGET="$COLUMBO_HOME";
@@ -73,27 +75,36 @@ build() {
       ;;
       onefile )
         COPY_TARGET=$SYSTEM_BIN;
-        COLUMBO_BIN="$SYSTEM_BIN";
+        COLUMBO_BIN=$SYSTEM_BIN;
       ;;
     esac
+
+    # Copy binary
     echo "+ Copy binary from ../dist/$BIN_NAME to $COPY_TARGET";
     cp -R "../dist/$BIN_NAME" "$COPY_TARGET";
 
+    # Make binary executable
     echo "+ Make $COLUMBO_BIN executable";
 		chmod +x "$COLUMBO_BIN";
 
+    RUN_MESSAGE="\t$(basename $SYSTEM_BIN) | $SYSTEM_BIN";
+    # Create symlink for binary in Columbo home
     if [ "$1" = "onedir" ];
     then
       echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
       ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
+      RUN_MESSAGE="$RUN_MESSAGE | $COLUMBO_BIN";
     fi
+
+    # Show message for application run
 		echo "Run Columbo as";
-		echo -e "\t$(basename $SYSTEM_BIN) | $SYSTEM_BIN | $COLUMBO_BIN";
+		echo -e "$RUN_MESSAGE";
 }
 
 # Resolve command
 case $COMMAND in
 	source )
+	  COLUMBO_PY="$COLUMBO_HOME/main.py";
 	  echo "+ Copy sources to $COLUMBO_HOME";
 	  rsync -av --exclude=".*" ../../Columbo/ $COLUMBO_HOME;
 	  echo "+ Make script executable";
