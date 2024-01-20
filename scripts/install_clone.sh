@@ -76,7 +76,7 @@ build() {
         TARGET=$SYSTEM_BIN
       ;;
     esac
-    cp "../dist/$COLUMBO_BIN" "$TARGET";
+    cp "../dist/$COLUMBO_BIN" "$TARGET/";
     echo "+ Make $TARGET executable";
 		chmod +x "$TARGET";
 
@@ -110,8 +110,8 @@ case $COMMAND in
 esac
 
 # Remove script
-echo "Clean installation folder script $SCRIPT_PATH";
-rm "$SCRIPT_PATH";
+echo "Clean installation folder";
+rm -R ../../Columbo;
 
 # Exit
 echo "Enjoy Columbo!";
