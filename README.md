@@ -39,7 +39,7 @@ Both ways are reasonable. For example, the unified way helps to understand what 
 Columbo aims to provide a cross-platform convenient graphical interface to investigate the syncronization history regardless of which a way has been used for the storage and which a way you currently prefer for an investigation.
 
 ## Technology stack
-+ Python 3;
++ Python 3.9+;
 + PyQt 5.
 
 ## Run from source
