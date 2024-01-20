@@ -38,7 +38,6 @@ esac
 
 # Switch to scripts location
 cd "$(dirname "$0")" || exit 1;
-SCRIPT_PATH="$PWD/$(basename "$0")";
 
 # Setup variables
 ## Build
@@ -49,7 +48,6 @@ APP_ROOT=/opt;
 COLUMBO_HOME="$APP_ROOT/Columbo";
 SYSTEM_BIN=/usr/local/bin/columbo;
 ## Show defined values
-echo "Script path: $SCRIPT_PATH";
 echo "Platform: $ARCH";
 echo "Application root: $APP_ROOT";
 echo "Columbo home: $COLUMBO_HOME";
@@ -123,8 +121,8 @@ case $COMMAND in
 esac
 
 # Remove script
-#echo "Clean installation folder";
-#rm -R ../../Columbo;
+echo "Clean installation folder";
+rm -R ../../Columbo;
 
 # Exit
 echo "Enjoy Columbo!";
