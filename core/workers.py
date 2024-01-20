@@ -18,8 +18,11 @@ class ClearEmptyDirsWorker(QRunnable):
     def run(self) -> None:
         for root, dirs, files in os.walk(self.root_path):
             if len(dirs) == 0 and len(files) == 0:
-                os.removedirs(root)
-                self.signals.progress.emit("Delete" + root)
+                try:
+                    os.removedirs(root)
+                    self.signals.progress.emit("Delete" + root)
+                except OSError:
+                    self.signals.progress.emit("Failed to delete" + root)
         self.signals.finished.emit()
 
 
