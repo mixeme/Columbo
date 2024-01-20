@@ -4,7 +4,7 @@
 #   sudo rm -R /opt/Columbo && rm install.sh && sudo rm /usr/local/bin/columbo
 #
 # Make a new installation
-#   wget https://github.com/mixeme/Columbo/raw/dev/scripts/install.sh && sudo bash [source | binary | standalone]
+#   git clone -b dev https://github.com/mixeme/Columbo.git && sudo bash Columbo/scripts/install.sh [source | binary | standalone]
 
 # Check input arguments
 if [ "$#" -eq 0 ];
@@ -38,8 +38,6 @@ cd "$(dirname "$0")" || exit 1;
 SCRIPT_PATH="$PWD/$(basename "$0")";
 
 # Setup variables
-## Repo
-BRANCH=dev;
 ## Build
 ARCH=$(uname -m);
 BIN_NAME="columbo-$ARCH";
@@ -58,24 +56,33 @@ echo "Columbo home: $COLUMBO_HOME";
 
 # Prepare environment
 echo "+ Install system packages...";
-apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
+apt update -y && apt install -y python3 python3-pip python3-pyqt5;
 echo "+ Install Python packages...";
 pip install --upgrade pyinstaller
 # If `pip` command is unknown then use
 # 	python -m pip install --upgrade pyinstaller
 
-# Clone repo
-echo "+ Clone Columbo repo...";
-cd "$APP_ROOT" || exit 1;
-git clone -b $BRANCH https://github.com/mixeme/Columbo.git;
-
 # Build routine
 build() {
-    bash $COLUMBO_HOME/scripts/build-lnx.sh "$1";
-    echo "+ Make $COLUMBO_BIN executable";
-		chmod +x "$COLUMBO_BIN";
-		echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
-		ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
+    bash build-lnx.sh "$1";
+    echo "+ Copy binary to $COLUMBO_HOME";
+    case $1 in
+      binary )
+        TARGET=$COLUMBO_HOME;
+      ;;
+      standalone )
+        TARGET=$SYSTEM_BIN
+      ;;
+    esac
+    cp "../dist/$COLUMBO_BIN" "$TARGET";
+    echo "+ Make $TARGET executable";
+		chmod +x "$TARGET";
+
+    if [ "$1" = "binary" ];
+    then
+      echo "+ Create symlink for $COLUMBO_BIN as $SYSTEM_BIN";
+      ln -s "$COLUMBO_BIN" $SYSTEM_BIN;
+    fi
 		echo "Run Columbo as";
 		echo -e "\t$(basename $SYSTEM_BIN) | $SYSTEM_BIN | $COLUMBO_BIN";
 }
@@ -83,13 +90,14 @@ build() {
 # Resolve command
 case $COMMAND in
 	source )
-	  echo "+ Make script executable...";
+	  echo "+ Copy sources to $COLUMBO_HOME";
+	  rsync -av --exclude=".*" ../../Columbo/ $COLUMBO_HOME;
+	  echo "+ Make script executable";
 		chmod +x $COLUMBO_PY;
 		echo "Run Columbo as";
 		echo -e "\t$COLUMBO_PY | python3 $COLUMBO_PY";
 	;;
 	binary )
-	  COLUMBO_BIN="$COLUMBO_BIN/$BIN_NAME";
 	  echo "+ Build a regular binary...";
 		build onedir;
 	;;
@@ -100,7 +108,7 @@ case $COMMAND in
 esac
 
 # Remove script
-echo "Clean install script $SCRIPT_PATH";
+echo "Clean installation folder script $SCRIPT_PATH";
 rm "$SCRIPT_PATH";
 
 # Exit
