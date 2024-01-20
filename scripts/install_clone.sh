@@ -65,6 +65,7 @@ build() {
     bash build-lnx.sh "$1";
 
     # Resolve variables
+    COPY_SOURCE="../dist/$BIN_NAME";
     case $1 in
       onedir )
         COPY_TARGET="$COLUMBO_HOME";
@@ -77,8 +78,8 @@ build() {
     esac
 
     # Copy binary
-    echo "+ Copy binary from ../dist/$BIN_NAME to $COPY_TARGET";
-    cp -R "../dist/$BIN_NAME" "$COPY_TARGET";
+    echo "+ Copy binary from $COPY_SOURCE to $COPY_TARGET";
+    cp -R "$COPY_SOURCE" "$COPY_TARGET";
 
     # Make binary executable
     echo "+ Make $COLUMBO_BIN executable";
