@@ -32,4 +32,5 @@ python3 -m PyInstaller \
 	--icon=icons/search.ico \
 	main.py;
 
+# Provide clean exit code
 exit 0;
