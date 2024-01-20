@@ -70,13 +70,13 @@ build() {
     echo "+ Copy binary to $COLUMBO_HOME";
     case $1 in
       binary )
-        TARGET=$COLUMBO_HOME;
+        TARGET=$COLUMBO_HOME/;
       ;;
       standalone )
         TARGET=$SYSTEM_BIN
       ;;
     esac
-    cp "../dist/$COLUMBO_BIN" "$TARGET/";
+    cp "../dist/$BIN_NAME" "$TARGET";
     echo "+ Make $TARGET executable";
 		chmod +x "$TARGET";
 
