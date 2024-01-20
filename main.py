@@ -106,7 +106,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def update_tree(self, _, model) -> None:
         self.fileTreeView.setModel(model)
-        self.fileTreeView.header().resizeSection(0, 400)
+        self.fileTreeView.header().resizeSection(0, 300)
         self.statusbar.showMessage("Build is finished")
 
     def switch_clear_all(self, op_type: OperatioType, _) -> None:
