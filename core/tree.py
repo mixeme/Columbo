@@ -112,7 +112,7 @@ class FileTreeWorker(QRunnable):
             path_parts = self.split_path(root)      # Remove root path component and convert to array
             routine(root, dirs, files, path_parts)  # Perform routine
 
-    def routine_simple(self, root, dirs, files, path_parts, snapshot=None):
+    def routine_simple(self, root: str, dirs: list[str], files: list[str], path_parts: list[str], snapshot=None):
         # Find corresponding node for the root
         current = nodes.descend(self.root_node, path_parts)
 
@@ -124,7 +124,7 @@ class FileTreeWorker(QRunnable):
         for i in map(lambda x: nodes.create_file(x, root, snapshot), files):
             current.appendRow(i)
 
-    def routine_filter(self, path_parts, files, map_fun, filter_fun):
+    def routine_filter(self, path_parts: list[str], files: list[str], map_fun, filter_fun):
         # Prepare list of items
         items = tuple(filter(filter_fun, tuple(map(map_fun, files))))
 
@@ -137,7 +137,7 @@ class FileTreeWorker(QRunnable):
             for i in items:
                 current.appendRow(i)
 
-    def routine_unified_unified(self, root, dirs, files, path_parts):
+    def routine_unified_unified(self, root: str, dirs, files, path_parts):
         if self.filter:
             self.routine_filter(path_parts[1:], files,
                                 lambda x: nodes.create_file(x, root),
@@ -145,7 +145,7 @@ class FileTreeWorker(QRunnable):
         else:
             self.routine_simple(root, dirs, files, path_parts[1:])
 
-    def routine_bydate_bydate(self, root, dirs, files, path_parts):
+    def routine_bydate_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         snapshot = path_parts[1]
         if self.filter:
             if self.test_snapshot(snapshot):
@@ -155,7 +155,7 @@ class FileTreeWorker(QRunnable):
         else:
             self.routine_simple(root, dirs, files, path_parts[1:], snapshot)
 
-    def routine_unified_bydate(self, root, dirs, files, path_parts):
+    def routine_unified_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         for i in files:
             snapshot = file.get_snapshot(i)
             if not self.filter or (self.filter and self.test_snapshot(snapshot)):
@@ -163,18 +163,18 @@ class FileTreeWorker(QRunnable):
                 current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
                 current.appendRow(nodes.create_file(i, root, snapshot)) # Place file in tree
 
-    def routine_bydate_unified(self, root, dirs, files, path_parts):
+    def routine_bydate_unified(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         snapshot = path_parts[1]
         if not self.filter or (self.filter and self.test_snapshot(snapshot)):
             current = nodes.descend(self.root_node, path_parts[2:])  # Find corresponding node for the root
             for f in files:
                 nodes.add_versioned_file(current, f, root, snapshot)
 
-    def routine_empty_dirs(self, root, dirs, files, path_parts):
+    def routine_empty_dirs(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         if len(dirs) == 0 and len(files) == 0:
             nodes.descend(self.root_node, path_parts[1:])   # Find corresponding node for the root
 
-    def run(self):
+    def run(self) -> None:
         routine = None
         if (self.operation == OperationType.FILE_TREE) or (self.operation == OperationType.FILTERED_TREE):
             # Resolve the required tree type
