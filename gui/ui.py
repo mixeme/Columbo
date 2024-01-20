@@ -193,6 +193,10 @@ class HistoryUI(QtWidgets.QMainWindow):
         self.path_field.setText(files[0])
 
     def contextMenuEvent(self, position) -> None:
+        # Don't open context menu for no selection
+        if len(self.get_selected_nodes()) == 0:
+            return
+
         context_menu = QMenu()
         restore = context_menu.addAction("Restore")
         context_menu.addSeparator()
