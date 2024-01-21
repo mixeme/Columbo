@@ -31,6 +31,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         # Connect signals
         FileTreeWorker.signals.finished.connect(self.update_tree)      # Connect to slot for finishing
         FileTreeWorker.signals.finished.connect(self.switch_clear_all) # Switch Clear all button
+        FileTreeWorker.signals.finished.connect(self.switch_delete_snapshots)  # Switch Clear all button
 
         ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
         ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
@@ -97,6 +98,9 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def switch_clear_all(self, op_type: OperationType, _) -> None:
         self.clear_all_button.setEnabled(op_type == OperationType.EMPTY_DIRS)
+
+    def switch_delete_snapshots(self, op_type: OperationType, _) -> None:
+        self.delete_button.setEnabled(op_type == OperationType.FILTERED_TREE)
 
     def build_file_tree(self, op_type: OperationType) -> None:
         if self.path_field.text():
