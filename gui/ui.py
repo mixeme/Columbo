@@ -29,9 +29,9 @@ class HistoryUI(QtWidgets.QMainWindow):
         icons.IconsLoader(project_home)
 
         # Connect signals
-        FileTreeWorker.signals.finished.connect(self.update_tree)      # Connect to slot for finishing
-        FileTreeWorker.signals.finished.connect(self.switch_clear_all) # Switch Clear all button
-        FileTreeWorker.signals.finished.connect(self.switch_delete_snapshots)  # Switch Clear all button
+        FileTreeWorker.signals.finished.connect(self.update_tree)               # Connect to slot for finishing
+        FileTreeWorker.signals.finished.connect(self.switch_clear_all)          # Switch Clear all button
+        FileTreeWorker.signals.finished.connect(self.switch_delete_snapshots)   # Switch Clear all button
 
         ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
         ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
