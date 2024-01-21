@@ -187,7 +187,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Clear all</string>
+            <string>Delete all</string>
            </property>
           </widget>
          </item>
@@ -276,7 +276,7 @@
          <item>
           <widget class="QPushButton" name="delete_button">
            <property name="text">
-            <string>Delete snapshots</string>
+            <string>Delete</string>
            </property>
           </widget>
          </item>
