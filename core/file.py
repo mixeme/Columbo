@@ -9,13 +9,13 @@ def get_last_modified(path: str) -> str:
 
 
 def get_snapshot(filename: str) -> str:
-    sep = filename.rfind("_")
     dot = filename.rfind(".")
-
-    if sep == -1:
-        return ""
     if dot == -1:
         dot = len(filename)
+
+    sep = filename.rfind("_", 0, dot)
+    if sep == -1:
+        return ""
 
     return filename[sep+1:dot]
 
