@@ -6,6 +6,7 @@ from PyQt5.QtCore import QRunnable, pyqtSignal, QObject
 from PyQt5.QtGui import QStandardItemModel
 
 from core import nodes, file
+from core.nodes import PathArray
 
 
 class TreeType(Enum):
@@ -98,7 +99,7 @@ class FileTreeWorker(QRunnable):
         # Store 1st column of the root node
         self.root_node = root_node[0]
 
-    def split_path(self, path: str) -> list[str]:
+    def split_path(self, path: str) -> PathArray:
         return path.removeprefix(self.root_path).split(os.sep)
 
     def test_snapshot(self, snapshot: str) -> bool:

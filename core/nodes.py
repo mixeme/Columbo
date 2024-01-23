@@ -50,7 +50,7 @@ def get_file_node(parent: QStandardItem, val: str):
     return get_node(parent, val, create_file)
 
 
-def descend(parent: QStandardItem, parts: list[str]):
+def descend(parent: QStandardItem, parts: PathArray):
     current = parent
     for i in range(0, len(parts)):
         current = get_dir_node(current, parts[i])       # Get the next node with name from parts
