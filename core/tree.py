@@ -111,7 +111,7 @@ class FileTreeWorker(QRunnable):
             path_parts = self.split_path(root)      # Remove root path component and convert to array
             routine(root, dirs, files, path_parts)  # Perform routine
 
-    def routine_simple(self, root: str, dirs: list[str], files: list[str], path_parts: list[str], snapshot=None):
+    def routine_simple(self, root: str, dirs: PathArray, files: PathArray, path_parts: PathArray, snapshot=None):
         # Find corresponding node for the root
         current = nodes.descend(self.root_node, path_parts)
 
@@ -123,7 +123,7 @@ class FileTreeWorker(QRunnable):
         for i in map(lambda x: nodes.create_file(x, root, snapshot), files):
             current.appendRow(i)
 
-    def routine_filter(self, path_parts: list[str], files: list[str], map_fun, filter_fun):
+    def routine_filter(self, path_parts: PathArray, files: PathArray, map_fun, filter_fun):
         # Prepare list of items
         items = tuple(filter(filter_fun, tuple(map(map_fun, files))))
 
