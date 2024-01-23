@@ -6,6 +6,7 @@ from core import file
 from gui import icons
 
 TreeNode = list[QStandardItem]      # Type alias for return values
+PathArray = list[str]               # Type alias for split path string
 
 
 def create_folder(path: str) -> TreeNode:
