@@ -41,6 +41,7 @@ python3 -m PyInstaller \
 	--$MODE \
 	--windowed \
 	--clean \
+	--noconfirm \
 	--add-data="./gui:./gui" \
 	--add-data="./icons:./icons" \
 	--icon=icons/search.ico \
