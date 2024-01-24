@@ -40,8 +40,8 @@ python3 -m PyInstaller \
 	--name "columbo-$ARCH" \
 	--$MODE \
 	--windowed \
-	--clean \
 	--noconfirm \
+	--clean \
 	--add-data="./gui:./gui" \
 	--add-data="./icons:./icons" \
 	--icon=icons/search.ico \
