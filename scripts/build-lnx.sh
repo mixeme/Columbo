@@ -16,24 +16,27 @@ if [ $# -gt 0 ];
 then
 	MODE=$1;
 else
+  if ! [ -v MODE ];   # If MODE is not defined in the environment
+  then
     echo "
 Build mode was not specified as an argument or as an environment variable MODE. Choose build mode:
   [1] onedir (one executable file and a folder with supplementary files, works faster)
   [2] onefile (all in one executable file, works slower)
 ";
 
-	read -p "Enter a number of option or just press ENTER for 'onedir' option: " OPTION;
-	case $OPTION in
-	  1 )
-	    MODE=onedir;
-	  ;;
-	  2 )
-	    MODE=onefile;
-	  ;;
-	  * )
-	    MODE=onedir;
-	  ;;
-	esac
+    read -p "Enter a number of an option or just press ENTER for default 'onedir' option: " OPTION;
+    case $OPTION in
+      1 )
+        MODE=onedir;
+      ;;
+      2 )
+        MODE=onefile;
+      ;;
+      * )
+        MODE=onedir;
+      ;;
+    esac
+  fi
 fi
 echo "Mode: $MODE";
 
