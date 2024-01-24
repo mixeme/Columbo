@@ -16,9 +16,11 @@ if [ $# -gt 0 ];
 then
 	MODE=$1;
 else
-  echo -e "\nBuild mode was not specified as an argument. Choose build mode:";
-  echo "[1] onedir (one executable file and a folder with supplementary files, works faster)";
-  echo -e "[2] onefile (all in one executable file, works slower)\n";
+    echo "
+Build mode was not specified as an argument or as an environment variable MODE. Choose build mode:
+  [1] onedir (one executable file and a folder with supplementary files, works faster)
+  [2] onefile (all in one executable file, works slower)
+";
 
 	read -p "Enter a number of option or just press ENTER for 'onedir' option: " OPTION;
 	case $OPTION in
