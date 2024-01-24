@@ -29,6 +29,7 @@ python -m PyInstaller ^
     --name columbo-win ^
 	--onefile ^
  	--windowed ^
+ 	--noconfirm ^
 	--clean ^
 	--add-data="./gui;./gui" ^
 	--add-data="./icons;./icons" ^
