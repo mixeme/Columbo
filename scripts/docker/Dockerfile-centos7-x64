@@ -1,0 +1,50 @@
+FROM centos:7
+
+# Install packages
+RUN yum -y install epel-release \
+	&& yum -y groupinstall "Development Tools" \
+	&& yum -y install wget \
+	openssl-devel libffi-devel bzip2-devel \
+	qt5-qtbase qt5-qtbase-devel qt5-qtstyleplugins libxkbcommon-x11
+# Make symlink for qmake
+RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
+
+# yum -y install libxkbcommon-x11 solves issue:
+# > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+# > This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+# Compile & install CPython 3.9.18 from source
+RUN mkdir /pybuild \
+	&& cd /pybuild \
+	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
+	&& tar xvf Python-*.tgz \
+	&& cd Python-3.9*/ \
+	&& ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" \
+	&& make altinstall \
+	&& cd / \
+	&& rm -R /pybuild
+
+# Install Python packages with `pip`
+RUN python3.9 -m pip install --upgrade pip \
+	&& python3.9 -m pip install pyqt5 pyinstaller
+#	&& python3.9 -m pip install pyqt5-sip \
+#	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
+
+# Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
+# This fix: libGL error: No matching fbConfigs or visuals found
+ENV LIBGL_ALWAYS_INDIRECT=1
+
+RUN mkdir /project
+WORKDIR /project
+
+RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
+CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
+
+# Image build
+# docker build --tag mixeme/columbo-build:centos-7 --file scripts/docker/Dockerfile-centos7-x64 scripts/docker
+#
+# Test run from source
+# docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo-build:centos-7 python3.9 main.py
+#
+# Build binary
+# docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro mixeme/columbo-build:centos-7
