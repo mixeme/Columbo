@@ -16,10 +16,10 @@ WORKDIR /project
 CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
 # Image build
-# docker build --tag mixeme/columbo-build:debian-bullseye scripts/docker
+# docker build --tag mixeme/columbo:debian-bullseye --file scripts/docker/Dockerfile-deb11 scripts/docker
 #
 # Test run from source
-# docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo-build:debian-bullseye python3 main.py
+# docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo:debian-bullseye python3 main.py
 #
 # Build binary
-# docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro mixeme/columbo-build:debian-bullseye
+# docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro mixeme/columbo:debian-bullseye
