@@ -2,8 +2,14 @@ FROM centos:7
 
 # Install packages
 RUN yum -y install epel-release
-RUN yum -y groupinstall "Development Tools"
-RUN yum -y install openssl-devel libffi-devel bzip2-devel wget
+	&& yum -y groupinstall "Development Tools"
+	&& yum -y install wget \
+	openssl-devel libffi-devel bzip2-devel \
+	qt5-qtbase qt5-qtbase-devel
+# Make symlink for qmake
+RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
+
+# Compile & install CPython 3.9.18 from source
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
@@ -13,11 +19,29 @@ RUN mkdir /pybuild \
 	&& make altinstall \
 	&& cd / \
 	&& rm -R /pybuild
-RUN yum -y install qt5-qtbase qt5-qtbase-devel
+
 # Install Python packages with `pip`
 RUN python3.9 -m pip install --upgrade pip \
 	&& python3.9 -m pip install pyqt5-sip
-RUN python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
+	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
+
+# Create wheel for PyQt5
+#RUN python3.9 -m pip install build twine
+#RUN mkdir /pyqtbuild \
+#	&& cd /pyqtbuild \
+#	&& wget https://files.pythonhosted.org/packages/4d/5d/b8b6e26956ec113ad3f566e02abd12ac3a56b103fcc7e0735e27ee4a1df3/PyQt5-5.15.10.tar.gz \
+#	&& tar xvf PyQt5*.tar.gz \
+#	&& cd PyQt5*/ \
+#	&& python3.9 -m build --wheel --config-settings --confirm-license= --verbose
+
+#ENV PATH="${PATH}:/opt/python3.9/bin"
+# python3.9 -m build --wheel
+# wget https://files.pythonhosted.org/packages/4d/5d/b8b6e26956ec113ad3f566e02abd12ac3a56b103fcc7e0735e27ee4a1df3/PyQt5-5.15.10.tar.gz
+
+#install -y twine
+# https://packaging.python.org/en/latest/tutorials/packaging-projects/
+#python3 -m twine upload --repository testpypi dist/*
+#twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 # && yum -y install qt5-qtstyleplugins
 #--config-settings --confirm-license= --verbose
