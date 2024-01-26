@@ -14,7 +14,7 @@ RUN mkdir /pybuild \
 	&& tar xvf Python-*.tgz \
 	&& cd Python-3.9*/ \
 	&& ./configure --enable-optimizations \
-	&& make altinstall \
+	&& make install \
 	&& cd / \
 	&& rm -R /pybuild
 
