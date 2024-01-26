@@ -31,7 +31,6 @@ WORKDIR /project
 
 #RUN python3 -m pip install pyqt5 pyinstaller
 
-#CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
 RUN apt install -y libnss3-dev libssl-dev libgdbm-dev libncurses5-dev
 
@@ -40,6 +39,7 @@ RUN python3.9 -m pip install --upgrade pip \
 	&& python3.9 -m pip install pyqt5-sip \
 	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
 
+#CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
 # Image build
 # docker build --tag mixeme/columbo:debian-buster --file scripts/docker/Dockerfile-deb10 scripts/docker
