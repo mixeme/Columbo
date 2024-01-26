@@ -1,11 +1,12 @@
 FROM centos:7
 
 # Install packages
-RUN yum -y install epel-release
-	&& yum -y groupinstall "Development Tools"
+RUN yum -y install epel-release \
+	&& yum -y groupinstall "Development Tools" \
 	&& yum -y install wget \
 	openssl-devel libffi-devel bzip2-devel \
 	qt5-qtbase qt5-qtbase-devel
+
 # Make symlink for qmake
 RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
 
@@ -15,14 +16,15 @@ RUN mkdir /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
 	&& tar xvf Python-*.tgz \
 	&& cd Python-3.9*/ \
-	&& ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" \
+	&& ./configure --enable-optimizations \
 	&& make altinstall \
 	&& cd / \
 	&& rm -R /pybuild
+#	&& ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" \
 
 # Install Python packages with `pip`
 RUN python3.9 -m pip install --upgrade pip \
-	&& python3.9 -m pip install pyqt5-sip
+	&& python3.9 -m pip install pyqt5-sip \
 	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
 
 # Create wheel for PyQt5
@@ -34,13 +36,15 @@ RUN python3.9 -m pip install --upgrade pip \
 #	&& cd PyQt5*/ \
 #	&& python3.9 -m build --wheel --config-settings --confirm-license= --verbose
 
+#ENV PATH="${PATH}:${PY_HOME}/bin"
 #ENV PATH="${PATH}:/opt/python3.9/bin"
+
 # python3.9 -m build --wheel
 # wget https://files.pythonhosted.org/packages/4d/5d/b8b6e26956ec113ad3f566e02abd12ac3a56b103fcc7e0735e27ee4a1df3/PyQt5-5.15.10.tar.gz
 
 #install -y twine
 # https://packaging.python.org/en/latest/tutorials/packaging-projects/
-#python3 -m twine upload --repository testpypi dist/*
+#python3.9 -m twine upload --repository testpypi dist/*
 #twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 # && yum -y install qt5-qtstyleplugins
@@ -58,13 +62,14 @@ RUN python3.9 -m pip install --upgrade pip \
 # This fix: libGL error: No matching fbConfigs or visuals found
 #ENV LIBGL_ALWAYS_INDIRECT=1
 
-#RUN mkdir /project
-#WORKDIR /project
+RUN mkdir /project
+WORKDIR /project
+#RUN yum -y install dbus-python-devel
 
 #CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
 # Image build
-# docker build --tag mixeme/columbo-build:centos-7 --file Docker-centos7 scripts/docker
+# docker build --tag mixeme/columbo-build:centos-7 --file scripts/docker/Dockerfile-centos7 scripts/docker
 #
 # Test run from source
 # docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo-build:debian-bullseye python3 main.py
