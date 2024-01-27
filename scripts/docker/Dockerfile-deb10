@@ -16,7 +16,7 @@ RUN mkdir /pybuild \
 	&& tar xvf Python-*.tgz \
 	&& cd Python-3.9*/ \
 	&& ./configure --enable-optimizations \
-	&& make install \
+	&& make altinstall \
 	&& cd / \
 	&& rm -R /pybuild
 
@@ -25,6 +25,7 @@ RUN python3.9 -m pip install --upgrade pip \
 	&& python3.9 -m pip install pyinstaller dbus-python
 #RUN	python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
 #	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
+
 # Overwrite symlink to the installed Python
 #RUN rm /usr/bin/python3 && ln -s /usr/local/bin/python3.9 /usr/bin/python3
 
