@@ -86,8 +86,8 @@ python3 Columbo/main.py   # Python 3.9+ is required
 
 ### Build from source
 #### Natively
-1. Check that you can successfully run Columbo from source. See section above;
 2. 
+1. Check that you can successfully run Columbo from the source. See instructions section above;
 
 #### With Docker image
 
