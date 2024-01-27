@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Reference: https://pyinstaller.org/en/stable/usage.html#options
 
