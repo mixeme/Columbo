@@ -32,9 +32,9 @@ RUN python3.9 -m pip install --upgrade pip \
 # This fix: libGL error: No matching fbConfigs or visuals found
 ENV LIBGL_ALWAYS_INDIRECT=1
 
-RUN mkdir /project
-WORKDIR /project
 
+#RUN mkdir /project
+#WORKDIR /project
 
 #CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
