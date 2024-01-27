@@ -34,9 +34,10 @@ RUN mkdir /pybuild \
 #	&& ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" \
 
 # Install Python packages with `pip`
-RUN python3.9 -m pip install --upgrade pip \
-	&& python3.9 -m pip install pyqt5-sip \
-	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
+RUN python3.9 -m pip install --upgrade pip
+RUN python3.9 -m pip install dbus-python
+#	&& python3.9 -m pip install pyqt5-sip \
+#	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
 
 # Create wheel for PyQt5
 #RUN python3.9 -m pip install build twine
