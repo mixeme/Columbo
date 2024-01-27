@@ -76,7 +76,18 @@ py -m pip install --upgrade PyQt5
 py <path-to-the-unpacked-repo>/main.py
 ```
 
+#### Linux
+```shell
+# Debian 11 version
+apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
+git clone -b main https://github.com/mixeme/Columbo.git
+python3 Columbo/main.py   # Python 3.9+ is required
+```
 
+### Build from source
+#### Natively
+1. Check that you can successfully run Columbo from source. See section above;
+2. 
 
 #### With Docker image
 
@@ -91,7 +102,6 @@ wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh \
    
 sudo apt install -y git \
     && git clone -b main https://github.com/mixeme/Columbo.git \
-
     && sudo bash Columbo/scripts/install-git.sh [source | regular | standalone]
 ```
 2. Run Columbo
