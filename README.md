@@ -52,7 +52,10 @@ In the release section you can find binaries which are build with [PyInstaller](
 
 If you need another binary, you can run Columbo from source or build it on your own. See corresponding sections below. 
 
-### Windows
+### Build binary
+#### Natively
+Windows version
+
 1. Install CPython interpreter from
 > https://www.python.org/downloads/windows/
 2. Open PowerShell as administrator;
@@ -74,6 +77,12 @@ py -m pip install --upgrade PyQt5
 ```shell
 py <path-to-the-unpacked-repo>/main.py
 ```
+
+
+
+#### With Docker image
+
+### Windows
 
 ### Linux
 1. Run `scripts/install.sh`. For example
