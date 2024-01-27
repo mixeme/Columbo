@@ -20,6 +20,11 @@ RUN mkdir /pybuild \
 	&& cd / \
 	&& rm -R /pybuild
 
+# Install Python packages with `pip`
+RUN python3.9 -m pip install --upgrade pip \
+	&& python3.9 -m pip install pyinstaller dbus-python
+#RUN	python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
+#	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
 # Overwrite symlink to the installed Python
 #RUN rm /usr/bin/python3 && ln -s /usr/local/bin/python3.9 /usr/bin/python3
 
@@ -30,11 +35,6 @@ ENV LIBGL_ALWAYS_INDIRECT=1
 RUN mkdir /project
 WORKDIR /project
 
-# Install Python packages with `pip`
-RUN python3.9 -m pip install --upgrade pip \
-	&& python3.9 -m pip install pyqt5-sip \
-	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
-#RUN python3 -m pip install pyinstaller
 
 #CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
