@@ -42,7 +42,7 @@ Columbo aims to provide a cross-platform convenient graphical interface to inves
 + Python 3.9+;
 + PyQt 5.
 
-## Run from source
+## Run / Install / Build
 ### Windows
 1. Install CPython interpreter from
 > https://www.python.org/downloads/windows/
