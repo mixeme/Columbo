@@ -44,7 +44,7 @@ Columbo aims to provide a cross-platform convenient graphical interface to inves
 
 ## Run / Install / Build
 ### Run binary
-In the release section you can find binaries which are build with [PyInstaller](https://pyinstaller.org/). There are the following binaries:
+In the release section, you can find binaries which are build with [PyInstaller](https://pyinstaller.org/). There are the following binaries:
 
 + Windows x86_64 (build on Windows 10 22H2);
 + Linux x86_64 (build on CentOS 7);
