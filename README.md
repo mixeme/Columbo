@@ -97,6 +97,8 @@ python3 -m pip install --upgrade pyinstaller
 4. Find your binary in `<repo>/dist` folder.
 
 #### With Docker image
+1. Install Docker engine;
+2. 
 
 #### 
 
