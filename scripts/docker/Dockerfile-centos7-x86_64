@@ -11,7 +11,6 @@ RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
 
 # yum -y install libxkbcommon-x11 solves issue:
 # > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
-# > This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
 
 # Compile & install CPython 3.9.18 from source
 RUN mkdir /pybuild \
