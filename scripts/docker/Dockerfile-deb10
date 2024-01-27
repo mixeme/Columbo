@@ -14,7 +14,7 @@ RUN apt install -y libdbus-1-dev libdbusextended-qt5-dev libdbus-c++-dev libdbus
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
-	&& tar xvf Python-*.tgz \
+	&& tar -xzf Python-*.tgz \
 	&& cd Python-3.9*/ \
 	&& ./configure --enable-optimizations --enable-shared LDFLAGS="-Wl,--rpath=/usr/local/lib" \
 	&& make altinstall \
