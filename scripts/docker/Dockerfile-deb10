@@ -5,6 +5,8 @@ RUN apt update -y \
 	software-properties-common build-essential \
 	libffi-dev glib2.0 \
 	zlib1g-dev libbz2-dev \
+	libssl-dev libnss3-dev \
+	libreadline-dev \
 	qt5-default qt5-gtk-platformtheme qt5-style-plugins
 
 # Compile & install CPython 3.9.18 from source
