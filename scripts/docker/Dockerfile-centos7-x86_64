@@ -16,7 +16,7 @@ RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
-	&& tar xvf Python-*.tgz \
+	&& tar -xzvf Python-*.tgz \
 	&& cd Python-3.9*/ \
 	&& ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" \
 	&& make altinstall \
