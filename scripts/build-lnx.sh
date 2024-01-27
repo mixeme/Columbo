@@ -53,7 +53,7 @@ python3 -m PyInstaller \
 	--icon=icons/search.ico \
 	main.py;
 
-# Create archive with binary
+# Create an archive with binary
 if [ "$MODE" = "onedir" ];
 then
   echo "Pack a folder with binary...";
