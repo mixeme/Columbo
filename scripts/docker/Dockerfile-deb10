@@ -8,6 +8,7 @@ RUN apt update -y \
 	libssl-dev libnss3-dev \
 	libreadline-dev \
 	qt5-default qt5-gtk-platformtheme qt5-style-plugins
+RUN apt install -y libdbus-1-dev libdbusextended-qt5-dev libdbus-c++-dev libdbus-glib-1-dev
 
 # Compile & install CPython 3.9.18 from source
 RUN mkdir /pybuild \
