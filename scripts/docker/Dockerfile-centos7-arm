@@ -6,9 +6,20 @@ RUN yum -y install epel-release \
 	&& yum -y install wget \
 	openssl-devel libffi-devel bzip2-devel \
 	qt5-qtbase qt5-qtbase-devel
+RUN yum -y install cmake3 dbus-devel glib2-devel
+
+  
+  sudo yum install yum-utils
+
+sudo yum-builddep python3
+
 
 # Make symlink for qmake
 RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
+RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
+# Make symlink for qmake
+RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
+
 
 # Compile & install CPython 3.9.18 from source
 RUN mkdir /pybuild \
