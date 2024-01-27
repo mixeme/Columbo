@@ -103,7 +103,7 @@ python3 -m pip install --upgrade pyinstaller
 #### 
 
 
-### Install on Linux
+### Install from source
 1. Run `scripts/install.sh`. For example
 ```shell
 wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh \
