@@ -119,7 +119,7 @@ docker build  --tag mixeme/columbo:debian-bullseye \
               https://github.com/mixeme/Columbo.git#dev:scripts/docker
 
 # CentOS 7 (x86_64)
-docker build  --tag mixeme/columbo-build:centos-7 \
+docker build  --tag mixeme/columbo:centos-7 \
               --file Dockerfile-centos7-x86_64 \
               https://github.com/mixeme/Columbo.git#dev:scripts/docker
 ```
