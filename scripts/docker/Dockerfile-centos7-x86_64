@@ -7,7 +7,6 @@ RUN yum -y install epel-release \
 	openssl-devel libffi-devel bzip2-devel \
 	qt5-qtbase qt5-qtbase-devel qt5-qtstyleplugins libxkbcommon-x11
 # Make symlink for qmake
-RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
 
 # yum -y install libxkbcommon-x11 solves issue:
 # > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
