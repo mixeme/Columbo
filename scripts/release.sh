@@ -8,11 +8,11 @@ echo "+ Go to dist folder";
 cd ../dist
 
 
-TARS=$(ls -1 *.tar.gz);
+TARS=$(find . -mindepth 1 -maxdepth 1 -type f -name "*tar.gz");
 echo "$TARS";
 
 # Create archives
-FOLDERS=$(ls -1 */);
+FOLDERS=$(find . -mindepth 1 -maxdepth 1 -type d | sed 's|^\./||g');
 for i in $FOLDERS;
 do
   echo "+ TAR $i";
