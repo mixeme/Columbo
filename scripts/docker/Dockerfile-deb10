@@ -30,10 +30,12 @@ RUN mkdir /pybuild \
 	&& rm -R /pybuild
 
 # Install Python packages with `pip`
-RUN python3.9 -m pip install --upgrade pip \
-	&& python3.9 -m pip install pyinstaller dbus-python
+#RUN python3.9 -m pip install --upgrade pip \
+#	&& python3.9 -m pip install dbus-python dbus-next
+
 #RUN	python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
 #	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
+#python3.9 -m pip install pyinstaller 
 
 # Overwrite symlink to the installed Python
 #RUN rm /usr/bin/python3 && ln -s /usr/local/bin/python3.9 /usr/bin/python3
