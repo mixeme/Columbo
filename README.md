@@ -86,8 +86,15 @@ python3 Columbo/main.py   # Python 3.9+ is required
 
 ### Build from source
 #### Natively
-2. 
 1. Check that you can successfully run Columbo from the source. See instructions section above;
+2. Install/upgrade [PyInstaller](https://pyinstaller.org/) with `pip`
+
+```shell
+python3 -m pip install --upgrade pyinstaller
+```
+
+3. Run `scripts/build-win.bat` for Windows and `scripts/build-lnx.sh` for Linux;
+4. Find your binary in `<repo>/dist` folder.
 
 #### With Docker image
 
