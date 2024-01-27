@@ -98,10 +98,62 @@ python3 -m pip install --upgrade pyinstaller
 
 #### With Docker image
 1. Install Docker engine;
-2. 
+2. Build an image with the required environment 
 
-#### 
+```shell
+# Debian 10 Buster
+docker build  --tag mixeme/columbo:debian-buster \
+              --file scripts/docker/Dockerfile-deb10 \
+              https://github.com/mixeme/Columbo.git#dev:scripts/docker
 
+# Debian 10 Bullseye
+docker build  --tag mixeme/columbo:debian-bullseye \
+              --file scripts/docker/Dockerfile-deb11 \
+              https://github.com/mixeme/Columbo.git#dev:scripts/docker
+
+# CentOS 7 (x86_64)
+docker build  --tag mixeme/columbo-build:centos-7 \
+              --file scripts/docker/Dockerfile-centos7-x86_64 \
+              https://github.com/mixeme/Columbo.git#dev:scripts/docker
+```
+
+3. Clone Columbo repository
+
+```shell
+git clone -b main https://github.com/mixeme/Columbo.git
+cd Columbo
+```
+
+4. Run container to build a binary
+
+```shell
+docker run  --user $(id -u):$(id -g) \
+            -it --rm \
+            --name columbo-build \
+            -v $PWD:/project \
+            -v /etc/passwd:/etc/passwd:ro \
+            -v /etc/group:/etc/group:ro \
+            -v /etc/shadow:/etc/shadow:ro \
+            mixeme/columbo:<built-image-version>
+```
+
+5. Get your binary in `dist` folder.  
+
+If you need to test built environment, use the following command to run Columbo from source inside a container
+
+```shell
+docker run  --user $(id -u):$(id -g) \
+            -it --rm \
+            --name columbo-build \
+            -v $PWD:/project \
+            -v /etc/passwd:/etc/passwd:ro \
+            -v /etc/group:/etc/group:ro \
+            -v /etc/shadow:/etc/shadow:ro \
+            -v /tmp/.X11-unix:/tmp/.X11-unix \
+            -e DISPLAY=$DISPLAY \
+            mixeme/columbo:<built-image-version> \
+            python3 main.py   # or `python3.9 main.py` for some images
+```
 
 ### Install from source
 1. Run `scripts/install.sh`. For example
