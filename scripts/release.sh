@@ -11,6 +11,11 @@ cd ../dist
 TARS=$(find . -mindepth 1 -maxdepth 1 -type f -name "*tar.gz");
 echo "$TARS";
 
+if [ -z "$TARS" ];
+then
+	echo "No TARS";
+fi
+
 # Create archives
 FOLDERS=$(find . -mindepth 1 -maxdepth 1 -type d | sed 's|^\./||g');
 for i in $FOLDERS;
