@@ -1,7 +1,7 @@
 FROM debian:buster
 
 RUN apt update -y \
-	&& apt install -y wget git \
+	&& apt install -y wget git apt-utils \
 	software-properties-common build-essential \
 	libffi-dev zlib1g-dev \
 	qt5-default qt5-gtk-platformtheme qt5-style-plugins \
