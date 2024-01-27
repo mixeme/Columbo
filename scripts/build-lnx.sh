@@ -16,7 +16,7 @@ if [ $# -gt 0 ];
 then
 	MODE=$1;
 else
-  if ! [ -v MODE ];   # If MODE is not defined in the environment
+  if ! [ -v MODE ];   # If MODE is not defined in the environment (is used in Docker image)
   then
     echo "
 Build mode was not specified as an argument or as an environment variable MODE. Choose build mode:
