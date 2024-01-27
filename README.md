@@ -82,9 +82,10 @@ py <path-to-the-unpacked-repo>/main.py
 
 #### With Docker image
 
-### Windows
+#### 
 
-### Linux
+
+### Install on Linux
 1. Run `scripts/install.sh`. For example
 ```shell
 wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh \
@@ -100,3 +101,13 @@ sudo apt install -y git \
     /opt/Columbo/main.py  # for `source` option
     columbo               # for `regular` & `standalone` options 
 ```
+
+
+
+#### Natively
+
+
+#### With Docker image
+
+### Windows
+
