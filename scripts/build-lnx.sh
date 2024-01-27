@@ -53,5 +53,14 @@ python3 -m PyInstaller \
 	--icon=icons/search.ico \
 	main.py;
 
+# Create archive with binary
+if [ "$MODE" = "onedir" ];
+then
+  echo "Pack a folder with binary...";
+  cd dist || exit 1;
+  tar -czf "$BIN_NAME".tar.gz "$BIN_NAME"
+  echo "Columbo is packed to dist/$BIN_NAME.tar.gz";
+fi
+
 # Provide clean exit code
 exit 0;
