@@ -54,7 +54,7 @@ If you need another version, you can run Columbo from source or build binary on 
 
 ### Run from source
 #### Windows
-1. Install CPython interpreter from
+1. Install CPython interpreter **(required 3.9+ version)** from
 > https://www.python.org/downloads/windows/
 2. Open PowerShell as administrator;
 3. Install `pip`
@@ -67,7 +67,7 @@ py -m pip install --upgrade pip
 ```
 5. Install `PyQt5` package with `pip`
 ```shell
-py -m pip install --upgrade PyQt5
+py -m pip install PyQt5
 ```
 6. Clone or [download as ZIP](http://github.com/mixeme/Columbo/zipball/main/) Columbo repo;
 7. Unpack ZIP (if it is needed);
@@ -77,20 +77,22 @@ py <path-to-the-unpacked-repo>/main.py
 ```
 
 #### Linux
+CPython 3.9+ is required.
 ```shell
 # Debian 11 version
-apt update -y && apt install -y git python3 python3-pip python3-pyqt5;
+apt update -y && apt install -y git python3 python3-pip python3-pyqt5
 git clone -b main https://github.com/mixeme/Columbo.git
-python3 Columbo/main.py   # Python 3.9+ is required
+python3 Columbo/main.py
 ```
 
 ### Build from source
 #### Natively
-1. Check that you can successfully run Columbo from the source. See instructions section above;
-2. Install/upgrade [PyInstaller](https://pyinstaller.org/) with `pip`
+1. Check that you can successfully run Columbo from the source. See instructions in the section above;
+2. Install [PyInstaller](https://pyinstaller.org/) with `pip`
 
 ```shell
-python3 -m pip install --upgrade pyinstaller
+py -m pip install pyinstaller         # For Windows  
+python3 -m pip install pyinstaller    # For Linux
 ```
 
 3. Run `scripts/build-win.bat` for Windows and `scripts/build-lnx.sh` for Linux;
@@ -98,6 +100,11 @@ python3 -m pip install --upgrade pyinstaller
 
 #### With Docker image
 1. Install Docker engine;
+
+```shell
+apt install docker docker.io apparmor # For example
+```
+
 2. Build an image with the required environment 
 
 ```shell
@@ -124,7 +131,7 @@ git clone -b main https://github.com/mixeme/Columbo.git
 cd Columbo
 ```
 
-4. Run container to build a binary
+4. Run a container to build a binary
 
 ```shell
 docker run  --user $(id -u):$(id -g) \
@@ -134,12 +141,12 @@ docker run  --user $(id -u):$(id -g) \
             -v /etc/passwd:/etc/passwd:ro \
             -v /etc/group:/etc/group:ro \
             -v /etc/shadow:/etc/shadow:ro \
-            mixeme/columbo:<built-image-version>
+            mixeme/columbo:<your-image-version>
 ```
 
 5. Get your binary in `dist` folder.  
 
-If you need to test built environment, use the following command to run Columbo from source inside a container
+If you need to test compatibility of the built environment, use the following command to run Columbo from the source inside a container
 
 ```shell
 docker run  --user $(id -u):$(id -g) \
@@ -151,8 +158,9 @@ docker run  --user $(id -u):$(id -g) \
             -v /etc/shadow:/etc/shadow:ro \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -e DISPLAY=$DISPLAY \
-            mixeme/columbo:<built-image-version> \
-            python3 main.py   # or `python3.9 main.py` for some images
+            mixeme/columbo:<your-image-version> \
+            python3 main.py
+            # or `python3.9 main.py` for some images
 ```
 
 ### Install from source
