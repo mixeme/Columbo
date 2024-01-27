@@ -43,6 +43,15 @@ Columbo aims to provide a cross-platform convenient graphical interface to inves
 + PyQt 5.
 
 ## Run / Install / Build
+### Run binary
+In the release section you can find binaries which are build with [PyInstaller](https://pyinstaller.org/). There are the following binaries:
+
++ Windows x86_64 (build on Windows 10 22H2);
++ Linux x86_64 (build on CentOS 7);
++ Linux ARM64 (build on Debian Bullseye).
+
+If you need another binary, you can run Columbo from source or build it on your own. See corresponding sections below. 
+
 ### Windows
 1. Install CPython interpreter from
 > https://www.python.org/downloads/windows/
