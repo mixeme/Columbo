@@ -30,8 +30,7 @@ RUN python3.9 -m pip install --upgrade pip \
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
 # This fix: libGL error: No matching fbConfigs or visuals found
-ENV LIBGL_ALWAYS_INDIRECT=1
-
+#ENV LIBGL_ALWAYS_INDIRECT=1
 
 #RUN mkdir /project
 #WORKDIR /project
