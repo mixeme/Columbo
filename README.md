@@ -110,17 +110,17 @@ apt install docker docker.io apparmor # For example
 ```shell
 # Debian 10 Buster
 docker build  --tag mixeme/columbo:debian-buster \
-              --file scripts/docker/Dockerfile-deb10 \
+              --file Dockerfile-deb10 \
               https://github.com/mixeme/Columbo.git#dev:scripts/docker
 
 # Debian 10 Bullseye
 docker build  --tag mixeme/columbo:debian-bullseye \
-              --file scripts/docker/Dockerfile-deb11 \
+              --file Dockerfile-deb11 \
               https://github.com/mixeme/Columbo.git#dev:scripts/docker
 
 # CentOS 7 (x86_64)
 docker build  --tag mixeme/columbo-build:centos-7 \
-              --file scripts/docker/Dockerfile-centos7-x86_64 \
+              --file Dockerfile-centos7-x86_64 \
               https://github.com/mixeme/Columbo.git#dev:scripts/docker
 ```
 
