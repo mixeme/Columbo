@@ -41,8 +41,9 @@ fi
 echo "Mode: $MODE";
 
 # Create executable file
+BIN_NAME="columbo-$ARCH";
 python3 -m PyInstaller \
-	--name "columbo-$ARCH" \
+	--name $BIN_NAME \
 	--$MODE \
 	--windowed \
 	--noconfirm \
