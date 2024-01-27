@@ -3,8 +3,9 @@ FROM debian:buster
 RUN apt update -y \
 	&& apt install -y wget git apt-utils \
 	software-properties-common build-essential \
-	libffi-dev zlib1g-dev \
 	qt5-default qt5-gtk-platformtheme qt5-style-plugins \
+	libffi-dev glib2.0 \
+	zlib1g-dev libbz2-dev \
 
 # Compile & install CPython 3.9.18 from source
 RUN mkdir /pybuild \
