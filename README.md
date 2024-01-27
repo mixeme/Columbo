@@ -50,12 +50,10 @@ In the release section, you can find binaries which are build with [PyInstaller]
 + Linux x86_64 (build on CentOS 7);
 + Linux ARM64 (build on Debian Bullseye).
 
-If you need another binary, you can run Columbo from source or build it on your own. See corresponding sections below. 
+If you need another version, you can run Columbo from source or build binary on your own. See instructions in the corresponding sections below. 
 
-### Build binary
-#### Natively
-Windows version
-
+### Run from source
+#### Windows
 1. Install CPython interpreter from
 > https://www.python.org/downloads/windows/
 2. Open PowerShell as administrator;
