@@ -21,8 +21,6 @@ RUN mkdir /pybuild \
 	&& make altinstall \
 	&& cd / \
 	&& rm -R /pybuild
-# Make symlink to the installed Python 3.9
-RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 
 # Install Python packages with `pip`
 RUN python3.9 -m pip install --upgrade pip \
@@ -34,6 +32,10 @@ ENV LIBGL_ALWAYS_INDIRECT=1
 
 RUN mkdir /project
 WORKDIR /project
+
+# Only after all packages installation!
+# Make symlink to the installed Python 3.9
+RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 
 CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
