@@ -1,82 +1,51 @@
 FROM centos:7
 
 # Install packages
-RUN yum -y install epel-release \
-	&& yum -y groupinstall "Development Tools" \
-	&& yum -y install wget \
-	openssl-devel libffi-devel bzip2-devel \
-	qt5-qtbase qt5-qtbase-devel
-RUN yum -y install cmake3 dbus-devel glib2-devel
-
-  
-  sudo yum install yum-utils
-
-sudo yum-builddep python3
-
+RUN yum -y install epel-release yum-utils
+RUN yum--y builddep python3
+#	&& yum -y groupinstall "Development Tools" \
+#	&& yum -y install wget \
+#	openssl-devel libffi-devel bzip2-devel \
+#	qt5-qtbase qt5-qtbase-devel
+#RUN yum -y install cmake3 dbus-devel glib2-devel
 
 # Make symlink for qmake
-RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
-RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
-# Make symlink for qmake
-RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
-
+#RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
+#RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
 
 # Compile & install CPython 3.9.18 from source
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
-	&& tar xvf Python-*.tgz \
+	&& tar -xzf Python-*.tgz \
 	&& cd Python-3.9*/ \
-	&& ./configure --enable-optimizations \
+	&& ./configure --enable-optimizations --with-lto --enable-shared LDFLAGS="-Wl,--rpath=/usr/local/lib" \
 	&& make altinstall \
 	&& cd / \
 	&& rm -R /pybuild
-#	&& ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" \
+# Make symlink to the installed Python 3.9
+RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
+
+# Packages required for `dbus-python`
+RUN apt install -y libdbus-1-dev libdbus-glib-1-dev
+#RUN yum -y install dbus-python-devel
+#dbus dbus-devel dbus-1
+# Packages required for `PyQt5`
+#RUN yum -y install qt5-qtbase qt5-qtbase-devel
+#RUN yum -y install qt5-qtstyleplugins
 
 # Install Python packages with `pip`
 RUN python3.9 -m pip install --upgrade pip
-RUN python3.9 -m pip install dbus-python
-#	&& python3.9 -m pip install pyqt5-sip \
-#	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
-
-# Create wheel for PyQt5
-#RUN python3.9 -m pip install build twine
-#RUN mkdir /pyqtbuild \
-#	&& cd /pyqtbuild \
-#	&& wget https://files.pythonhosted.org/packages/4d/5d/b8b6e26956ec113ad3f566e02abd12ac3a56b103fcc7e0735e27ee4a1df3/PyQt5-5.15.10.tar.gz \
-#	&& tar xvf PyQt5*.tar.gz \
-#	&& cd PyQt5*/ \
-#	&& python3.9 -m build --wheel --config-settings --confirm-license= --verbose
-
-#ENV PATH="${PATH}:${PY_HOME}/bin"
-#ENV PATH="${PATH}:/opt/python3.9/bin"
-
-# python3.9 -m build --wheel
-# wget https://files.pythonhosted.org/packages/4d/5d/b8b6e26956ec113ad3f566e02abd12ac3a56b103fcc7e0735e27ee4a1df3/PyQt5-5.15.10.tar.gz
-
-#install -y twine
-# https://packaging.python.org/en/latest/tutorials/packaging-projects/
-#python3.9 -m twine upload --repository testpypi dist/*
-#twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-
-# && yum -y install qt5-qtstyleplugins
-#--config-settings --confirm-license= --verbose
-# pyinstaller
-# --prefix=/opt/python
-# --prefix=/usr/local
-
-#	&& apt install -y git \
-#	python3 python3-pip python3-pyqt5 \
-#	qt5-gtk2-platformtheme qt5-gtk-platformtheme qt5-style-plugins 
-#RUN python3 -m pip install pyinstaller
+RUN python3.9 -m pip install dbus-python dbus-next
+RUN python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
+RUN python3.9 -m pip install pyinstaller
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
 # This fix: libGL error: No matching fbConfigs or visuals found
 #ENV LIBGL_ALWAYS_INDIRECT=1
 
-RUN mkdir /project
-WORKDIR /project
-#RUN yum -y install dbus-python-devel
+#RUN mkdir /project
+#WORKDIR /project
 
 #CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
