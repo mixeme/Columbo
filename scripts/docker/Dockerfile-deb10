@@ -3,8 +3,8 @@ FROM debian:buster
 # Suppress prompting from apt
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt update -y && apt install -y apt-utils && apt install -y wget git
 # Install basic packages
+RUN apt update -y && apt install -y apt-utils
 
 # Install packages for CPython compilation
 # See reference for CPython dependencies:
@@ -20,6 +20,7 @@ RUN apt install -y	build-essential \
 #RUN apt install -y software-properties-common libnss3-dev 
 
 # Compile & install CPython 3.9.18 from source
+RUN apt install -y wget git
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
