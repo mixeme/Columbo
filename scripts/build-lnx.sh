@@ -9,6 +9,7 @@ echo "Project home: $PWD";
 
 # Get a platform architecture
 ARCH=$(uname -m);
+BIN_NAME="columbo-$ARCH";
 echo "Detected platform architecture: $ARCH";
 
 # Check the specified mode
@@ -41,7 +42,6 @@ fi
 echo "Mode: $MODE";
 
 # Create executable file
-BIN_NAME="columbo-$ARCH";
 python3 -m PyInstaller \
 	--name $BIN_NAME \
 	--$MODE \
