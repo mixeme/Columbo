@@ -6,8 +6,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update -y && apt install -y apt-utils && apt install -y wget git
 # Install basic packages
 
-# https://devguide.python.org/getting-started/setup-building/index.html#build-dependencies
+# Install packages for CPython compilation
 # See reference for CPython dependencies:
+#	https://devguide.python.org/getting-started/setup-building/index.html#build-dependencies
 RUN echo "deb-src http://deb.debian.org/debian/ buster main" >> /etc/apt/sources.list \
 	&& apt update -y \
 	&& apt build-dep -y python3
