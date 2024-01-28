@@ -1,20 +1,17 @@
 FROM centos:7
 
-# Install packages
-RUN yum -y install epel-release yum-utils
-RUN yum--y builddep python3
-#	&& yum -y groupinstall "Development Tools" \
-#	&& yum -y install wget \
-#	openssl-devel libffi-devel bzip2-devel \
-#	qt5-qtbase qt5-qtbase-devel
-#RUN yum -y install cmake3 dbus-devel glib2-devel
+# Install basic packages
+RUN yum -y install epel-release
 
-# Make symlink for qmake
-#RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
-#RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
+# Install packages for CPython compilation
+RUN yum -y groupinstall "Development Tools"
+RUN yum -y install	gdbm-devel libffi-devel lcov \
+					zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
+					openssl-devel sqlite-devel expat-devel \
+					ncurses-devel readline-devel tk-devel uuid-devel 
 
 # Compile & install CPython 3.9.18 from source
-RUN yum -y install wget git
+RUN yum -y install wget
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
@@ -26,18 +23,21 @@ RUN mkdir /pybuild \
 	&& rm -R /pybuild
 
 # Packages required for `dbus-python`
-RUN apt install -y libdbus-1-dev libdbus-glib-1-dev
-#RUN yum -y install dbus-python-devel
-#dbus dbus-devel dbus-1
+RUN yum -y install dbus-devel glib2-devel
 # Packages required for `PyQt5`
-#RUN yum -y install qt5-qtbase qt5-qtbase-devel
+RUN yum -y install qt5-qtbase qt5-qtbase-devel
 #RUN yum -y install qt5-qtstyleplugins
+
+# Make symlink for `qmake`
+RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
 
 # Install Python packages with `pip`
 RUN python3.9 -m pip install --upgrade pip
 RUN python3.9 -m pip install dbus-python dbus-next
 RUN python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
-RUN python3.9 -m pip install pyinstaller
+#RUN python3.9 -m pip install pyinstaller
+
+#libxcb libxcb-devel xcb-util xcb-util-devel
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
 # This fix: libGL error: No matching fbConfigs or visuals found
@@ -48,12 +48,12 @@ RUN python3.9 -m pip install pyinstaller
 
 # Only after all packages installation!
 # Make symlink to the installed Python 3.9
-RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
+#RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 
 #CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
 # Image build
-# docker build --tag mixeme/columbo-build:centos-7 --file scripts/docker/Dockerfile-centos7 scripts/docker
+# docker build --tag mixeme/columbo-build:centos-7 --file scripts/docker/Dockerfile-centos7-arm scripts/docker
 #
 # Test run from source
 # docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo-build:debian-bullseye python3 main.py
