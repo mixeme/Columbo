@@ -68,8 +68,10 @@ then
   echo "Pack a folder with binary...";
   cd dist || exit 1;
   tar -czf "$BIN_NAME".tar.gz "$BIN_NAME"
+  rm -R "$BIN_NAME";
   echo "Columbo is packed to dist/$BIN_NAME.tar.gz";
 fi
 
 # Provide clean exit code
 exit 0;
+
