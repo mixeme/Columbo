@@ -17,7 +17,7 @@ RUN mkdir /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
 	&& tar -xzvf Python-*.tgz \
 	&& cd Python-3.9*/ \
-	&& ./configure --enable-optimizations --enable-shared LDFLAGS="-Wl,--rpath=/usr/local/lib" \
+	&& ./configure --enable-optimizations --with-lto --enable-shared LDFLAGS="-Wl,--rpath=/usr/local/lib" \
 	&& make altinstall \
 	&& cd / \
 	&& rm -R /pybuild
