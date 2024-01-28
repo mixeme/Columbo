@@ -41,7 +41,16 @@ Build mode was not specified as an argument or as an environment variable MODE. 
 fi
 echo "Mode: $MODE";
 
+if [ -v TAG ];
+then
+	echo "Build tag: $TAG";
+	BIN_NAME="$BIN_NAME-$TAG";
+else
+	echo "Build tag is not defined";
+fi
+
 # Create executable file
+echo "Target binary name: $BIN_NAME";
 python3 -m PyInstaller \
 	--name $BIN_NAME \
 	--$MODE \
