@@ -53,7 +53,7 @@ WORKDIR /project
 # Overwrite symlink to the installed Python 3.9
 RUN rm /usr/bin/python3 && ln -s /usr/local/bin/python3.9 /usr/bin/python3
 
-#CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
+CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
 # Image build
 # docker build --tag mixeme/columbo:debian-buster --file scripts/docker/Dockerfile-deb10 scripts/docker
