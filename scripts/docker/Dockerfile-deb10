@@ -30,9 +30,6 @@ RUN mkdir /pybuild \
 	&& cd / \
 	&& rm -R /pybuild
 
-#RUN apt install -y glib2.0 libdbus-1-dev libdbus-glib-1-dev
-#RUN libdbusextended-qt5-dev libdbus-c++-dev 
-
 #RUN apt install -y qt5-default qt5-gtk-platformtheme qt5-style-plugins
 
 # Install Python packages with `pip`
