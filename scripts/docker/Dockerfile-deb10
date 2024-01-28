@@ -43,8 +43,6 @@ RUN apt install -y qt5-default qt5-gtk-platformtheme qt5-style-plugins
 #	&& python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
 #python3.9 -m pip install pyinstaller 
 
-# Overwrite symlink to the installed Python
-#RUN rm /usr/bin/python3 && ln -s /usr/local/bin/python3.9 /usr/bin/python3
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
 # This fix: libGL error: No matching fbConfigs or visuals found
@@ -52,6 +50,8 @@ RUN apt install -y qt5-default qt5-gtk-platformtheme qt5-style-plugins
 
 #RUN mkdir /project
 #WORKDIR /project
+# Overwrite symlink to the installed Python 3.9
+RUN rm /usr/bin/python3 && ln -s /usr/local/bin/python3.9 /usr/bin/python3
 
 #CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
