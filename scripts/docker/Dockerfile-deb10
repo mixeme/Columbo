@@ -30,7 +30,10 @@ RUN mkdir /pybuild \
 	&& cd / \
 	&& rm -R /pybuild
 
-#RUN apt install -y qt5-default qt5-gtk-platformtheme qt5-style-plugins
+# Packages required for `dbus-python`
+RUN apt install -y libdbus-1-dev libdbus-glib-1-dev
+# Packages required for `PyQt5`
+RUN apt install -y qt5-default qt5-gtk-platformtheme qt5-style-plugins
 
 # Install Python packages with `pip`
 #RUN python3.9 -m pip install --upgrade pip \
