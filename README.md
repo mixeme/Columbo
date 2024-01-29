@@ -51,7 +51,7 @@ In the release section, you can find binaries which are built with [PyInstaller]
 
 If you need another version, you can run Columbo from source or a build binary on your own. See instructions in the corresponding sections below. 
 
-## Run / Install / Build
+## Run / Build / Install 
 ### Run from source
 #### Windows
 1. Install CPython interpreter **(required 3.9+ version)** from
