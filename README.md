@@ -69,7 +69,7 @@ py -m pip install --upgrade pip
 ```shell
 py -m pip install PyQt5
 ```
-6. Clone or [download as ZIP](http://github.com/mixeme/Columbo/zipball/main/) Columbo repo;
+6. Clone or [download as ZIP](http://github.com/mixeme/Columbo/zipball/main/) Columbo repository;
 7. Unpack ZIP (if it is needed);
 8. Run Columbo with
 ```shell
@@ -85,7 +85,7 @@ git clone -b main https://github.com/mixeme/Columbo.git
 python3 Columbo/main.py
 ```
 
-### Build from source
+### Build binary
 #### Natively
 1. Check that you can successfully run Columbo from the source. See instructions in the section above;
 2. Install [PyInstaller](https://pyinstaller.org/) with `pip`
