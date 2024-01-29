@@ -18,6 +18,7 @@ ENV LIBGL_ALWAYS_INDIRECT=1
 RUN mkdir /project
 WORKDIR /project
 
+# Define default command for execution
 CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 
 # Image build
