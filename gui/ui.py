@@ -198,35 +198,42 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def contextMenuEvent(self, position) -> None:
         # Don't open context menu for no selection
-        if len(self.get_selected_nodes()) == 0:
+        nodes = self.get_selected_nodes()
+        if len(nodes) == 0:
             return
 
         context_menu = QMenu()
-        restore = context_menu.addAction("Restore")
-        context_menu.addSeparator()
-        from_snapshot = context_menu.addAction("From snapshot")
-        to_snapshot = context_menu.addAction("To snapshot")
-        context_menu.addSeparator()
-        expand = context_menu.addAction("Expand recursively")
-        context_menu.addSeparator()
-        delete = context_menu.addAction("Delete empty directory")
-        action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
-        if action == restore:
-            self.restore_action()
-        if action == from_snapshot:
-            selected_nodes = self.get_selected_nodes()
-            snapshot = selected_nodes[0].siblingAtColumn(2).data()
-            self.filter_from_field.setText(snapshot)
-        if action == to_snapshot:
-            selected_nodes = self.get_selected_nodes()
-            snapshot = selected_nodes[0].siblingAtColumn(2).data()
-            self.filter_to_field.setText(snapshot)
-        if action == expand:
-            self.file_tree_view.expandRecursively(self.get_selected_nodes()[0])
-        if action == delete:
-            selected_path, _ = self.get_selected_path()
-            try:
-                os.removedirs(selected_path)
-                self.statusbar.showMessage("Delete", selected_path)
-            except OSError:
-                self.statusbar.showMessage("Failed to delete", selected_path)
+        if nodes[0].siblingAtColumn(1).data() != "Folder":
+            openfile = context_menu.addAction("Open")
+            restore = context_menu.addAction("Restore")
+            context_menu.addSeparator()
+            from_snapshot = context_menu.addAction("From snapshot")
+            to_snapshot = context_menu.addAction("To snapshot")
+            action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
+
+            if action == openfile:
+                os.startfile(self.get_selected_path()[0])
+            if action == restore:
+                self.restore_action()
+            if action == from_snapshot:
+                selected_nodes = self.get_selected_nodes()
+                snapshot = selected_nodes[0].siblingAtColumn(2).data()
+                self.filter_from_field.setText(snapshot)
+            if action == to_snapshot:
+                selected_nodes = self.get_selected_nodes()
+                snapshot = selected_nodes[0].siblingAtColumn(2).data()
+                self.filter_to_field.setText(snapshot)
+        else:
+            expand = context_menu.addAction("Expand recursively")
+            context_menu.addSeparator()
+            delete = context_menu.addAction("Delete empty directory")
+            action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
+            if action == expand:
+                self.file_tree_view.expandRecursively(self.get_selected_nodes()[0])
+            if action == delete:
+                selected_path, _ = self.get_selected_path()
+                try:
+                    os.removedirs(selected_path)
+                    self.statusbar.showMessage("Delete", selected_path)
+                except OSError:
+                    self.statusbar.showMessage("Failed to delete", selected_path)
