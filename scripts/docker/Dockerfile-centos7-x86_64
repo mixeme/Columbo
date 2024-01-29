@@ -1,7 +1,7 @@
 FROM centos:7
 
 # Install basic packages
-RUN yum -y install epel-release
+RUN yum -y install epel-release wget
 
 # Install packages for CPython compilation
 RUN yum -y groupinstall "Development Tools"
@@ -11,7 +11,6 @@ RUN yum -y install	gdbm-devel libffi-devel lcov \
 					ncurses-devel readline-devel tk-devel uuid-devel
 
 # Compile & install CPython 3.9.18 from source
-RUN yum -y install wget
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
