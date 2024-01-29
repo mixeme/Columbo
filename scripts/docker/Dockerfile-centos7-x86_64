@@ -1,15 +1,17 @@
 FROM centos:7
 
-# Install packages
-RUN yum -y install epel-release \
-	&& yum -y groupinstall "Development Tools" \
-	&& yum -y install wget git \
-	libffi-devel bzip2-devel openssl-devel \
-	qt5-qtbase qt5-qtbase-devel qt5-qtstyleplugins \
-	libxkbcommon-x11
+# Install basic packages
+RUN yum -y install epel-release
 
+# Install packages for CPython compilation
+RUN yum -y groupinstall "Development Tools"
+RUN yum -y install	gdbm-devel libffi-devel lcov \
+					zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
+					openssl-devel sqlite-devel expat-devel \
+					ncurses-devel readline-devel tk-devel uuid-devel
 
 # Compile & install CPython 3.9.18 from source
+RUN yum -y install wget
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
@@ -20,6 +22,9 @@ RUN mkdir /pybuild \
 	&& cd / \
 	&& rm -R /pybuild
 
+# Install packages required for `PyQt5`
+yum -y install	qt5-qtbase qt5-qtbase-devel qt5-qtstyleplugins \
+				libxkbcommon-x11
 # Package `libxkbcommon-x11` solves issue:
 # > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 
