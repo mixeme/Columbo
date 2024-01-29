@@ -39,7 +39,7 @@ RUN mkdir /project
 WORKDIR /project
 
 # Only after all packages installation!
-# Make symlink to the installed Python 3.9
+# Make a symlink to the installed Python 3.9
 RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 
 # Define default command for execution
