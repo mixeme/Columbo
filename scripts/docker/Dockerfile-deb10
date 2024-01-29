@@ -48,7 +48,7 @@ RUN mkdir /project
 WORKDIR /project
 
 # Only after all packages installation!
-# Overwrite symlink to the installed Python 3.9
+# Overwrite a symlink to the installed Python 3.9
 RUN rm /usr/bin/python3 && ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 
 CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
