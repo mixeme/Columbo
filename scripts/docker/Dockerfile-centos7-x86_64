@@ -3,7 +3,7 @@ FROM centos:7
 # Install basic packages
 RUN yum -y install epel-release wget
 
-# Install packages for CPython compilation
+# Install packages for CPython (with all modules) compilation
 RUN yum -y groupinstall "Development Tools"
 RUN yum -y install	gdbm-devel libffi-devel lcov \
 					zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
