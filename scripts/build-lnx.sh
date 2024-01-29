@@ -51,6 +51,7 @@ fi
 
 # Create executable file
 echo "Target binary name: $BIN_NAME";
+echo "+ Launch PyInstaller";
 python3 -m PyInstaller \
 	--name $BIN_NAME \
 	--$MODE \
@@ -63,16 +64,17 @@ python3 -m PyInstaller \
 	main.py;
 
 # Delete temp folder
+echo "+ Remove `build` folder";
 rm -R build;
 
 # Create an archive with binary
 if [ "$MODE" = "onedir" ];
 then
-  echo "Pack a folder with binary...";
+  echo "+ Pack a folder with binary...";
   cd dist || exit 1;
   tar -czf "$BIN_NAME".tar.gz "$BIN_NAME"
   rm -R "$BIN_NAME";
-  echo "Columbo is packed to dist/$BIN_NAME.tar.gz";
+  echo "+ Columbo is packed to dist/$BIN_NAME.tar.gz";
 fi
 
 # Provide clean exit code
