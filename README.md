@@ -45,11 +45,11 @@ Columbo aims to provide a cross-platform convenient graphical interface to inves
 ## Get binary
 In the release section, you can find binaries which are built with [PyInstaller](https://pyinstaller.org/). There are the following binaries:
 
-+ Windows x86_64 (build on Windows 10 22H2);
-+ Linux x86_64 (build on CentOS 7);
-+ Linux ARM64 (build on Debian Bullseye).
++ Windows x86_64 (built on Windows 10 22H2);
++ Linux x86_64 (built on CentOS 7);
++ Linux ARM64 (built on Debian 11 Bullseye & Debian 10 Buster).
 
-If you need another version, you can run Columbo from source or build binary on your own. See instructions in the corresponding sections below. 
+If you need another version, you can run Columbo from source or a build binary on your own. See instructions in the corresponding sections below. 
 
 ## Run / Install / Build
 ### Run from source
