@@ -8,8 +8,6 @@ RUN yum -y install epel-release \
 	qt5-qtbase qt5-qtbase-devel qt5-qtstyleplugins \
 	libxkbcommon-x11
 
-# yum -y install libxkbcommon-x11 solves issue:
-# > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 
 # Compile & install CPython 3.9.18 from source
 RUN mkdir /pybuild \
@@ -21,6 +19,9 @@ RUN mkdir /pybuild \
 	&& make altinstall \
 	&& cd / \
 	&& rm -R /pybuild
+
+# Package `libxkbcommon-x11` solves issue:
+# > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 
 # Install Python packages with `pip`
 RUN python3.9 -m pip install --upgrade pip \
