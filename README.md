@@ -42,8 +42,7 @@ Columbo aims to provide a cross-platform convenient graphical interface to inves
 + Python 3.9+;
 + PyQt 5.
 
-## Run / Install / Build
-### Get binary
+## Get binary
 In the release section, you can find binaries which are built with [PyInstaller](https://pyinstaller.org/). There are the following binaries:
 
 + Windows x86_64 (build on Windows 10 22H2);
@@ -52,6 +51,7 @@ In the release section, you can find binaries which are built with [PyInstaller]
 
 If you need another version, you can run Columbo from source or build binary on your own. See instructions in the corresponding sections below. 
 
+## Run / Install / Build
 ### Run from source
 #### Windows
 1. Install CPython interpreter **(required 3.9+ version)** from
