@@ -22,8 +22,8 @@ RUN mkdir /pybuild \
 	&& rm -R /pybuild
 
 # Install packages required for `PyQt5`
-yum -y install	qt5-qtbase qt5-qtbase-devel qt5-qtstyleplugins \
-				libxkbcommon-x11
+RUN yum -y install	qt5-qtbase qt5-qtbase-devel qt5-qtstyleplugins \
+					libxkbcommon-x11-devel
 # Package `libxkbcommon-x11` solves issue:
 # > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 
