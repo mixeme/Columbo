@@ -79,7 +79,7 @@ py <path-to-the-unpacked-repo>/main.py
 #### Linux
 CPython 3.9+ is required.
 ```shell
-# Debian 11 version
+# Debian 11 Bullseye version
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5
 git clone -b main https://github.com/mixeme/Columbo.git
 python3 Columbo/main.py
