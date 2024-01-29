@@ -62,6 +62,9 @@ python3 -m PyInstaller \
 	--icon=icons/search.ico \
 	main.py;
 
+# Delete temp folder
+rm -R build;
+
 # Create an archive with binary
 if [ "$MODE" = "onedir" ];
 then
