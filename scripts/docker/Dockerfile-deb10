@@ -4,7 +4,7 @@ FROM debian:buster
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Install basic packages
-RUN apt update -y && apt install -y apt-utils
+RUN apt update -y && apt install -y apt-utils wget
 
 # Install packages for CPython compilation
 # See reference for CPython dependencies:
@@ -19,7 +19,6 @@ RUN echo "deb-src http://deb.debian.org/debian/ buster main" >> /etc/apt/sources
 						lzma lzma-dev tk-dev uuid-dev zlib1g-dev
 
 # Compile & install CPython 3.9.18 from source
-RUN apt install -y wget git
 RUN mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
