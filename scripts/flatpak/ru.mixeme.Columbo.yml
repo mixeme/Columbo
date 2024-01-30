@@ -1,0 +1,23 @@
+id: ru.mixeme.Columbo
+runtime: org.kde.Platform
+runtime-version: '5.15-23.08'
+sdk: org.kde.Sdk
+base: com.riverbankcomputing.PyQt.BaseApp
+base-version: '5.15-23.08'
+command: main.py
+modules:
+  - name: Columbo
+#    buildsystem: simple
+#    build-commands:
+#      - pip3 install PyQt5
+#      - install -D hello.sh /app/bin/hello.sh
+    sources:
+      - type: dir
+        path: ../../
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=xdg-config/kdeglobals:ro
