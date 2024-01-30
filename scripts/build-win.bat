@@ -24,6 +24,8 @@ cd %SCRIPT%
 cd ..
 echo Switch to project home: %cd%
 
+SET BIN_NAME=columbo-win
+
 :: Run PyInstaller
 python -m PyInstaller ^
     --name columbo-win ^
