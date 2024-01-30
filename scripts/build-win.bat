@@ -36,4 +36,7 @@ python -m PyInstaller ^
 	--icon=icons/search.ico ^
 	main.py
 
+rmdir /S /Q build
+del %BIN_NAME%.spec
+
 exit 0
