@@ -105,6 +105,12 @@ case $COMMAND in
 		chmod +x $COLUMBO_PY;
 		echo "Run Columbo as";
 		echo -e "\t$COLUMBO_PY | python3 $COLUMBO_PY";
+
+		echo "#! /bin/bash
+exec python3 $COLUMBO_PY
+exit 0;
+" > $SYSTEM_BIN;
+
 	;;
 	binary )
 	  echo "+ Build a regular binary...";
