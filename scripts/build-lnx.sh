@@ -66,6 +66,8 @@ python3 -m PyInstaller \
 # Delete temp folder
 echo "+ Remove 'build' folder";
 rm -R build;
+echo "+ Remove .spec";
+rm $BIN_NAME.spec;
 
 # Create an archive with binary
 if [ "$MODE" = "onedir" ];
