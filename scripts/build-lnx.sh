@@ -64,7 +64,7 @@ python3 -m PyInstaller \
 	main.py;
 
 # Delete temp folder
-echo "+ Remove `build` folder";
+echo "+ Remove 'build' folder";
 rm -R build;
 
 # Create an archive with binary
