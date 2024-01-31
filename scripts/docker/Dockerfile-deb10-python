@@ -14,10 +14,9 @@ RUN apt install -y qt5-default qt5-style-plugins \
 	&& apt clean
 
 # Install Python packages with `pip`
-RUN python3.9 -m pip install --upgrade pip
-RUN python3.9 -m pip install dbus-python dbus-next
 RUN python3.9 -m pip install --no-binary=:all: pyqt5 --config-settings --confirm-license= --verbose
-RUN python3.9 -m pip install pyinstaller \
+RUN python3.9 -m pip install --upgrade pip \
+	&& python3.9 -m pip install pyinstaller dbus-python dbus-next
 	&& python3.9 -m pip cache purge
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
