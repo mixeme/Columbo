@@ -29,8 +29,9 @@ RUN yum -y groupremove "Development Tools" \
 LABEL python.version=3.9.18
 
 # Install packages required for `PyQt5`
-RUN yum -y install	qt5-qtbase-devel qt5-qtstyleplugins qgnomeplatform \
-					libxkbcommon-x11-devel
+RUN	yum -y install	qt5-qtbase-devel qgnomeplatform qt5-qtstyleplugins \
+					libxkbcommon-x11-devel \
+	&& yum clean all
 # Package `libxkbcommon-x11` solves issue:
 # > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 
