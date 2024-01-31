@@ -25,6 +25,7 @@ RUN yum -y groupinstall "Development Tools" \
 						zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
 						openssl-devel sqlite-devel expat-devel \
 						ncurses-devel readline-devel tk-devel uuid-devel \
+	&& yum -y autoremove \
 	&& yum clean all
 LABEL python.version=3.9.18
 
