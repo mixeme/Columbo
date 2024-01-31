@@ -8,7 +8,8 @@ RUN yum -y groupinstall "Development Tools"
 RUN yum -y install	gdbm-devel libffi-devel lcov \
 					zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
 					openssl-devel sqlite-devel expat-devel \
-					ncurses-devel readline-devel tk-devel uuid-devel
+					ncurses-devel readline-devel tk-devel uuid-devel \
+	&& yum clean all
 
 # Compile & install CPython 3.9.18 from source
 RUN mkdir /pybuild \
