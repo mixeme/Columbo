@@ -35,10 +35,9 @@ RUN apt install -y libdbus-1-dev libdbus-glib-1-dev \
 	qt5-default qt5-gtk-platformtheme qt5-flatpak-platformtheme qt5-style-plugins
 
 # Install Python packages with `pip`
-RUN python3.9 -m pip install --upgrade pip
-RUN python3.9 -m pip install dbus-python dbus-next
 RUN python3.9 -m pip install pyqt5 --config-settings --confirm-license= --verbose
-RUN python3.9 -m pip install pyinstaller
+RUN python3.9 -m pip install --upgrade pip \
+	&& python3.9 -m pip install pyinstaller dbus-python dbus-next
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
 # This fix: libGL error: No matching fbConfigs or visuals found
