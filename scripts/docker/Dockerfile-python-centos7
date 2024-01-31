@@ -23,7 +23,9 @@ RUN yum -y groupinstall "Development Tools" \
 	&& rm -R /pybuild \
 	&& yum -y history rollback 2 \
 	&& yum clean all
-LABEL python.version=3.9.18
+
+# Highlight installed CPython version
+LABEL CPython.version=3.9.18
 
 # Image build
 # docker build --tag mixeme/columbo:python-centos-7 --file scripts/docker/Dockerfile-python-centos7 scripts/docker
