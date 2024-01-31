@@ -8,17 +8,16 @@ RUN	yum -y install	qt5-qtbase-devel qgnomeplatform qt5-qtstyleplugins \
 # > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 
 # Make symlink for `qmake`
-RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
+#RUN ln -s /usr/bin/qmake-qt5 /usr/bin/qmake
 
 # Install Python packages with `pip`
 RUN python3.9 -m pip install --upgrade pip
-RUN yum install -y gcc make
-RUN yum -y install dbus-devel glib2-devel
-RUN python3.9 -m pip install dbus-python dbus-next
-RUN yum -y groupinstall "Development Tools"
+#RUN yum install -y gcc make
+#RUN yum -y install dbus-devel glib2-devel
+#RUN python3.9 -m pip install dbus-python dbus-next
+#RUN yum -y groupinstall "Development Tools"
 #RUN python3.9 -m pip install pyqt5-sip==12.7.0
 #RUN yum -y install python36-pyqt5-sip
-RUN	python3.9 -m pip install --no-binary=:all: pyqt5 --config-settings --confirm-license= --verbose \
 	&& python3.9 -m pip install pyinstaller \
 	&& python3.9 -m pip cache purge
 
