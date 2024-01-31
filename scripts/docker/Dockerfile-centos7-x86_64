@@ -29,7 +29,8 @@ RUN yum -y install	qt5-qtbase-devel qt5-qtstyleplugins qgnomeplatform \
 
 # Install Python packages with `pip`
 RUN python3.9 -m pip install --upgrade pip \
-	&& python3.9 -m pip install pyqt5 pyinstaller
+	&& python3.9 -m pip install pyqt5 pyinstaller \
+	&& python3.9 -m pip cache purge
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
 # This fix: libGL error: No matching fbConfigs or visuals found
