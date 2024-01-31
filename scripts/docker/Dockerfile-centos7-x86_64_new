@@ -8,8 +8,8 @@ RUN	yum -y install	qt5-qtbase-devel qgnomeplatform qt5-qtstyleplugins \
 # > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 
 # Install Python packages with `pip`
-RUN python3.9 -m pip install --upgrade pip
-RUN	python3.9 -m pip install pyqt5 pyinstaller \
+RUN python3.9 -m pip install --upgrade pip \
+	&& python3.9 -m pip install pyqt5 pyinstaller \
 	&& python3.9 -m pip cache purge
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
