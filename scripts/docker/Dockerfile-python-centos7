@@ -1,0 +1,32 @@
+FROM centos:7
+
+# 1. Install basic packages;
+# 2. Install packages for CPython compilation (with all modules);
+# 3. Download, compile & install CPython 3.9.18 from source;
+# 4. Remove packages for compilation.
+
+RUN yum -y install epel-release wget \
+	&& yum -y groupinstall "Development Tools" \
+	&& yum -y install	gdbm-devel libffi-devel lcov \
+						zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
+						openssl-devel sqlite-devel expat-devel \
+						ncurses-devel readline-devel tk-devel uuid-devel \
+	&& mkdir /pybuild \
+	&& cd /pybuild \
+	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
+	&& tar -xzf Python-*.tgz \
+	&& cd Python-3.9*/ \
+	&& ./configure --enable-optimizations --with-lto --enable-shared LDFLAGS="-Wl,--rpath=/usr/local/lib" \
+	&& make altinstall \
+	&& cd / \
+	&& rm -R /pybuild \
+	&& yum -y groupremove "Development Tools" \
+	&& yum -y remove	gdbm-devel libffi-devel lcov \
+						zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
+						openssl-devel sqlite-devel expat-devel \
+						ncurses-devel readline-devel tk-devel uuid-devel \
+	&& yum clean all
+LABEL python.version=3.9.18
+
+# Image build
+# docker build --tag mixeme/columbo:python-centos-7 --file scripts/docker/Dockerfile-python-centos7 scripts/docker
