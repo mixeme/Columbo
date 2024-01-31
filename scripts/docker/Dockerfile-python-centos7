@@ -24,6 +24,9 @@ RUN yum -y groupinstall "Development Tools" \
 	&& yum -y history rollback 2 \
 	&& yum clean all
 
+# Make a symlink to the installed Python 3.9
+RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
+
 # Highlight installed CPython version
 LABEL CPython.version=3.9.18
 
