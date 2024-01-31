@@ -25,6 +25,7 @@ RUN yum -y groupremove "Development Tools" \
 						zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
 						openssl-devel sqlite-devel expat-devel \
 						ncurses-devel readline-devel tk-devel uuid-devel \
+LABEL python.version=3.9.18
 
 # Install packages required for `PyQt5`
 RUN yum -y install	qt5-qtbase-devel qt5-qtstyleplugins qgnomeplatform \
