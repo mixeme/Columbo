@@ -40,7 +40,7 @@ CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
 # docker build --tag mixeme/columbo:centos-7-$(uname -m) --file scripts/docker/Dockerfile-centos7-x86_64_new scripts/docker
 #
 # Test run from source
-# docker run --user $(id -u):$(id -g) -it --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo:centos-7-$(uname -m) python3 main.py
+# docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo:centos-7-$(uname -m) python3 main.py
 #
 # Build binary
 # docker run --user $(id -u):$(id -g) -it --rm -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e TAG=centos7 mixeme/columbo:centos-7-$(uname -m)
