@@ -18,8 +18,9 @@ RUN python3.9 -m pip install --upgrade pip
 #RUN yum -y groupinstall "Development Tools"
 #RUN python3.9 -m pip install pyqt5-sip==12.7.0
 #RUN yum -y install python36-pyqt5-sip
-	&& python3.9 -m pip install pyinstaller \
+RUN	python3.9 -m pip install pyqt5 pyinstaller \
 	&& python3.9 -m pip cache purge
+#	&& python3.9 -m pip install pyinstaller \
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
 # This fix: libGL error: No matching fbConfigs or visuals found
