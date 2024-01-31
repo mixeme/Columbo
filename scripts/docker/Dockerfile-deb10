@@ -29,8 +29,8 @@ RUN mkdir /pybuild \
 	&& cd / \
 	&& rm -R /pybuild
 
-# Packages required for `dbus-python`
-# Packages required for `PyQt5`
+# Packages required for `dbus-python` compilation: libdbus-1-dev libdbus-glib-1-dev
+# Packages required for `PyQt5` compilation: qt5-default qt5-style-plugins qt5-gtk-platformtheme qt5-flatpak-platformtheme
 RUN apt install -y libdbus-1-dev libdbus-glib-1-dev \
 	qt5-default qt5-gtk-platformtheme qt5-flatpak-platformtheme qt5-style-plugins
 
