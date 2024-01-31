@@ -10,7 +10,8 @@ RUN apt update -y \
 	qt5-gtk2-platformtheme qt5-gtk-platformtheme qt5-style-plugins \
 	&& apt clean
 # Install Python packages with `pip`
-RUN python3 -m pip install pyinstaller
+RUN python3 -m pip install pyinstaller \
+	&& python3 -m pip cache purge
 
 # Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
 # This fix: libGL error: No matching fbConfigs or visuals found
