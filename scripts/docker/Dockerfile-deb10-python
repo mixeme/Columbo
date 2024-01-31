@@ -7,10 +7,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update -y && apt install -y apt-utils wget
 
 # Packages required for `dbus-python` compilation: libdbus-1-dev libdbus-glib-1-dev
-RUN apt install -y libdbus-1-dev libdbus-glib-1-dev
-RUN apt install -y qt5-default qt5-style-plugins \
-	qt5-gtk-platformtheme qt5-flatpak-platformtheme \
 # Packages required for `PyQt5` compilation: qt5-default qt5-gtk-platformtheme qt5-flatpak-platformtheme qt5-style-plugins
+RUN apt install -y libdbus-1-dev libdbus-glib-1-dev \
+	qt5-default qt5-gtk-platformtheme qt5-flatpak-platformtheme qt5-style-plugins \
 	&& apt clean
 
 # Install Python packages with `pip`
