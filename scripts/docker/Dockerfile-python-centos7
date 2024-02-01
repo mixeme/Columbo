@@ -6,7 +6,8 @@ FROM centos:7
 #   3. Download, compile & install CPython 3.9.18 from source;
 #   4. Remove installed packages for the compilation by `rollback` command.
 
-RUN yum -y groupinstall "Development Tools" \
+RUN	yum history new && yum -y update \
+	&& yum -y groupinstall "Development Tools" \
 	&& yum -y install	gdbm-devel libffi-devel lcov \
 						zlib-devel xz-devel bzip2-devel lzma lzma-sdk-devel \
 						openssl-devel sqlite-devel expat-devel \
@@ -21,7 +22,7 @@ RUN yum -y groupinstall "Development Tools" \
 	&& make altinstall \
 	&& cd / \
 	&& rm -R /pybuild \
-	&& yum -y history rollback 2 \
+	&& yum -y history rollback 1 \
 	&& yum clean all
 
 # Make a symlink to the installed Python 3.9
