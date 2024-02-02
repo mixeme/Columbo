@@ -21,6 +21,11 @@ case $# in
 		OPTION_IMAGE=$1;
 		OPTION_COMMAND=$2;
 	;;
+	3 )
+		OPTION_IMAGE=$1;
+		OPTION_COMMAND=$2;
+		OPTIONS=$3;
+	;;
 	* )
 		exit 1;
 	;;
@@ -37,7 +42,7 @@ then
 	read -p "Select image. Enter number of an option: " OPTION_IMAGE;
 fi
 
-
+# Ask command option if it is not provided
 if ! [ -v OPTION_COMMAND ];
 then
 	echo "Available commands:
@@ -49,7 +54,7 @@ then
 	read -p "Select command. Enter number of an option: " OPTION_COMMAND;
 fi
 
-# Resolve option
+# Resolve image option
 IMAGE_BASENAME="mixeme/columbo";
 case $OPTION_IMAGE in
 	1 | deb11 )
@@ -68,48 +73,61 @@ case $OPTION_IMAGE in
 		TAG=${TAG:-"centos7"};
 	;;
 	* )
-		echo "Unknown option. Exit";
+		echo "Unknown image option. Exit";
 		exit 1;
 	;;
 esac
 
+# Resolve command option
 case $OPTION_COMMAND in
 	1 | image )
-		IMAGE_REBUILD=1;
+		BUILD_IMAGE=1;
 	;;
 	2 | test )
-		TEST=1;
+		TEST_RUN=1;
 	;;
 	3 | binary )
-		BUILD=1;
+		BUILD_BINARY=1;
 	;;
 	4 | push )
-		IMAGE_REBUILD=1;
-		PUSH=1;
+		BUILD_IMAGE=1;
+		PUSH_IMAGE=1;
+	;;
+	remove )
+		REMOVE_IMAGE=1;
 	;;
 	* )
 		exit 2;
 esac
 
+case $OPTIONS
+	force )
+		BUILD_IMAGE=1;
+	;;
+esac
+
 echo "Docker image: $IMAGE_NAME";
 echo "Tag for binary build: $TAG";
-[ -v IMAGE_REBUILD ] && echo "Request to (re)build Docker image";
-[ -v TEST ] && echo "Request to make a test run";
-[ -v BUILD ] && echo "Request to build binary";
-[ -v PUSH ] && echo "Request to push Docker image";
+[ -v BUILD_IMAGE ]  && echo "Request to (re)build Docker image";
+[ -v TEST_RUN ]     && echo "Request to make a test run";
+[ -v BUILD_BINARY ] && echo "Request to build binary";
+[ -v PUSH_IMAGE ]   && echo "Request to push Docker image";
 
 # Build Docker image
 IMAGES=$(docker image ls -q $IMAGE_NAME);		# Check image
 ([ -z "$IMAGES" ] && echo "  No image found") || echo "  Found image(s): $IMAGES";
-if [ -z "$IMAGES" ] || [ -v IMAGE_REBUILD ];
+if [ -z "$IMAGES" ] || [ -v BUILD_IMAGE ];
 then
 	echo "+ (Re)build Docker image: $IMAGE_NAME";
-	docker build --tag $IMAGE_NAME --file scripts/docker/$DOCKERFILE scripts/docker
+	docker build \
+			--tag $IMAGE_NAME \
+			--file scripts/docker/$DOCKERFILE \
+			scripts/docker > scripts/dockder/$IMAGE_NAME.log
 fi
 
-if [ -v TEST ];
+if [ -v TEST_RUN ];
 then
-	echo "Test run...";
+	echo "+ Test run...";
 	docker run \
 			-it --rm \
 			--name columbo-env \
@@ -124,9 +142,9 @@ then
 			python3 main.py
 fi
 
-if [ -v BUILD ];
+if [ -v BUILD_BINARY ];
 then
-	echo "Build binary..";
+	echo "+ Build binary..";
 	docker run \
 			--user $(id -u):$(id -g) \
 			-it --rm \
@@ -138,10 +156,15 @@ then
 			$IMAGE_NAME
 fi
 
-if [ -v PUSH ];
+if [ -v PUSH_IMAGE ];
 then
 	echo "+ Push image...";
 	docker push $IMAGE_NAME;
+fi
+
+if [ -v REMOVE_IMAGE ] && ! [ -z "$IMAGES" ];
+then
+	docker image rm "$IMAGES";
 fi
 
 echo "All done!";
