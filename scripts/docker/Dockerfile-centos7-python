@@ -11,7 +11,7 @@ RUN	yum -y groupinstall "Development Tools" \
 						zlib-devel xz-devel bzip2-devel lzma \
 						openssl-devel sqlite-devel expat-devel \
 						ncurses-devel readline-devel tk-devel uuid-devel \
-	&& yum -y install wget \
+						wget \
 	&& mkdir /pybuild \
 	&& cd /pybuild \
 	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
@@ -31,4 +31,5 @@ RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 LABEL CPython.version=3.9.18
 
 # Image build
-# docker build --tag mixeme/columbo:python-centos-7 --file scripts/docker/Dockerfile-python-centos7 scripts/docker
+# docker build --tag mixeme/columbo:centos-7-python --file scripts/docker/Dockerfile-centos7-python scripts/docker > scripts/docker/centos7-python.log
+
