@@ -2,9 +2,9 @@ FROM centos:7
 
 # The next layer does the following:
 #   1. Install group "Development Tools";
-#   2. Install packages for CPython compilation (with all modules);
+#   2. Install packages required for CPython compilation (with all modules);
 #   3. Download, compile & install CPython 3.9.18 from source;
-#   4. Remove installed packages for the compilation by `rollback` command.
+#   4. Remove installed packages by `rollback` command.
 
 RUN	yum -y groupinstall "Development Tools" \
 	&& yum -y install	gdbm-devel libffi-devel \
