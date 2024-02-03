@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 
 from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
@@ -83,6 +84,13 @@ class HistoryUI(QtWidgets.QMainWindow):
             selected_path = os.path.join(parent_item, selected_path)
             index = index.parent()
         return selected_path, selected_item
+
+    def _open_file(self):
+        file = self.get_selected_path()[0]
+        try:
+            os.startfile(file)
+        except AttributeError:
+            subprocess.call(['open', file])
 
     def browse_action(self) -> None:
         dialog = QFileDialog(self)
@@ -212,7 +220,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
 
             if action == openfile:
-                os.startfile(self.get_selected_path()[0])
+                self._open_file()
             if action == restore:
                 self.restore_action()
             if action == from_snapshot:
