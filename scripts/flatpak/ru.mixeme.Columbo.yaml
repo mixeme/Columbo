@@ -1,0 +1,61 @@
+id: ru.mixeme.Columbo
+runtime: org.kde.Platform
+runtime-version: '5.15-23.08'
+sdk: org.kde.Sdk
+base: com.riverbankcomputing.PyQt.BaseApp
+base-version: '5.15-23.08'
+command: /app/columbo/main.py
+modules:
+  - name: Columbo
+    buildsystem: simple
+    build-commands:
+       - mkdir /app/columbo
+       - cp -R gui /app/columbo/
+       - cp -R core /app/columbo/
+       - cp -R icons /app/columbo/
+       - install -D main.py /app/columbo/main.py
+    sources:
+      - type: dir
+        path: src	# Path can be absolute or relative to the .yml location
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=xdg-config/kdeglobals:ro
+
+# Just build
+# flatpak-builder --force-clean build ~/Scripts/columbo/scripts/flatpak/ru.mixeme.Columbo.yml
+#
+# Build & install
+# flatpak-builder --user --install --force-clean build ~/Scripts/columbo/scripts/flatpak/ru.mixeme.Columbo.yml
+#
+# Run app
+# flatpak run ru.mixeme.Columbo
+#
+# Debug app
+# # flatpak run --command="bash" ru.mixeme.Columbo
+#
+# Export to the local repo
+# flatpak build-export repo build
+#
+# Create single-file bundles
+# flatpak build-bundle -v repo columbo.flatpak ru.mixeme.Columbo
+# flatpak build-bundle -v repo columbo2.flatpak ru.mixeme.Columbo --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
+
+# cd cd ~/Scripts/columbo/scripts/flatpak/
+# flatpak-builder --verbose build ru.mixeme.Columbo.yml
+# flatpak-builder --verbose --force-clean build ru.mixeme.Columbo.yml
+# flatpak build-finish ru.mixeme.Columbo --share=ipc --socket=x11 --socket=wayland --socket=pulseaudio --device=dri --filesystem=xdg-config/kdeglobals:ro --command=main.py
+
+# https://flatpak-testing.readthedocs.io/en/latest/building-simple-apps.html
+# https://docs.flatpak.org/en/latest/first-build.html
+
+# flatpak build-init --base=com.riverbankcomputing.PyQt.BaseApp --base-version=5.15-23.08 --arch=aarch64 /home/pi/Scripts/columbo/scripts/flatpak/build ru.mixeme.Columbo org.kde.Sdk org.kde.Platform 5.15-23.08
+# flatpak build-finish ru.mixeme.Columbo --share=ipc --socket=x11 --socket=wayland --socket=pulseaudio --device=dri --filesystem=xdg-config/kdeglobals:ro --command=main.py
+# flatpak build-export repo build
+# flatpak --user remote-add --no-gpg-verify --if-not-exists ru.mixeme.Columbo repo
+# flatpak --user install  ru.mixeme.Columbo  ru.mixeme.Columbo
+# flatpak run ru.mixeme.Columbo
+# flatpak run --command="bash" ru.mixeme.Columbo
