@@ -138,8 +138,8 @@ then
 			-v /etc/shadow:/etc/shadow:ro \
 			-e DISPLAY=$DISPLAY \
 			-v /tmp/.X11-unix:/tmp/.X11-unix \
-			$IMAGE_NAME \
-			python3 main.py
+			"$IMAGE_NAME" \
+			python3 src/main.py
 fi
 
 if [ -v BUILD_BINARY ];
