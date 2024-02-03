@@ -233,12 +233,16 @@ class HistoryUI(QtWidgets.QMainWindow):
                 self.filter_to_field.setText(snapshot)
         else:
             expand = context_menu.addAction("Expand recursively")
-            context_menu.addSeparator()
-            delete = context_menu.addAction("Delete empty directory")
+
+            delete = None
+            if self.clear_all_button.isEnabled():
+                context_menu.addSeparator()
+                delete = context_menu.addAction("Delete empty directory")
+
             action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
             if action == expand:
                 self.file_tree_view.expandRecursively(self.get_selected_nodes()[0])
-            if action == delete:
+            if self.clear_all_button.isEnabled() and action == delete:
                 selected_path, _ = self.get_selected_path()
                 try:
                     os.removedirs(selected_path)
