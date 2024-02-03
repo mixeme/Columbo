@@ -11,7 +11,7 @@ import core.file
 from core.tree import FileTreeWorker
 from core.types import TreeType, OperationType
 from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
-from gui import icons
+from src.gui import icons
 
 
 class HistoryUI(QtWidgets.QMainWindow):
@@ -20,7 +20,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         super().__init__()
 
         # Load GUI layout
-        uic.loadUi(os.path.join(project_home, 'gui/history.ui'), self)
+        uic.loadUi(os.path.join(project_home, 'src/gui/history.ui'), self)
 
         # Set window properties
         self.setWindowTitle("Columbo - Synchronization history observer")
