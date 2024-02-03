@@ -131,7 +131,7 @@ then
 	docker run \
 			-it --rm \
 			--name columbo-env \
-			--user $(id -u):$(id -g) \
+			--user "$(id -u)":"$(id -g)" \
 			-v $PWD:/project \
 			-v /etc/passwd:/etc/passwd:ro \
 			-v /etc/group:/etc/group:ro \
@@ -146,7 +146,7 @@ if [ -v BUILD_BINARY ];
 then
 	echo "+ Build binary..";
 	docker run \
-			--user $(id -u):$(id -g) \
+			--user "$(id -u)":"$(id -g)" \
 			-it --rm \
 			-v $PWD:/project \
 			-v /etc/passwd:/etc/passwd:ro \
