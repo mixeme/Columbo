@@ -105,7 +105,7 @@ class FileTreeWorker(QRunnable):
         for i in map(lambda x: nodes.create_file(x, root, snapshot), files):
             current.appendRow(i)
 
-    def routine_filter(self, path_parts: PathArray, files: PathArray, map_fun, filter_fun):
+    def routine_filter(self, path_parts: PathArray, files: list[str], map_fun, filter_fun):
         # Prepare list of items
         items = tuple(filter(filter_fun, tuple(map(map_fun, files))))
 
@@ -118,7 +118,7 @@ class FileTreeWorker(QRunnable):
             for i in items:
                 current.appendRow(i)
 
-    def routine_unified_unified(self, root: str, dirs, files, path_parts):
+    def routine_unified_unified(self, root: str, dirs: list[str], files: list[str], path_parts: PathArray):
         if self.tester:
             self.routine_filter(path_parts[1:], files,
                                 lambda x: nodes.create_file(x, root),
@@ -126,7 +126,7 @@ class FileTreeWorker(QRunnable):
         else:
             self.routine_simple(root, dirs, files, path_parts[1:])
 
-    def routine_bydate_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
+    def routine_bydate_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: PathArray):
         if len(path_parts) > 1:
             snapshot = path_parts[1]
         else:
@@ -139,7 +139,7 @@ class FileTreeWorker(QRunnable):
         else:
             self.routine_simple(root, dirs, files, path_parts[1:], snapshot)
 
-    def routine_unified_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
+    def routine_unified_bydate(self, root: str, dirs, files: list[str], path_parts: list[str]):
         for i in files:
             snapshot = file.get_snapshot(i)
             if not self.tester or (self.tester and self.tester.test_snapshot(snapshot)):
@@ -147,7 +147,7 @@ class FileTreeWorker(QRunnable):
                 current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
                 current.appendRow(nodes.create_file(i, root, snapshot)) # Place file in tree
 
-    def routine_bydate_unified(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
+    def routine_bydate_unified(self, root: str, dirs, files: list[str], path_parts: list[str]):
         if len(path_parts) > 1:
             snapshot = path_parts[1]
         else:
