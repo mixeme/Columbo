@@ -7,10 +7,10 @@ from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
-import core.file
-from core.tree import FileTreeWorker
-from core.types import TreeType, OperationType
-from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
+import src.core.file
+from src.core.tree import FileTreeWorker
+from src.core.types import TreeType, OperationType
+from src.core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
 from src.gui import icons
 
 
@@ -119,8 +119,8 @@ class HistoryUI(QtWidgets.QMainWindow):
 
             # Switch filter
             if op_type == OperationType.FILTERED_TREE:
-                tester = core.file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
-                                                  self.checked()[0])
+                tester = src.core.file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
+                                                      self.checked()[0])
                 worker.set_filter(tester)
 
             # Start worker in another thread
@@ -145,7 +145,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def restore_action(self) -> None:
         # Get path to item
         selected_path, selected_item = self.get_selected_path()
-        extension = core.file.get_extension(selected_item)
+        extension = src.core.file.get_extension(selected_item)
 
         # Define file extension for dialog
         if extension:
@@ -174,7 +174,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def delete_snapshots_action(self) -> None:
         if self.path_field.text():
             bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-            tester = core.file.SnapshotTester(bounds, self.checked()[0])
+            tester = src.core.file.SnapshotTester(bounds, self.checked()[0])
             worker = ClearSnapshotWorker(self.path_field.text(), tester)
             worker.signals.progress.connect(lambda x: print(x))
             QThreadPool.globalInstance().start(worker)
