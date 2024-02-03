@@ -1,4 +1,4 @@
-FROM mixeme/columbo:python-centos-7
+FROM mixeme/columbo:centos-7-python
 
 # Install packages required for `PyQt5`
 RUN	yum -y install	qt5-qtbase-devel qgnomeplatform qt5-qtstyleplugins \
