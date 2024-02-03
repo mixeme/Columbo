@@ -14,7 +14,7 @@ def __get_bundle_dir() -> str:
         return sys._MEIPASS
     else:
         # We are running in a normal Python environment
-        return os.path.dirname(os.path.abspath(__file__))
+        return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def except_hook(cls, exception, traceback):
