@@ -69,6 +69,7 @@ class FileTreeWorker(QRunnable):
         self.filter = True
         self.from_snapshot = from_snapshot
         self.to_snapshot = to_snapshot
+        self.tester = tester
 
     def init_root(self) -> None:
         # Create root node
@@ -129,7 +130,7 @@ class FileTreeWorker(QRunnable):
         if self.filter:
             self.routine_filter(path_parts[1:], files,
                                 lambda x: nodes.create_file(x, root),
-                                lambda x: self.test_snapshot(x[2].text()))
+                                lambda x: self.tester.test_snapshot(x[2].text()))
         else:
             self.routine_simple(root, dirs, files, path_parts[1:])
 
@@ -149,7 +150,7 @@ class FileTreeWorker(QRunnable):
     def routine_unified_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         for i in files:
             snapshot = file.get_snapshot(i)
-            if not self.filter or (self.filter and self.test_snapshot(snapshot)):
+            if not self.filter or (self.filter and self.tester.test_snapshot(snapshot)):
                 current = nodes.get_dir_node(self.root_node, snapshot)  # Find corresponding node for the snapshot
                 current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
                 current.appendRow(nodes.create_file(i, root, snapshot)) # Place file in tree
