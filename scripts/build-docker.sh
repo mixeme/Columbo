@@ -100,7 +100,7 @@ case $OPTION_COMMAND in
 		exit 2;
 esac
 
-case $OPTIONS
+case $OPTIONS in
 	force )
 		BUILD_IMAGE=1;
 	;;
