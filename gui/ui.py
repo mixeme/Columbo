@@ -98,7 +98,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         dialog.setFileMode(QFileDialog.FileMode.Directory)
         if dialog.exec():
             selected_dir = dialog.selectedFiles()[0]
-            self.path_field.setText(selected_dir)
+            self.path_field.setText(selected_dir.replace("/", os.sep))
 
     def update_tree(self, _, model) -> None:
         self.file_tree_view.setModel(model)
