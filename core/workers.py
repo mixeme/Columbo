@@ -31,21 +31,19 @@ class ClearEmptyDirsWorker(QRunnable):
 class ClearSnapshotWorker(QRunnable):
     signals = Signals()
 
-    def __init__(self, root_path: str, test_snapshot, tester: core.file.SnapshotTester):
+    def __init__(self, root_path: str, tester: core.file.SnapshotTester):
         super().__init__()
         self.root_path = root_path
-        self.test_snapshot = test_snapshot
         self.tester = tester
 
     def run(self) -> None:
         for root, dirs, files in os.walk(self.root_path):
             for f in files:
-                #if self.test_snapshot(root, f):
-                if self.tester.test(root, f):
+                if self.tester.test_file(root.removeprefix(self.root_path), f):
                     path = os.path.join(root, f)
                     try:
                         os.remove(path)
-                        self.signals.progress.emit("Delete" + path)
+                        self.signals.progress.emit("Delete " + path)
                     except OSError:
-                        self.signals.progress.emit("Failed to delete" + path)
+                        self.signals.progress.emit("Failed to delete " + path)
         self.signals.finished.emit()
