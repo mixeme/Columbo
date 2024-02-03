@@ -8,7 +8,8 @@ from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
 import core.file
-from core.tree import TreeType, OperationType, FileTreeWorker
+from core.tree import FileTreeWorker
+from core.types import TreeType, OperationType
 from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
 from gui import icons
 
@@ -118,7 +119,9 @@ class HistoryUI(QtWidgets.QMainWindow):
 
             # Switch filter
             if op_type == OperationType.FILTERED_TREE:
-                worker.set_filter(self.filter_from_field.text(), self.filter_to_field.text())
+                tester = core.file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
+                                                  self.checked()[0])
+                worker.set_filter(tester)
 
             # Start worker in another thread
             QThreadPool.globalInstance().start(worker)
@@ -170,19 +173,9 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def delete_snapshots_action(self) -> None:
         if self.path_field.text():
-            from_snapshot = self.filter_from_field.text()
-            to_snapshot = self.filter_to_field.text()
-
-            if self.checked()[0] == TreeType.UNIFIED:
-                snapshot_fun = lambda root, file: core.file.get_snapshot(file)
-            if self.checked()[0] == TreeType.BY_DATE:
-                snapshot_fun = lambda root, file: root.split(os.sep)[1]
-
-            def test_fun(root: str, file: str) -> bool:
-                snapshot = snapshot_fun(root, file)
-                return (from_snapshot <= snapshot) and (snapshot <= to_snapshot)
-
-            worker = ClearSnapshotWorker(self.path_field.text(), test_fun)
+            bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
+            tester = core.file.SnapshotTester(bounds, self.checked()[0])
+            worker = ClearSnapshotWorker(self.path_field.text(), tester)
             worker.signals.progress.connect(lambda x: print(x))
             QThreadPool.globalInstance().start(worker)
             self.statusbar.showMessage("Start clear snapshots")
