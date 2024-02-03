@@ -2,7 +2,7 @@
 import os
 import sys
 
-from gui.ui import HistoryUI
+from src.gui.ui import HistoryUI
 
 from PyQt5.QtWidgets import QApplication
 

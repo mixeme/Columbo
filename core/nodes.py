@@ -3,7 +3,7 @@ import os
 from PyQt5.QtGui import QStandardItem
 
 from core import file
-from gui import icons
+from src.gui import icons
 
 TreeNode = list[QStandardItem]      # Type alias for return values
 PathArray = list[str]               # Type alias for split path string
