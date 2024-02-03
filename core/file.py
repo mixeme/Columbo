@@ -54,7 +54,6 @@ class SnapshotTester:
     def __init__(self, bounds: list[str], source_type: TreeType) -> None:
         self.bounds = bounds
         self.type = source_type
-        print(bounds)
 
     def test_snapshot(self, snapshot: str) -> bool:
         if self.bounds[0] and snapshot < self.bounds[0]:
@@ -65,7 +64,7 @@ class SnapshotTester:
 
         return True
 
-    def test(self, root, file) -> bool:
+    def test_file(self, root, file) -> bool:
         snapshot = None
         if self.type == TreeType.UNIFIED:
             snapshot = get_snapshot(file)
