@@ -1,0 +1,33 @@
+FROM mixeme/columbo:centos-7-python
+
+# Install packages required for `PyQt5`
+RUN	yum -y install	qt5-qtbase-devel qgnomeplatform qt5-qtstyleplugins \
+					libxkbcommon-x11-devel \
+	&& yum clean all
+# Package `libxkbcommon-x11` solves issue:
+# > qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+
+# Install Python packages with `pip`
+RUN python3.9 -m pip install --upgrade pip \
+	&& python3.9 -m pip install pyqt5 pyinstaller \
+	&& python3.9 -m pip cache purge
+
+# Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
+# This fix: libGL error: No matching fbConfigs or visuals found
+ENV LIBGL_ALWAYS_INDIRECT=1
+
+# Setup work directory
+RUN mkdir /project
+WORKDIR /project
+
+# Define default command for execution
+CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
+
+# Image build
+# docker build --tag mixeme/columbo:centos-7-$(uname -m) --file scripts/docker/Dockerfile-centos7 scripts/docker
+#
+# Test run from source
+# docker run --user $(id -u):$(id -g) -it --rm --name columbo-build -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo:centos-7-$(uname -m) python3 main.py
+#
+# Build binary
+# docker run --user $(id -u):$(id -g) -it --rm -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e TAG=centos7 mixeme/columbo:centos-7-$(uname -m)

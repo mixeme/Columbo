@@ -1,0 +1,35 @@
+FROM centos:7
+
+# The next layer does the following:
+#   1. Install group "Development Tools";
+#   2. Install packages required for CPython compilation (with all modules);
+#   3. Download, compile & install CPython 3.9.18 from source;
+#   4. Remove installed packages by `rollback` command.
+
+RUN	yum -y groupinstall "Development Tools" \
+	&& yum -y install	gdbm-devel libffi-devel \
+						zlib-devel xz-devel bzip2-devel lzma \
+						openssl-devel sqlite-devel expat-devel \
+						ncurses-devel readline-devel tk-devel uuid-devel \
+						wget \
+	&& mkdir /pybuild \
+	&& cd /pybuild \
+	&& wget https://www.python.org/ftp/python/3.9.18/Python-3.9.18.tgz \
+	&& tar -xzf Python-*.tgz \
+	&& cd Python-3.9*/ \
+	&& ./configure --enable-optimizations --with-lto --enable-shared LDFLAGS="-Wl,--rpath=/usr/local/lib" \
+	&& make altinstall \
+	&& cd / \
+	&& rm -R /pybuild \
+	&& yum -y history rollback 2 \
+	&& yum clean all
+
+# Make a symlink to the installed Python 3.9
+RUN ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
+
+# Highlight installed CPython version
+LABEL CPython.version=3.9.18
+
+# Image build
+# docker build --tag mixeme/columbo:centos-7-python --file scripts/docker/Dockerfile-centos7-python scripts/docker > scripts/docker/centos7-python.log
+

@@ -1,0 +1,40 @@
+FROM python:3.9-buster
+
+# Suppress prompting from apt
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install packages from Debian repository
+RUN apt update -y \
+	&& apt install -y libdbus-1-dev libdbus-glib-1-dev \
+	qt5-default qt5-gtk-platformtheme qt5-flatpak-platformtheme qt5-style-plugins \
+	&& apt clean
+# Packages required for `dbus-python` compilation: libdbus-1-dev libdbus-glib-1-dev
+# Packages required for `PyQt5` compilation: qt5-default qt5-gtk-platformtheme qt5-flatpak-platformtheme qt5-style-plugins
+
+# Install Python packages with `pip`
+RUN python3.9 -m pip install --upgrade pip \
+	&& python3.9 -m pip install dbus-python \
+	&& python3.9 -m pip install --no-binary=:all: pyqt5 --config-settings --confirm-license= --verbose \
+	&& python3.9 -m pip install pyinstaller \
+	&& python3.9 -m pip cache purge
+# dbus-next
+
+# Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
+# This fix: libGL error: No matching fbConfigs or visuals found
+ENV LIBGL_ALWAYS_INDIRECT=1
+
+# Setup work directory
+RUN mkdir /project
+WORKDIR /project
+
+# Define default command for execution
+CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
+
+# Image build
+# docker build --tag mixeme/columbo:debian-buster-$(uname -m) --file scripts/docker/Dockerfile-deb10 scripts/docker
+#
+# Test run from source
+# docker run --user $(id -u):$(id -g) -it --rm --name columbo-env -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo:debian-buster-$(uname -m) python3 main.py
+#
+# Build binary
+# docker run --user $(id -u):$(id -g) -it --rm -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e TAG=deb10 mixeme/columbo:debian-buster-$(uname -m)

@@ -1,5 +1,6 @@
 import os.path
 import time
+from core.types import TreeType
 
 
 def get_last_modified(path: str) -> str:
@@ -9,13 +10,13 @@ def get_last_modified(path: str) -> str:
 
 
 def get_snapshot(filename: str) -> str:
-    sep = filename.rfind("_")
     dot = filename.rfind(".")
-
-    if sep == -1:
-        return ""
     if dot == -1:
         dot = len(filename)
+
+    sep = filename.rfind("_", 0, dot)
+    if sep == -1:
+        return ""
 
     return filename[sep+1:dot]
 
@@ -47,3 +48,27 @@ def clear_snapshots(root_path: str, test_snapshot_fun) -> None:
                     pass
                 #except FileNotFoundError:
                 #    pass
+
+
+class SnapshotTester:
+    def __init__(self, bounds: list[str], source_type: TreeType) -> None:
+        self.bounds = bounds
+        self.type = source_type
+
+    def test_snapshot(self, snapshot: str) -> bool:
+        if self.bounds[0] and snapshot < self.bounds[0]:
+            return False
+
+        if self.bounds[1] and snapshot > self.bounds[1]:
+            return False
+
+        return True
+
+    def test_file(self, root, file) -> bool:
+        snapshot = None
+        if self.type == TreeType.UNIFIED:
+            snapshot = get_snapshot(file)
+        if self.type == TreeType.BY_DATE:
+            snapshot = root.split(os.sep)[1]
+
+        return self.test_snapshot(snapshot)

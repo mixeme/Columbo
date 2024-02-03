@@ -1,0 +1,34 @@
+FROM debian:bullseye
+
+# Suppress prompting from apt
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install packages from Debian repository
+RUN apt update -y \
+	&& apt install -y python3 python3-pip python3-pyqt5 \
+	qt5-gtk2-platformtheme qt5-gtk-platformtheme qt5-style-plugins \
+	&& apt clean
+
+# Install Python packages with `pip`
+RUN python3 -m pip install pyinstaller \
+	&& python3 -m pip cache purge
+
+# Got from https://github.com/jozo/docker-pyqt5/blob/master/default/Dockerfile
+# This fix: libGL error: No matching fbConfigs or visuals found
+ENV LIBGL_ALWAYS_INDIRECT=1
+
+# Setup work directory
+RUN mkdir /project
+WORKDIR /project
+
+# Define default command for execution
+CMD ["/bin/bash", "/project/scripts/build-lnx.sh", "onedir"]
+
+# Image build
+# docker build --tag mixeme/columbo:debian-bullseye-$(uname -m) --file scripts/docker/Dockerfile-deb11 scripts/docker
+#
+# Test run from source
+# docker run --user $(id -u):$(id -g) -it --rm --name columbo-env -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix mixeme/columbo:debian-bullseye-$(uname -m) python3 main.py
+#
+# Build binary
+# docker run --user $(id -u):$(id -g) -it --rm -v $PWD:/project -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro -e TAG=deb11 mixeme/columbo:debian-bullseye-$(uname -m)

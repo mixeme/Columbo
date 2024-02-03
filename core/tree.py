@@ -1,22 +1,12 @@
 import os
-from enum import Enum
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, pyqtSignal, QObject
 from PyQt5.QtGui import QStandardItemModel
 
 from core import nodes, file
-
-
-class TreeType(Enum):
-    UNIFIED = 0
-    BY_DATE = 1
-
-
-class OperationType(Enum):
-    FILE_TREE = 0
-    FILTERED_TREE = 1
-    EMPTY_DIRS = 2
+from core.nodes import PathArray
+from core.types import TreeType, OperationType
 
 
 class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
@@ -64,21 +54,17 @@ class FileTreeWorker(QRunnable):
         super().__init__()
         # Store input values
         self.root_path = root_path
-        self.checked = checked_options
+        self.checked_options = checked_options
         self.operation = operation
 
         # Declare fields
         self.root_node = None
         self.sort_rows = None
-        self.filter = False
-        self.from_snapshot = None
-        self.to_snapshot = None
+        self.tester = None
         self.model = None
 
-    def set_filter(self, from_snapshot: str, to_snapshot: str):
-        self.filter = True
-        self.from_snapshot = from_snapshot
-        self.to_snapshot = to_snapshot
+    def set_filter(self, tester: file.SnapshotTester):
+        self.tester = tester
 
     def init_root(self) -> None:
         # Create root node
@@ -98,11 +84,8 @@ class FileTreeWorker(QRunnable):
         # Store 1st column of the root node
         self.root_node = root_node[0]
 
-    def split_path(self, path: str) -> list[str]:
+    def split_path(self, path: str) -> PathArray:
         return path.removeprefix(self.root_path).split(os.sep)
-
-    def test_snapshot(self, snapshot: str) -> bool:
-        return (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot)
 
     def create_tree(self, routine):
         self.init_root()
@@ -110,7 +93,7 @@ class FileTreeWorker(QRunnable):
             path_parts = self.split_path(root)      # Remove root path component and convert to array
             routine(root, dirs, files, path_parts)  # Perform routine
 
-    def routine_simple(self, root: str, dirs: list[str], files: list[str], path_parts: list[str], snapshot=None):
+    def routine_simple(self, root: str, dirs: PathArray, files: PathArray, path_parts: PathArray, snapshot=None):
         # Find corresponding node for the root
         current = nodes.descend(self.root_node, path_parts)
 
@@ -122,7 +105,7 @@ class FileTreeWorker(QRunnable):
         for i in map(lambda x: nodes.create_file(x, root, snapshot), files):
             current.appendRow(i)
 
-    def routine_filter(self, path_parts: list[str], files: list[str], map_fun, filter_fun):
+    def routine_filter(self, path_parts: PathArray, files: list[str], map_fun, filter_fun):
         # Prepare list of items
         items = tuple(filter(filter_fun, tuple(map(map_fun, files))))
 
@@ -135,41 +118,41 @@ class FileTreeWorker(QRunnable):
             for i in items:
                 current.appendRow(i)
 
-    def routine_unified_unified(self, root: str, dirs, files, path_parts):
-        if self.filter:
+    def routine_unified_unified(self, root: str, dirs: list[str], files: list[str], path_parts: PathArray):
+        if self.tester:
             self.routine_filter(path_parts[1:], files,
                                 lambda x: nodes.create_file(x, root),
-                                lambda x: self.test_snapshot(x[2].text()))
+                                lambda x: self.tester.test_snapshot(x[2].text()))
         else:
             self.routine_simple(root, dirs, files, path_parts[1:])
 
-    def routine_bydate_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
+    def routine_bydate_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: PathArray):
         if len(path_parts) > 1:
             snapshot = path_parts[1]
         else:
             snapshot = ""
-        if self.filter:
-            if self.test_snapshot(snapshot):
+        if self.tester:
+            if self.tester.test_snapshot(snapshot):
                 self.routine_filter(path_parts[1:], files,
                                     lambda x: nodes.create_file(x, root, snapshot),
                                     lambda x: True)
         else:
             self.routine_simple(root, dirs, files, path_parts[1:], snapshot)
 
-    def routine_unified_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
+    def routine_unified_bydate(self, root: str, dirs, files: list[str], path_parts: list[str]):
         for i in files:
             snapshot = file.get_snapshot(i)
-            if not self.filter or (self.filter and self.test_snapshot(snapshot)):
+            if not self.tester or (self.tester and self.tester.test_snapshot(snapshot)):
                 current = nodes.get_dir_node(self.root_node, snapshot)  # Find corresponding node for the snapshot
                 current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
                 current.appendRow(nodes.create_file(i, root, snapshot)) # Place file in tree
 
-    def routine_bydate_unified(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
+    def routine_bydate_unified(self, root: str, dirs, files: list[str], path_parts: list[str]):
         if len(path_parts) > 1:
             snapshot = path_parts[1]
         else:
             snapshot = ""
-        if not self.filter or (self.filter and self.test_snapshot(snapshot)):
+        if not self.tester or (self.tester and self.tester.test_snapshot(snapshot)):
             current = nodes.descend(self.root_node, path_parts[2:])  # Find corresponding node for the root
             for f in files:
                 nodes.add_versioned_file(current, f, root, snapshot)
@@ -182,13 +165,13 @@ class FileTreeWorker(QRunnable):
         routine = None
         if (self.operation == OperationType.FILE_TREE) or (self.operation == OperationType.FILTERED_TREE):
             # Resolve the required tree type
-            if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.UNIFIED):
+            if (self.checked_options[0] == TreeType.UNIFIED) and (self.checked_options[1] == TreeType.UNIFIED):
                 routine = self.routine_unified_unified  # Unified -> unified
-            if (self.checked[0] == TreeType.BY_DATE) and (self.checked[1] == TreeType.BY_DATE):
+            if (self.checked_options[0] == TreeType.BY_DATE) and (self.checked_options[1] == TreeType.BY_DATE):
                 routine = self.routine_bydate_bydate    # By date -> by date
-            if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BY_DATE):
+            if (self.checked_options[0] == TreeType.UNIFIED) and (self.checked_options[1] == TreeType.BY_DATE):
                 routine = self.routine_unified_bydate   # Unified -> by date
-            if (self.checked[0] == TreeType.BY_DATE) and (self.checked[1] == TreeType.UNIFIED):
+            if (self.checked_options[0] == TreeType.BY_DATE) and (self.checked_options[1] == TreeType.UNIFIED):
                 routine = self.routine_bydate_unified   # By date -> unified
 
         if self.operation == OperationType.EMPTY_DIRS:
