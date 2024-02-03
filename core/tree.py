@@ -54,7 +54,7 @@ class FileTreeWorker(QRunnable):
         super().__init__()
         # Store input values
         self.root_path = root_path
-        self.checked = checked_options
+        self.checked_options = checked_options
         self.operation = operation
 
         # Declare fields
@@ -165,13 +165,13 @@ class FileTreeWorker(QRunnable):
         routine = None
         if (self.operation == OperationType.FILE_TREE) or (self.operation == OperationType.FILTERED_TREE):
             # Resolve the required tree type
-            if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.UNIFIED):
+            if (self.checked_options[0] == TreeType.UNIFIED) and (self.checked_options[1] == TreeType.UNIFIED):
                 routine = self.routine_unified_unified  # Unified -> unified
-            if (self.checked[0] == TreeType.BY_DATE) and (self.checked[1] == TreeType.BY_DATE):
+            if (self.checked_options[0] == TreeType.BY_DATE) and (self.checked_options[1] == TreeType.BY_DATE):
                 routine = self.routine_bydate_bydate    # By date -> by date
-            if (self.checked[0] == TreeType.UNIFIED) and (self.checked[1] == TreeType.BY_DATE):
+            if (self.checked_options[0] == TreeType.UNIFIED) and (self.checked_options[1] == TreeType.BY_DATE):
                 routine = self.routine_unified_bydate   # Unified -> by date
-            if (self.checked[0] == TreeType.BY_DATE) and (self.checked[1] == TreeType.UNIFIED):
+            if (self.checked_options[0] == TreeType.BY_DATE) and (self.checked_options[1] == TreeType.UNIFIED):
                 routine = self.routine_bydate_unified   # By date -> unified
 
         if self.operation == OperationType.EMPTY_DIRS:
