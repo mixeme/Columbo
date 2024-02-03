@@ -2,6 +2,8 @@ import os
 
 from PyQt5.QtCore import QRunnable, QObject, pyqtSignal
 
+import core.file
+
 
 class Signals(QObject):
     progress = pyqtSignal(str)
@@ -29,15 +31,17 @@ class ClearEmptyDirsWorker(QRunnable):
 class ClearSnapshotWorker(QRunnable):
     signals = Signals()
 
-    def __init__(self, root_path: str, test_snapshot):
+    def __init__(self, root_path: str, test_snapshot, tester: core.file.SnapshotTester):
         super().__init__()
         self.root_path = root_path
         self.test_snapshot = test_snapshot
+        self.tester = tester
 
     def run(self) -> None:
         for root, dirs, files in os.walk(self.root_path):
             for f in files:
-                if self.test_snapshot(root, f):
+                #if self.test_snapshot(root, f):
+                if self.tester.test(root, f):
                     path = os.path.join(root, f)
                     try:
                         os.remove(path)
