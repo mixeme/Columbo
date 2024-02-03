@@ -60,15 +60,10 @@ class FileTreeWorker(QRunnable):
         # Declare fields
         self.root_node = None
         self.sort_rows = None
-        self.filter = False
-        self.from_snapshot = None
-        self.to_snapshot = None
+        self.tester = None
         self.model = None
 
-    def set_filter(self, from_snapshot: str, to_snapshot: str):
-        self.filter = True
-        self.from_snapshot = from_snapshot
-        self.to_snapshot = to_snapshot
+    def set_filter(self, tester: file.SnapshotTester):
         self.tester = tester
 
     def init_root(self) -> None:
@@ -91,9 +86,6 @@ class FileTreeWorker(QRunnable):
 
     def split_path(self, path: str) -> PathArray:
         return path.removeprefix(self.root_path).split(os.sep)
-
-    def test_snapshot(self, snapshot: str) -> bool:
-        return (self.from_snapshot <= snapshot) and (snapshot <= self.to_snapshot)
 
     def create_tree(self, routine):
         self.init_root()
@@ -127,7 +119,7 @@ class FileTreeWorker(QRunnable):
                 current.appendRow(i)
 
     def routine_unified_unified(self, root: str, dirs, files, path_parts):
-        if self.filter:
+        if self.tester:
             self.routine_filter(path_parts[1:], files,
                                 lambda x: nodes.create_file(x, root),
                                 lambda x: self.tester.test_snapshot(x[2].text()))
@@ -139,8 +131,8 @@ class FileTreeWorker(QRunnable):
             snapshot = path_parts[1]
         else:
             snapshot = ""
-        if self.filter:
-            if self.test_snapshot(snapshot):
+        if self.tester:
+            if self.tester.test_snapshot(snapshot):
                 self.routine_filter(path_parts[1:], files,
                                     lambda x: nodes.create_file(x, root, snapshot),
                                     lambda x: True)
@@ -150,7 +142,7 @@ class FileTreeWorker(QRunnable):
     def routine_unified_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         for i in files:
             snapshot = file.get_snapshot(i)
-            if not self.filter or (self.filter and self.tester.test_snapshot(snapshot)):
+            if not self.tester or (self.tester and self.tester.test_snapshot(snapshot)):
                 current = nodes.get_dir_node(self.root_node, snapshot)  # Find corresponding node for the snapshot
                 current = nodes.descend(current, path_parts[1:])        # Find corresponding node for the root
                 current.appendRow(nodes.create_file(i, root, snapshot)) # Place file in tree
@@ -160,7 +152,7 @@ class FileTreeWorker(QRunnable):
             snapshot = path_parts[1]
         else:
             snapshot = ""
-        if not self.filter or (self.filter and self.test_snapshot(snapshot)):
+        if not self.tester or (self.tester and self.tester.test_snapshot(snapshot)):
             current = nodes.descend(self.root_node, path_parts[2:])  # Find corresponding node for the root
             for f in files:
                 nodes.add_versioned_file(current, f, root, snapshot)
