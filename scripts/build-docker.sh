@@ -122,7 +122,7 @@ then
 	docker build \
 			--tag $IMAGE_NAME \
 			--file scripts/docker/$DOCKERFILE \
-			scripts/docker > scripts/dockder/$IMAGE_NAME.log
+			scripts/docker > scripts/docker/$TAG.log
 fi
 
 if [ -v TEST_RUN ];
