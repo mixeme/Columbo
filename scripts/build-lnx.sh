@@ -58,10 +58,10 @@ python3 -m PyInstaller \
 	--windowed \
 	--noconfirm \
 	--clean \
-	--add-data="./gui:./gui" \
+	--add-data="./src/gui:./src/gui" \
 	--add-data="./icons:./icons" \
 	--icon=icons/search.ico \
-	main.py;
+	src/main.py;
 
 # Delete temp folder
 echo "+ Remove 'build' folder";
