@@ -2,7 +2,7 @@ import os
 
 from PyQt5.QtGui import QStandardItem
 
-from core import file
+from src.core import file
 from src.gui import icons
 
 TreeNode = list[QStandardItem]      # Type alias for return values

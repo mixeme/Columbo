@@ -1,6 +1,6 @@
 import os.path
 import time
-from core.types import TreeType
+from src.core.types import TreeType
 
 
 def get_last_modified(path: str) -> str:
