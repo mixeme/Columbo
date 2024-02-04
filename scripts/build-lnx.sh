@@ -17,11 +17,10 @@ if [ $# -gt 0 ];
 then
 	MODE=$1;
 else
-  if ! [ -v MODE ];   # If MODE is not defined in the environment (is used in Docker image)
-  then
-    echo "
-Build mode was not specified as an argument or as an environment variable MODE. Choose build mode:
-  [1] onedir (one executable file and a folder with supplementary files, works faster)
+	if ! [ -v MODE ];   # If MODE is not defined in the environment (used in Docker image)
+	then
+		echo "Build mode is not specified. Choose build mode:
+  [1] onedir  (one executable file and a folder with supplementary files, works faster)
   [2] onefile (all in one executable file, works slower)
 ";
 
