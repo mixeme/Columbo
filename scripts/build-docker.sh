@@ -167,5 +167,7 @@ then
 	docker image rm "$IMAGES";
 fi
 
+# Provide clean exit code
 echo "All done!";
 exit 0;
+
