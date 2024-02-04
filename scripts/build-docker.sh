@@ -7,7 +7,7 @@ echo "Project home: $PWD";
 
 # Get a platform architecture
 ARCH=$(uname -m);
-BIN_NAME="columbo-$ARCH";
+#BIN_NAME="columbo-$ARCH";
 echo "Detected platform architecture: $ARCH";
 
 # Resolve a number of arguments
@@ -169,4 +169,3 @@ fi
 
 echo "All done!";
 exit 0;
-
