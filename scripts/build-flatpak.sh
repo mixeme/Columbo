@@ -11,6 +11,7 @@ ARCH=$(uname -m);
 BUNDLE=$PWD/dist/columbo-$ARCH.flatpak;
 BUILD_DIR=~/.cache/columbo;
 echo "Manifest: $MANIFEST";
+echo "Detected platform architecture: $ARCH";
 
 # Ask user
 echo "Select what to do:
