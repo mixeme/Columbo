@@ -13,14 +13,18 @@ BUILD_DIR=~/.cache/columbo;
 echo "Manifest: $MANIFEST";
 echo "Detected platform architecture: $ARCH";
 
-# Ask user
-echo "Select what to do:
-  [1] Build & install
-  [2] Run
-  [3] Export bundle
-  [4] Clean
-";
-read -p "Select option: " DO_OPTION;
+
+if [ "$#" -eq 0 ];
+then
+	# Ask user
+	echo "Select what to do:
+  	[1] Build & install
+  	[2] Run
+  	[3] Export bundle
+  	[4] Clean
+	";
+	read -p "Select option: " DO_OPTION;
+fi
 
 # Resolve action
 case $DO_OPTION in
