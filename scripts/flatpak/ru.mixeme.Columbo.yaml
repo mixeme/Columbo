@@ -4,19 +4,21 @@ runtime-version: '5.15-23.08'
 sdk: org.kde.Sdk
 base: com.riverbankcomputing.PyQt.BaseApp
 base-version: '5.15-23.08'
-command: /app/columbo/main.py
+command: /app/columbo/src/main.py
 modules:
   - name: Columbo
     buildsystem: simple
     build-commands:
        - mkdir /app/columbo
-       - cp -R gui /app/columbo/
-       - cp -R core /app/columbo/
-       - cp -R icons /app/columbo/
-       - install -D main.py /app/columbo/main.py
+       - cp -R src /app/columbo/
+       - cp -R resources /app/columbo/
+       - chmod +x /app/columbo/src/main.py
     sources:
       - type: dir
-        path: src	# Path can be absolute or relative to the .yml location
+        path: ../../	# Path can be absolute or relative to the .yml location
+        skip:
+          - dist/
+          - _gsdata_/
 finish-args:
   - --share=ipc
   - --socket=x11
