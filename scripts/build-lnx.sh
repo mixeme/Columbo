@@ -22,6 +22,7 @@ else
 		echo "Build mode is not specified. Choose build mode:
   [1] onedir  (one executable file and a folder with supplementary files, works faster)
   [2] onefile (all in one executable file, works slower)
+(Build mode can be provided as an script argument or as an environment variable MODE)
 ";
 
     read -p "Enter a number of an option or just press ENTER for default 'onedir' option: " OPTION;
