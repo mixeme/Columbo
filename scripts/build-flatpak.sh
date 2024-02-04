@@ -66,4 +66,12 @@ esac
 exit 0;
 
 # Debug app
-# # flatpak run --command="bash" ru.mixeme.Columbo
+# flatpak run --command="bash" ru.mixeme.Columbo
+#
+# flatpak install --bundle columbo.flatpak
+#
+# flatpak --user remote-add --no-gpg-verify --if-not-exists ru.mixeme.Columbo repo
+# flatpak --user install  ru.mixeme.Columbo  ru.mixeme.Columbo
+
+# https://flatpak-testing.readthedocs.io/en/latest/building-simple-apps.html
+# https://docs.flatpak.org/en/latest/first-build.html
