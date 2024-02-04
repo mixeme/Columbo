@@ -67,10 +67,17 @@ esac
 # Provide clean exit code
 exit 0;
 
+# Install deps
+# flatpak install -y --user org.kde.Platform/x86_64/5.15-23.08
+# flatpak install -y --user org.kde.Sdk/x86_64/5.15-23.08
+# flatpak install -y --user com.riverbankcomputing.PyQt.BaseApp/x86_64/5.15-23.08
+#
 # Debug app
 # flatpak run --command="bash" ru.mixeme.Columbo
 #
-# flatpak install --bundle columbo.flatpak
+# flatpak install --user --bundle columbo.flatpak
+# flatpak uninstall ru.mixeme.Columbo
+# flatpak uninstall --unused
 #
 # flatpak --user remote-add --no-gpg-verify --if-not-exists ru.mixeme.Columbo repo
 # flatpak --user install  ru.mixeme.Columbo  ru.mixeme.Columbo
