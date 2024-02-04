@@ -17,8 +17,8 @@ echo "Select what to do:
   [1] Build & install
   [2] Run
   [3] Export bundle
+  [4] Clean
 ";
-
 read -p "Select option: " DO_OPTION;
 
 case $DO_OPTION in
