@@ -47,7 +47,12 @@ case $DO_OPTION in
 		flatpak build-bundle -v repo $BUNDLE ru.mixeme.Columbo --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
 	;;
 	4 )
-		[ -d $BUILD_DIR ] && echo "+ Clean $BUILD_DIR" && rm -R $BUILD_DIR
+		if [ -d $BUILD_DIR ];
+			echo "+ Clean $BUILD_DIR";
+			rm -R $BUILD_DIR;
+		then
+			echo "No folder $BUILD_DIR";
+		fi
 	;;
 	* )
 		exit 1;
