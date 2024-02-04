@@ -26,6 +26,7 @@ case $DO_OPTION in
 	1 )
 		# Switch folder
 		echo "+ Switch to Flatpak work directory: $BUILD_DIR";
+		mkdir -p "$BUILD_DIR";
 		cd "$BUILD_DIR" || exit 1;
 
 		# Build & install
