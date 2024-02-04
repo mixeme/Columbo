@@ -74,6 +74,7 @@ exit 0;
 
 # Install deps
 # sudo apt install -y flatpak-builder
+# flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 # flatpak install -y --user org.kde.Platform/$(uname -m)/5.15-23.08
 # flatpak install -y --user org.kde.Sdk/$(uname -m)/5.15-23.08
 # flatpak install -y --user com.riverbankcomputing.PyQt.BaseApp/$(uname -m)/5.15-23.08
