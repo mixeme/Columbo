@@ -1,41 +1,60 @@
-#! /bin/bash
+#!/usr/bin/env bash
+#!/bin/bash
 
-cd "$(dirname "$0")";
+# Change location to the project home
+cd "$(dirname "$0")" || exit 1;
+cd ..;
+echo "Project home: $PWD";
 
-# Prepare source folders
-[ -d src ] && echo "+ Remove src/" && rm -R src;
-mkdir src;
-
-DIRS="core icons gui";
-for i in $DIRS;
-do
-	echo "+ Copy $i";
-	rsync -av --exclude="__pycache__" ../../$i/ src/$i;
-done
-cp ../../main.py src/;
-
-# Build
-#flatpak-builder --verbose --force-clean build-dir ru.mixeme.Columbo.yaml
-
-MANIFEST=$PWD/ru.mixeme.Columbo.yaml;
+# Define variables
+MANIFEST=$PWD/scripts/flatpak/ru.mixeme.Columbo.yaml;
+BUNDLE=$PWD/dist/columbo.flatpak;
 BUILD_DIR=~/.cache/columbo;
 
-cd $BUILD_DIR;
+echo "Manifest: $MANIFEST";
 
-# Build & install
-echo "+ Build";
-flatpak-builder --user --install --force-clean build-dir $MANIFEST
-#
-# Run app
-# flatpak run ru.mixeme.Columbo
-#
+
+echo "
+Select what to do:
+  [1] Build & install
+  [2] Run
+  [3] Export bundle
+";
+
+read -p "Select option: " DO_OPTION;
+
+case $DO_OPTION in
+	1 )
+		# Switch folder
+		echo "+ Switch to Flatpak work directory: $BUILD_DIR";
+		cd "$BUILD_DIR" || exit 1;
+
+		# Build & install
+		echo "+ Build & install";
+		flatpak-builder --user --install --force-clean build-dir "$MANIFEST"
+	;;
+	2 )
+		# Run app
+		flatpak run ru.mixeme.Columbo;
+	;;
+	3 )
+		# Switch folder
+		echo "+ Switch to Flatpak work directory: $BUILD_DIR";
+		cd "$BUILD_DIR" || exit 1;
+
+		# Export to the local repo
+		flatpak build-export repo build-dir
+		
+		# Create single-file bundles
+		flatpak build-bundle -v repo $BUNDLE ru.mixeme.Columbo --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
+	;;
+	4 )
+		[ -d $BUILD_DIR ] && echo "+ Clean $BUILD_DIR" && rm -R $BUILD_DIR
+	;;
+	* )
+		exit 1;
+	;;
+esac
+
 # Debug app
 # # flatpak run --command="bash" ru.mixeme.Columbo
-#
-# Export to the local repo
-# flatpak build-export repo build
-#
-# Create single-file bundles
-# flatpak build-bundle -v repo columbo.flatpak ru.mixeme.Columbo
-# flatpak build-bundle -v repo columbo2.flatpak ru.mixeme.Columbo --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
-
