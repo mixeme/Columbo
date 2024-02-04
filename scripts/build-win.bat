@@ -28,7 +28,7 @@ SET BIN_NAME=columbo-win
 
 :: Run PyInstaller
 python -m PyInstaller ^
-    --name columbo-win ^
+    --name %BIN_NAME% ^
 	--onefile ^
  	--windowed ^
  	--noconfirm ^
