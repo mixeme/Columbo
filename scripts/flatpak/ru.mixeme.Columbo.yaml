@@ -25,6 +25,6 @@ finish-args:
   - --socket=wayland
   - --socket=pulseaudio
   - --device=dri
-  - --filesystem=host
   - --filesystem=xdg-config/kdeglobals:ro
+  - --filesystem=host
 
