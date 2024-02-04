@@ -70,7 +70,7 @@ echo "+ Remove .spec";
 rm $BIN_NAME.spec;
 
 # Create an archive with binary
-if [ "$MODE" = "onedir" ];
+if [ "$MODE" = "onedir" ] && [ -d "$BIN_NAME" ];
 then
   echo "+ Pack a folder with binary...";
   cd dist || exit 1;
