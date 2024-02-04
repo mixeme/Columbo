@@ -79,7 +79,7 @@ case $OPTION_ACTION in
 		if [ -d $BUILD_DIR ];
 		then
 			echo "+ Clean $BUILD_DIR";
-			rm -R -v $BUILD_DIR;
+			rm -R $BUILD_DIR;
 		else
 			echo "No folder $BUILD_DIR";
 		fi
