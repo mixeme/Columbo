@@ -24,6 +24,8 @@ then
   	[4] Clean
 	";
 	read -p "Select option: " DO_OPTION;
+else
+	DO_OPTION=$1;
 fi
 
 # Resolve action
