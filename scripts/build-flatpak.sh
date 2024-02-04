@@ -28,7 +28,7 @@ fi
 
 # Resolve action
 case $DO_OPTION in
-	1 )
+	1 | install )
 		# Switch folder
 		echo "+ Switch to Flatpak work directory: $BUILD_DIR";
 		mkdir -p "$BUILD_DIR";
@@ -38,11 +38,11 @@ case $DO_OPTION in
 		echo "+ Build & install";
 		flatpak-builder --user --install --force-clean build-dir "$MANIFEST"
 	;;
-	2 )
+	2 | run )
 		# Run app
 		flatpak run ru.mixeme.Columbo;
 	;;
-	3 )
+	3 | export )
 		# Switch folder
 		echo "+ Switch to Flatpak work directory: $BUILD_DIR";
 		cd "$BUILD_DIR" || exit 1;
@@ -55,7 +55,7 @@ case $DO_OPTION in
 		echo "+ Create bundle $BUNDLE";
 		flatpak build-bundle repo $BUNDLE ru.mixeme.Columbo --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
 	;;
-	4 )
+	4 | clean )
 		if [ -d $BUILD_DIR ];
 		then
 			echo "+ Clean $BUILD_DIR";
