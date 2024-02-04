@@ -41,7 +41,8 @@ case $DO_OPTION in
 		cd "$BUILD_DIR" || exit 1;
 
 		# Export to the local repo
-		flatpak build-export repo build-dir
+		echo "+ Export to local repo: $BUILD_DIR/repo";
+		flatpak build-export -v repo build-dir
 		
 		# Create single-file bundles
 		flatpak build-bundle -v repo $BUNDLE ru.mixeme.Columbo --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
