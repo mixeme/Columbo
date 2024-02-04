@@ -6,8 +6,8 @@ cd ..;
 echo "Project home: $PWD";
 
 # Define variables
-ARCH=$(uname -m);
 MANIFEST=$PWD/scripts/flatpak/ru.mixeme.Columbo.yaml;
+ARCH=$(uname -m);
 BUNDLE=$PWD/dist/columbo-$ARCH.flatpak;
 BUILD_DIR=~/.cache/columbo;
 echo "Manifest: $MANIFEST";
