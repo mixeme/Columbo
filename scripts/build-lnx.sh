@@ -10,7 +10,7 @@ echo "Project home: $PWD";
 # Get a platform architecture
 ARCH=$(uname -m);
 BIN_NAME="columbo-$ARCH";
-echo "Detected platform architecture: $ARCH";
+echo "Platform architecture: $ARCH";
 
 # Check the specified mode
 if [ $# -gt 0 ];
