@@ -15,7 +15,7 @@ modules:
        - chmod +x /app/columbo/src/main.py
     sources:
       - type: dir
-        path: ../../	# Path can be absolute or relative to the .yml location
+        path: ../../	# Path can be absolute or relative to the .yaml location
         skip:
           - dist/
           - _gsdata_/
