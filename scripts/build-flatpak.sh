@@ -11,9 +11,8 @@ BUNDLE=$PWD/dist/columbo.flatpak;
 BUILD_DIR=~/.cache/columbo;
 echo "Manifest: $MANIFEST";
 
-
-echo "
-Select what to do:
+# Ask user
+echo "Select what to do:
   [1] Build & install
   [2] Run
   [3] Export bundle
