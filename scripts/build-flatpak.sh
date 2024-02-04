@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#!/bin/bash
 
 # Change location to the project home
 cd "$(dirname "$0")" || exit 1;
