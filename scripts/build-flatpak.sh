@@ -42,7 +42,7 @@ case $DO_OPTION in
 
 		# Export to the local repo
 		echo "+ Export to local repo: $BUILD_DIR/repo";
-		flatpak build-export -v repo build-dir
+		flatpak build-export repo build-dir
 		
 		# Create single-file bundles
 		flatpak build-bundle -v repo $BUNDLE ru.mixeme.Columbo --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
