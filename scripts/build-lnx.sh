@@ -38,7 +38,7 @@ else
 		esac
 	fi
 fi
-echo "Mode: $MODE";
+echo "Build mode: $MODE";
 
 # Resolve build tag
 if [ -v TAG ];
@@ -46,7 +46,7 @@ then
 	echo "Build tag: $TAG";
 	BIN_NAME="$BIN_NAME-$TAG";
 else
-	echo "Build tag is not defined";
+	echo "Build tag is not specified";
 fi
 
 # Create executable file
@@ -66,7 +66,7 @@ python3 -m PyInstaller \
 # Delete temp folder
 echo "+ Remove 'build' folder";
 rm -R build;
-echo "+ Remove .spec";
+echo "+ Remove '.spec' file";
 rm $BIN_NAME.spec;
 
 # Create an archive with binary
