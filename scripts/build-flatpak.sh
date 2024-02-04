@@ -21,6 +21,7 @@ echo "Select what to do:
 ";
 read -p "Select option: " DO_OPTION;
 
+# Resolve action
 case $DO_OPTION in
 	1 )
 		# Switch folder
@@ -60,6 +61,9 @@ case $DO_OPTION in
 		exit 1;
 	;;
 esac
+
+# Provide clean exit code
+exit 0;
 
 # Debug app
 # # flatpak run --command="bash" ru.mixeme.Columbo
