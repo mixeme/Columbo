@@ -84,7 +84,7 @@ exit 0;
 # Debug app
 # flatpak run --command="bash" ru.mixeme.Columbo
 #
-# flatpak install --user --bundle columbo-$(uname -m).flatpak
+# flatpak install --user --bundle dist/columbo-$(uname -m).flatpak
 # flatpak uninstall ru.mixeme.Columbo
 # flatpak uninstall --unused
 #
