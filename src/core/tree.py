@@ -4,9 +4,9 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, pyqtSignal, QObject
 from PyQt5.QtGui import QStandardItemModel
 
-from src.core import file, nodes
-from src.core.nodes import PathArray
-from src.core.types import TreeType, OperationType
+from core import file, nodes
+from core.nodes import PathArray
+from core.types import TreeType, OperationType
 
 
 class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
