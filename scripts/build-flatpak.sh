@@ -52,9 +52,10 @@ case $DO_OPTION in
 	;;
 	4 )
 		if [ -d $BUILD_DIR ];
-			echo "+ Clean $BUILD_DIR";
-			rm -R $BUILD_DIR;
 		then
+			echo "+ Clean $BUILD_DIR";
+			rm -R -v $BUILD_DIR;
+		else
 			echo "No folder $BUILD_DIR";
 		fi
 	;;
