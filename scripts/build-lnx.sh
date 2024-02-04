@@ -80,6 +80,5 @@ then
 fi
 
 # Provide clean exit code
-echo "All done!";
 exit 0;
 
