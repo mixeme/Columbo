@@ -69,14 +69,15 @@ esac
 exit 0;
 
 # Install deps
-# flatpak install -y --user org.kde.Platform/x86_64/5.15-23.08
-# flatpak install -y --user org.kde.Sdk/x86_64/5.15-23.08
-# flatpak install -y --user com.riverbankcomputing.PyQt.BaseApp/x86_64/5.15-23.08
+# sudo apt install -y flatpak-builder
+# flatpak install -y --user org.kde.Platform/$(uname -m)/5.15-23.08
+# flatpak install -y --user org.kde.Sdk/$(uname -m)/5.15-23.08
+# flatpak install -y --user com.riverbankcomputing.PyQt.BaseApp/$(uname -m)/5.15-23.08
 #
 # Debug app
 # flatpak run --command="bash" ru.mixeme.Columbo
 #
-# flatpak install --user --bundle columbo.flatpak
+# flatpak install --user --bundle columbo-$(uname -m).flatpak
 # flatpak uninstall ru.mixeme.Columbo
 # flatpak uninstall --unused
 #
