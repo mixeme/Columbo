@@ -20,9 +20,9 @@ then
 	echo "Select action:
   [0] Install dev. tools
   [1] Build & install
-  [2] Run
-  [3] Export as bundle
-  [4] Import from bundle
+  [2] Run application
+  [3] Export bundle
+  [4] Import bundle
   [5] Clean build dir.
 ";
 	read -p "Select option: " OPTION_ACTION;
