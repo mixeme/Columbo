@@ -24,7 +24,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
         # Set window properties
         self.setWindowTitle("Columbo - Synchronization history observer")
-        self.setWindowIcon(QtGui.QIcon(os.path.join(project_home, 'icons/search.png')))
+        self.setWindowIcon(QtGui.QIcon(os.path.join(project_home, 'resources/icons/search.png')))
         self.setAcceptDrops(True)
 
         # Load icons
