@@ -87,6 +87,7 @@ exit 0;
 # flatpak install --user --bundle dist/columbo-$(uname -m).flatpak
 # flatpak uninstall ru.mixeme.Columbo
 # flatpak uninstall --unused
+# flatpak uninstall --all
 #
 # flatpak --user remote-add --no-gpg-verify --if-not-exists ru.mixeme.Columbo repo
 # flatpak --user install  ru.mixeme.Columbo  ru.mixeme.Columbo
