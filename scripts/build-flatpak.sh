@@ -9,7 +9,6 @@ echo "Project home: $PWD";
 MANIFEST=$PWD/scripts/flatpak/ru.mixeme.Columbo.yaml;
 BUNDLE=$PWD/dist/columbo.flatpak;
 BUILD_DIR=~/.cache/columbo;
-
 echo "Manifest: $MANIFEST";
 
 
