@@ -12,7 +12,7 @@ ARCH=$(uname -m);
 BIN_NAME="columbo-$ARCH";
 echo "Platform architecture: $ARCH";
 
-# Check the specified mode
+# Resolve build mode
 if [ $# -gt 0 ];
 then
 	MODE=$1;
@@ -41,6 +41,7 @@ Build mode was not specified as an argument or as an environment variable MODE. 
 fi
 echo "Mode: $MODE";
 
+# Resolve build tag
 if [ -v TAG ];
 then
 	echo "Build tag: $TAG";
