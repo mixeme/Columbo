@@ -14,8 +14,8 @@ find_image() {
 }
 
 docker_build_invoke() {
-	SUFFIX=$(echo "$1" | cut -d ':' -f 2);
-	LOG=scripts/docker/log/$SUFFIX.log;
+	SUFFIX="$(echo "$1" | cut -d ':' -f 2)";
+	LOG="scripts/docker/log/$SUFFIX.log";
 	[ ! -d "$(dirname "$LOG")" ] && mkdir -p "$(dirname "$LOG")";
 	echo "+ Build Docker image '$1'. See log file $LOG";
 	docker build \
@@ -143,7 +143,7 @@ case $OPTION_COMMAND in
 		docker run \
 			--user "$(id -u)":"$(id -g)" \
 			-it --rm \
-			-v $PWD:/project \
+			-v "$PWD":/project \
 			-v /etc/passwd:/etc/passwd:ro \
 			-v /etc/group:/etc/group:ro \
 			-v /etc/shadow:/etc/shadow:ro \
@@ -152,7 +152,7 @@ case $OPTION_COMMAND in
 	;;
 	5 | push )
 		# Push images to Docker Hub
-		if [ -v IMAGE_BASE ] && find_image $IMAGE_BASE;
+		if [ -v IMAGE_BASE ] && find_image "$IMAGE_BASE";
 		then
 			echo "+ Push base image: $IMAGE_BASE";
 			docker push $IMAGE_BASE;
@@ -180,8 +180,8 @@ case $OPTION_COMMAND in
 		
 		if [ -v IMAGE_BASE ] && find_image "$IMAGE_BASE";
 		then
-			echo "+ Remove base image '$IMAGE_BASE'";
-			docker image rm $IMAGE_BASE;
+			echo "+ Remove base image $IMAGE_BASE";
+			docker image rm "$IMAGE_BASE";
 		else
 			[ -v IMAGE_BASE ] && echo "  No base image found";
 		fi
