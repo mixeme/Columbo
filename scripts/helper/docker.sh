@@ -5,8 +5,7 @@
 
 # Define auxiliarly functions
 find_image() {
-	IMAGES="$(docker image ls -q $1)";
-	if [ -z "$IMAGES" ];
+	if [ -z "$(docker image ls -q "$1")" ];
 	then
 		return 1;	# No images found
 	else
