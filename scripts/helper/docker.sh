@@ -71,9 +71,9 @@ find_image() {
 	IMAGES=$(docker image ls -q $IMAGE_NAME);	# Check image
 	if [ -z "$IMAGES" ];
 	then
-		exit 1;		# No images found
+		return 1;	# No images found
 	else
-		exit 0;		# Images found
+		return 0;	# Images found
 	fi
 }
 
