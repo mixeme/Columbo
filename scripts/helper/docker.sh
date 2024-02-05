@@ -19,7 +19,7 @@ docker_build_invoke() {
 	[ ! -d "$(dirname "$LOG")" ] && mkdir -p "$(dirname "$LOG")";
 	echo "+ Build Docker image '$1'. See log file $LOG";
 	docker build \
-		--tag $1 \
+		--tag "$1" \
 		--file scripts/docker/"$2" \
 		scripts/docker > "$LOG";
 	echo "+ Build finished";
@@ -111,7 +111,7 @@ case $OPTION_COMMAND in
 		# Build base Docker image (with CPython 3.9+)
 		if [ -v DOCKERFILE_BASE ] && [ -v IMAGE_BASE ];
 		then
-			docker_build_invoke $IMAGE_BASE $DOCKERFILE_BASE;
+			docker_build_invoke "$IMAGE_BASE" "$DOCKERFILE_BASE";
 		else
 			[ ! -v DOCKERFILE_BASE ] && echo "Dockerfile for base image is not defined!";
 			[ ! -v IMAGE_BASE ]      && echo "Name of base image is not defined!";
@@ -128,13 +128,13 @@ case $OPTION_COMMAND in
 			--name columbo-env \
 			--user "$(id -u)":"$(id -g)" \
 			-it --rm \
-			-v $PWD:/project \
+			-v "$PWD":/project \
 			-v /etc/passwd:/etc/passwd:ro \
 			-v /etc/group:/etc/group:ro \
 			-v /etc/shadow:/etc/shadow:ro \
-			-e DISPLAY=$DISPLAY \
+			-e DISPLAY="$DISPLAY" \
 			-v /tmp/.X11-unix:/tmp/.X11-unix \
-			$IMAGE_MAIN \
+			"$IMAGE_MAIN" \
 			python3 src/main.py
 	;;
 	4 | binary )
@@ -147,7 +147,7 @@ case $OPTION_COMMAND in
 			-v /etc/passwd:/etc/passwd:ro \
 			-v /etc/group:/etc/group:ro \
 			-v /etc/shadow:/etc/shadow:ro \
-			-e TAG=$TAG \
+			-e TAG="$TAG" \
 			"$IMAGE_MAIN"
 	;;
 	5 | push )
