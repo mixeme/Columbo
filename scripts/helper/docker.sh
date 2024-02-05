@@ -85,7 +85,7 @@ case $OPTION_IMAGE in
 	;;
 	* )
 		echo "Unknown image. Exit";
-		exit 1;
+		exit 2;
 	;;
 esac
 echo "Docker image: '$IMAGE_MAIN'";
@@ -188,7 +188,7 @@ case $OPTION_COMMAND in
 	;;
 	* )
 		echo "Unknown command. Exit";
-		exit 2;
+		exit 3;
 esac
 
 # Provide clean exit code
