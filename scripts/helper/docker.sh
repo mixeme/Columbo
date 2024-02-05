@@ -119,7 +119,7 @@ case $OPTION_COMMAND in
 	;;
 	1 | main )
 		# Build main Docker image
-		docker_build_invoke $IMAGE_MAIN $DOCKERFILE;
+		docker_build_invoke "$IMAGE_MAIN" "$DOCKERFILE";
 	;;
 	3 | run )
 		# Run application
@@ -148,7 +148,7 @@ case $OPTION_COMMAND in
 			-v /etc/group:/etc/group:ro \
 			-v /etc/shadow:/etc/shadow:ro \
 			-e TAG=$TAG \
-			$IMAGE_MAIN
+			"$IMAGE_MAIN"
 	;;
 	5 | push )
 		# Push images to Docker Hub
@@ -160,7 +160,7 @@ case $OPTION_COMMAND in
 			[ -v IMAGE_BASE ] && echo "  No base image found";
 		fi
 		
-		if find_image $IMAGE_MAIN;
+		if find_image "$IMAGE_MAIN";
 		then
 			echo "+ Push main image: $IMAGE_MAIN";
 			docker push $IMAGE_MAIN;
