@@ -155,9 +155,6 @@ case $OPTION_COMMAND in
 			$IMAGE_NAME
 	;;
 	5 | push )
-		# Check image
-		[ ! find_image ] && echo "  No image found. Exit" && exit 1;
-		
 		if [ ! -z $BASE_IMAGE ];
 		then
 			echo "+ Push base image $BASE_IMAGE";
