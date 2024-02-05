@@ -153,15 +153,15 @@ case $OPTION_COMMAND in
 		# Push images to Docker Hub
 		if [ -v IMAGE_BASE ] && find_image "$IMAGE_BASE";
 		then
-			echo "+ Push base image: $IMAGE_BASE";
-			docker push $IMAGE_BASE;
+			echo "+ Push base image $IMAGE_BASE";
+			docker push "$IMAGE_BASE";
 		else
 			[ -v IMAGE_BASE ] && echo "  No base image found";
 		fi
 		
 		if find_image "$IMAGE_MAIN";
 		then
-			echo "+ Push main image: $IMAGE_MAIN";
+			echo "+ Push main image $IMAGE_MAIN";
 			docker push "$IMAGE_MAIN";
 		else
 			echo "  No main image found";
