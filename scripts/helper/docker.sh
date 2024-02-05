@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Test Docker binary
-[ -z "$(which docker)" ] && echo "No 'docker' binary. Exit" && exit 1;
+[ -z "$(which docker)" ] && echo "  No 'docker' binary. Exit" && exit 1;
 
 # Define auxiliary functions
 find_image() {
