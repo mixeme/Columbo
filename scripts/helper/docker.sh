@@ -123,9 +123,7 @@ case $OPTION_COMMAND in
 		docker pull $IMAGE_NAME
 	;;
 	3 | run )
-		# Check image
-		[ ! find_image ] && echo "  No image found. Exit" && exit 1;
-
+		# Run application
 		echo "+ Run application";
 		docker run \
 			--name columbo-env \
