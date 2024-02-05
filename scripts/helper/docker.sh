@@ -3,7 +3,7 @@
 # Test Docker binary
 [ -z "$(which docker)" ] && echo "No 'docker' binary. Exit" && exit 1;
 
-# Define auxiliarly functions
+# Define auxiliary functions
 find_image() {
 	if [ -z "$(docker image ls -q "$1")" ];
 	then
