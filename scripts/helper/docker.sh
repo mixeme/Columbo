@@ -112,12 +112,6 @@ case $OPTION_COMMAND in
 		# Build base Docker image (with CPython 3.9+)
 		if [ -v DOCKERFILE_BASE ] && [ -v BASE_IMAGE ];
 		then
-#			echo "+ Build base Docker image: $BASE_IMAGE";
-#			docker build \
-#				--tag $BASE_IMAGE \
-#				--file scripts/docker/$DOCKERFILE_BASE \
-#				scripts/docker > scripts/docker/$TAG-base.log
-#			echo "+ Build finished";
 			docker_build_invoke $BASE_IMAGE $DOCKERFILE_BASE;
 		else
 			[ ! -v DOCKERFILE_BASE ] && echo "Dockerfile for base image is not defined!";
@@ -126,12 +120,6 @@ case $OPTION_COMMAND in
 	;;
 	1 | main )
 		# Build main Docker image
-#		echo "+ Build main Docker image: $IMAGE_NAME";
-#		docker build \
-#			--tag $IMAGE_NAME \
-#			--file scripts/docker/$DOCKERFILE \
-#			scripts/docker > scripts/docker/$TAG.log
-#		echo "+ Build finished";
 		docker_build_invoke $IMAGE_NAME $DOCKERFILE;
 	;;
 	3 | run )
