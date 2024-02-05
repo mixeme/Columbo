@@ -44,28 +44,29 @@ fi
 IMAGE_BASENAME="mixeme/columbo";
 case $OPTION_IMAGE in
 	1 | deb11 )
-		BASE_IMAGE="";
 		IMAGE_NAME="$IMAGE_BASENAME:debian-bullseye-$ARCH";
 		DOCKERFILE=Dockerfile-deb11;
 		TAG=${TAG:-"deb11"};
 	;;
 	2 | deb10 )
-		BASE_IMAGE="";
 		IMAGE_NAME="$IMAGE_BASENAME:debian-buster-$ARCH";
 		DOCKERFILE=Dockerfile-deb10;
 		TAG=${TAG:-"deb10"};
 	;;
 	3 | centos7 )
-		BASE_IMAGE="$IMAGE_BASENAME:centos-7-python ";
+		BASE_IMAGE="$IMAGE_BASENAME:centos-7-python";
+		DOCKERFILE_BASE=Dockerfile-centos7-python;
+		
 		IMAGE_NAME="$IMAGE_BASENAME:centos-7-$ARCH";
 		DOCKERFILE=Dockerfile-centos7;
 		TAG=${TAG:-"centos7"};
 	;;
 	* )
-		echo "Unknown image option. Exit";
+		echo "Unknown image. Exit";
 		exit 1;
 	;;
 esac
+echo "Docker image: '$IMAGE_NAME'";
 
 find_image() {
 	IMAGES="$(docker image ls -q $1)";
