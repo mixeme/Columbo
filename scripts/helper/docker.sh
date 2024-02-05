@@ -37,21 +37,6 @@ then
   [2] Debian 10 {deb10}   (legacy)
   [3] CentOS 7  {centos7} (legacy)
 "
-fi
-
-# Ask command option if it is not provided
-if [ ! -v OPTION_COMMAND ];
-then
-	echo "Available commands:
-  [0] build base image
-  [1] build main image
-  [2] pull main image
-  [3] run application
-  [4] build binary
-  [5] push image(s)
-  [6] remove image
-"
-	read -p "Select command. Enter [0-6]: " OPTION_COMMAND;
 	read -p "Select image. Enter [1-3] or {word}: " OPTION_IMAGE;
 fi
 
@@ -92,7 +77,34 @@ find_image() {
 	fi
 }
 
-echo "Docker image: $IMAGE_NAME";
+get_id() {
+	echo "$(docker image ls -q $1)";
+}
+
+# Ask command option if it is not provided
+if [ ! -v OPTION_COMMAND ];
+then
+	echo "Available commands:
+  [0] build {base} image
+  [1] build {main} image
+  [2] -
+  [3] {run} application
+  [4] build {binary}
+  [5] {push} image(s)
+  [6] {remove} image
+"
+	read -p "Select command. Enter [0-6] or {word}: " OPTION_COMMAND;
+fi
+
+docker_build_invoke() {
+	LOG=scripts/docker/log/$1.log;
+	echo "+ Build Docker image '$1'. See log file $PWD/$LOG";
+	docker build \
+		--tag $1 \
+		--file scripts/docker/$2 \
+		scripts/docker > $LOG;
+	echo "+ Build finished";
+}
 
 # Resolve command option
 case $OPTION_COMMAND in
