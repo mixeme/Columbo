@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Test Docker binary
-[ -z $(which docker) ] && echo "No 'docker' binary. Exit" && exit 1;
+[ -z "$(which docker)" ] && echo "No 'docker' binary. Exit" && exit 1;
 
 # Define auxiliarly functions
 find_image() {
@@ -21,8 +21,8 @@ docker_build_invoke() {
 	echo "+ Build Docker image '$1'. See log file $PWD/$LOG";
 	docker build \
 		--tag $1 \
-		--file scripts/docker/$2 \
-		scripts/docker > $LOG;
+		--file scripts/docker/"$2" \
+		scripts/docker > "$LOG";
 	echo "+ Build finished";
 }
 
