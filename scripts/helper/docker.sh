@@ -154,7 +154,7 @@ case $OPTION_COMMAND in
 			-v /etc/group:/etc/group:ro \
 			-v /etc/shadow:/etc/shadow:ro \
 			-e TAG=$TAG \
-			"$IMAGE_NAME"
+			$IMAGE_NAME
 	;;
 	5 | push )
 		# Check image
