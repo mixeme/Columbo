@@ -59,7 +59,7 @@ then
   [2] Debian 10 {deb10}   (legacy)
   [3] CentOS 7  {centos7} (legacy)
 "
-	read -p "Select image. Enter [1-3] or {word}: " OPTION_IMAGE;
+	read -r -p "Select image. Enter [1-3] or {word}: " OPTION_IMAGE;
 fi
 
 # Resolve image option
