@@ -37,7 +37,6 @@ then
   [2] Debian 10 {deb10}   (legacy)
   [3] CentOS 7  {centos7} (legacy)
 "
-	read -p "Select image. Enter [1-3]: " OPTION_IMAGE;
 fi
 
 # Ask command option if it is not provided
@@ -53,6 +52,7 @@ then
   [6] remove image
 "
 	read -p "Select command. Enter [0-6]: " OPTION_COMMAND;
+	read -p "Select image. Enter [1-3] or {word}: " OPTION_IMAGE;
 fi
 
 # Resolve image option
