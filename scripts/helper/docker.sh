@@ -68,7 +68,7 @@ case $OPTION_IMAGE in
 esac
 
 find_image() {
-	IMAGES=$(docker image ls -q $IMAGE_NAME);	# Check image
+	IMAGES="$(docker image ls -q $1)";
 	if [ -z "$IMAGES" ];
 	then
 		return 1;	# No images found
