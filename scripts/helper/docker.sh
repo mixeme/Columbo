@@ -183,10 +183,9 @@ case $OPTION_COMMAND in
 		docker image rm "$IMAGE_NAME";
 	;;
 	* )
+		echo "Unknown command. Exit";
 		exit 2;
 esac
 
 # Provide clean exit code
-echo "All done!";
 exit 0;
-
