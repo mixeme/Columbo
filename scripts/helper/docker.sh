@@ -76,7 +76,7 @@ case $OPTION_IMAGE in
 		TAG=${TAG:-"deb10"};
 	;;
 	3 | centos7 )
-		BASE_IMAGE="$IMAGE_BASENAME:centos-7-python";
+		IMAGE_BASE="$IMAGE_BASENAME:centos-7-python";
 		DOCKERFILE_BASE=Dockerfile-centos7-python;
 		
 		IMAGE_MAIN="$IMAGE_BASENAME:centos-7-$ARCH";
@@ -109,12 +109,12 @@ fi
 case $OPTION_COMMAND in
 	0 | base )
 		# Build base Docker image (with CPython 3.9+)
-		if [ -v DOCKERFILE_BASE ] && [ -v BASE_IMAGE ];
+		if [ -v DOCKERFILE_BASE ] && [ -v IMAGE_BASE ];
 		then
-			docker_build_invoke $BASE_IMAGE $DOCKERFILE_BASE;
+			docker_build_invoke $IMAGE_BASE $DOCKERFILE_BASE;
 		else
 			[ ! -v DOCKERFILE_BASE ] && echo "Dockerfile for base image is not defined!";
-			[ ! -v BASE_IMAGE ]      && echo "Name of base image is not defined!";
+			[ ! -v IMAGE_BASE ]      && echo "Name of base image is not defined!";
 		fi
 	;;
 	1 | main )
@@ -152,12 +152,12 @@ case $OPTION_COMMAND in
 	;;
 	5 | push )
 		# Push images to Docker Hub
-		if [ -v BASE_IMAGE ] && find_image $BASE_IMAGE;
+		if [ -v IMAGE_BASE ] && find_image $IMAGE_BASE;
 		then
-			echo "+ Push base image: $BASE_IMAGE";
-			docker push $BASE_IMAGE;
+			echo "+ Push base image: $IMAGE_BASE";
+			docker push $IMAGE_BASE;
 		else
-			[ -v BASE_IMAGE ] && echo "  No base image found";
+			[ -v IMAGE_BASE ] && echo "  No base image found";
 		fi
 		
 		if find_image $IMAGE_MAIN;
@@ -178,12 +178,12 @@ case $OPTION_COMMAND in
 			echo "  No main image found";
 		fi
 		
-		if [ -v BASE_IMAGE ] && find_image $BASE_IMAGE;
+		if [ -v IMAGE_BASE ] && find_image $IMAGE_BASE;
 		then
-			echo "+ Remove base image '$BASE_IMAGE'";
-			docker image rm $BASE_IMAGE;
+			echo "+ Remove base image '$IMAGE_BASE'";
+			docker image rm $IMAGE_BASE;
 		else
-			[ -v BASE_IMAGE ] && echo "  No base image found";
+			[ -v IMAGE_BASE ] && echo "  No base image found";
 		fi
 	;;
 	* )
