@@ -3,6 +3,27 @@
 # Test Docker binary
 [ -z $(which docker) ] && echo "No 'docker' binary. Exit" && exit 1;
 
+# Define auxiliarly functions
+find_image() {
+	IMAGES="$(docker image ls -q $1)";
+	if [ -z "$IMAGES" ];
+	then
+		return 1;	# No images found
+	else
+		return 0;	# Images found
+	fi
+}
+
+docker_build_invoke() {
+	LOG=scripts/docker/log/$1.log;
+	echo "+ Build Docker image '$1'. See log file $PWD/$LOG";
+	docker build \
+		--tag $1 \
+		--file scripts/docker/$2 \
+		scripts/docker > $LOG;
+	echo "+ Build finished";
+}
+
 # Change location to the project home
 cd "$(dirname "$0")" || exit 1;
 cd ../..;
@@ -68,20 +89,6 @@ case $OPTION_IMAGE in
 esac
 echo "Docker image: '$IMAGE_NAME'";
 
-find_image() {
-	IMAGES="$(docker image ls -q $1)";
-	if [ -z "$IMAGES" ];
-	then
-		return 1;	# No images found
-	else
-		return 0;	# Images found
-	fi
-}
-
-get_id() {
-	echo "$(docker image ls -q $1)";
-}
-
 # Ask command option if it is not provided
 if [ ! -v OPTION_COMMAND ];
 then
@@ -96,16 +103,6 @@ then
 "
 	read -p "Select command. Enter [0-6] or {word}: " OPTION_COMMAND;
 fi
-
-docker_build_invoke() {
-	LOG=scripts/docker/log/$1.log;
-	echo "+ Build Docker image '$1'. See log file $PWD/$LOG";
-	docker build \
-		--tag $1 \
-		--file scripts/docker/$2 \
-		scripts/docker > $LOG;
-	echo "+ Build finished";
-}
 
 # Resolve command option
 case $OPTION_COMMAND in
