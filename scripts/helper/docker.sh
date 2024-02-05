@@ -141,9 +141,7 @@ case $OPTION_COMMAND in
 			python3 src/main.py
 	;;
 	4 | binary )
-		# Check image
-		[ ! find_image ] && echo "  No image found. Exit" && exit 1;
-		
+		# Build binary
 		echo "+ Build binary";
 		echo "Build tag: $TAG";
 		docker run \
