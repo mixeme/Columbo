@@ -101,7 +101,7 @@ then
   [4] {push} image(s)
   [5] {remove} image
 "
-	read -r -p "Select command. Enter [0-6] or {word}: " OPTION_COMMAND;
+	read -r -p "Select command. Enter [0-5] or {word}: " OPTION_COMMAND;
 fi
 
 # Resolve command option
