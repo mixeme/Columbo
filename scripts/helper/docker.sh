@@ -167,8 +167,13 @@ case $OPTION_COMMAND in
 			fi
 		fi
 		
-		echo "+ Push main image $IMAGE_NAME";
-		docker push "$IMAGE_NAME";
+		if find_image "$IMAGE_NAME";
+		then
+			echo "+ Push main image: $IMAGE_NAME";
+			docker push $IMAGE_NAME;
+		else
+			echo "  No main image found";
+		fi 
 	;;
 	6 | remove )
 		# Remove images
