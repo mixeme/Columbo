@@ -96,11 +96,10 @@ then
 	echo "Available commands:
   [0] build {base} image
   [1] build {main} image
-  [2] -
-  [3] {run} application
-  [4] build {binary}
-  [5] {push} image(s)
-  [6] {remove} image
+  [2] {run} application
+  [3] build {binary}
+  [4] {push} image(s)
+  [5] {remove} image
 "
 	read -r -p "Select command. Enter [0-6] or {word}: " OPTION_COMMAND;
 fi
@@ -121,7 +120,7 @@ case $OPTION_COMMAND in
 		# Build main Docker image
 		docker_build_invoke "$IMAGE_MAIN" "$DOCKERFILE";
 	;;
-	3 | run )
+	2 | run )
 		# Run application
 		echo "+ Run application";
 		docker run \
@@ -137,7 +136,7 @@ case $OPTION_COMMAND in
 			"$IMAGE_MAIN" \
 			python3 src/main.py
 	;;
-	4 | binary )
+	3 | binary )
 		# Build binary
 		echo "+ Build binary";
 		docker run \
@@ -150,7 +149,7 @@ case $OPTION_COMMAND in
 			-e TAG="$TAG" \
 			"$IMAGE_MAIN"
 	;;
-	5 | push )
+	4 | push )
 		# Push images to Docker Hub
 		if [ -v IMAGE_BASE ] && find_image "$IMAGE_BASE";
 		then
@@ -168,7 +167,7 @@ case $OPTION_COMMAND in
 			echo "  No main image found";
 		fi 
 	;;
-	6 | remove )
+	5 | remove )
 		# Remove images
 		if find_image "$IMAGE_MAIN";
 		then
