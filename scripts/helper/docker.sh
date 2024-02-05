@@ -23,11 +23,6 @@ case $# in
 		OPTION_IMAGE=$1;
 		OPTION_COMMAND=$2;
 	;;
-	3 )
-		OPTION_IMAGE=$1;
-		OPTION_COMMAND=$2;
-		OPTION_OTHER=$3;
-	;;
 	* )
 		echo "Incorrect number of arguments. Exit";
 		exit 1;
