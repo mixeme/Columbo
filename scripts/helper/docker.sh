@@ -66,12 +66,12 @@ fi
 IMAGE_BASENAME="mixeme/columbo";
 case $OPTION_IMAGE in
 	1 | deb11 )
-		IMAGE_NAME="$IMAGE_BASENAME:debian-bullseye-$ARCH";
+		IMAGE_MAIN="$IMAGE_BASENAME:debian-bullseye-$ARCH";
 		DOCKERFILE=Dockerfile-deb11;
 		TAG=${TAG:-"deb11"};
 	;;
 	2 | deb10 )
-		IMAGE_NAME="$IMAGE_BASENAME:debian-buster-$ARCH";
+		IMAGE_MAIN="$IMAGE_BASENAME:debian-buster-$ARCH";
 		DOCKERFILE=Dockerfile-deb10;
 		TAG=${TAG:-"deb10"};
 	;;
@@ -79,7 +79,7 @@ case $OPTION_IMAGE in
 		BASE_IMAGE="$IMAGE_BASENAME:centos-7-python";
 		DOCKERFILE_BASE=Dockerfile-centos7-python;
 		
-		IMAGE_NAME="$IMAGE_BASENAME:centos-7-$ARCH";
+		IMAGE_MAIN="$IMAGE_BASENAME:centos-7-$ARCH";
 		DOCKERFILE=Dockerfile-centos7;
 		TAG=${TAG:-"centos7"};
 	;;
@@ -88,7 +88,7 @@ case $OPTION_IMAGE in
 		exit 1;
 	;;
 esac
-echo "Docker image: '$IMAGE_NAME'";
+echo "Docker image: '$IMAGE_MAIN'";
 
 # Ask command option if it is not provided
 if [ ! -v OPTION_COMMAND ];
@@ -119,7 +119,7 @@ case $OPTION_COMMAND in
 	;;
 	1 | main )
 		# Build main Docker image
-		docker_build_invoke $IMAGE_NAME $DOCKERFILE;
+		docker_build_invoke $IMAGE_MAIN $DOCKERFILE;
 	;;
 	3 | run )
 		# Run application
@@ -134,7 +134,7 @@ case $OPTION_COMMAND in
 			-v /etc/shadow:/etc/shadow:ro \
 			-e DISPLAY=$DISPLAY \
 			-v /tmp/.X11-unix:/tmp/.X11-unix \
-			$IMAGE_NAME \
+			$IMAGE_MAIN \
 			python3 src/main.py
 	;;
 	4 | binary )
@@ -148,7 +148,7 @@ case $OPTION_COMMAND in
 			-v /etc/group:/etc/group:ro \
 			-v /etc/shadow:/etc/shadow:ro \
 			-e TAG=$TAG \
-			$IMAGE_NAME
+			$IMAGE_MAIN
 	;;
 	5 | push )
 		# Push images to Docker Hub
@@ -160,20 +160,20 @@ case $OPTION_COMMAND in
 			[ -v BASE_IMAGE ] && echo "  No base image found";
 		fi
 		
-		if find_image $IMAGE_NAME;
+		if find_image $IMAGE_MAIN;
 		then
-			echo "+ Push main image: $IMAGE_NAME";
-			docker push $IMAGE_NAME;
+			echo "+ Push main image: $IMAGE_MAIN";
+			docker push $IMAGE_MAIN;
 		else
 			echo "  No main image found";
 		fi 
 	;;
 	6 | remove )
 		# Remove images
-		if find_image $IMAGE_NAME;
+		if find_image $IMAGE_MAIN;
 		then
-			echo "+ Remove main image '$IMAGE_NAME'";
-			docker image rm $IMAGE_NAME;
+			echo "+ Remove main image '$IMAGE_MAIN'";
+			docker image rm $IMAGE_MAIN;
 		else
 			echo "  No main image found";
 		fi
