@@ -171,7 +171,7 @@ case $OPTION_COMMAND in
 			[ -v BASE_IMAGE ] && echo "  No base image found";
 		fi
 		
-		if find_image "$IMAGE_NAME";
+		if find_image $IMAGE_NAME;
 		then
 			echo "+ Push main image: $IMAGE_NAME";
 			docker push $IMAGE_NAME;
@@ -181,7 +181,7 @@ case $OPTION_COMMAND in
 	;;
 	6 | remove )
 		# Remove images
-		if find_image "$IMAGE_NAME";
+		if find_image $IMAGE_NAME;
 		then
 			echo "+ Remove main image '$IMAGE_NAME'";
 			docker image rm $IMAGE_NAME;
