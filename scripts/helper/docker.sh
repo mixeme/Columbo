@@ -171,13 +171,13 @@ case $OPTION_COMMAND in
 		docker push "$IMAGE_NAME";
 	;;
 	6 | remove )
-		# Check image
-		[ ! find_image ] && echo "  No image found. Exit" && exit 1;
-		
-		if [ ! -z $BASE_IMAGE ];
+		# Remove images
+		if find_image "$IMAGE_NAME";
 		then
-			echo "+ Remove base image $BASE_IMAGE";
-			docker image rm "$BASE_IMAGE";
+			echo "+ Remove main image '$IMAGE_NAME'";
+			docker image rm $IMAGE_NAME;
+			else
+			echo "  No main image found";
 		fi
 		
 		if [ -v BASE_IMAGE ];
