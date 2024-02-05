@@ -17,7 +17,7 @@ docker_build_invoke() {
 	SUFFIX="$(echo "$1" | cut -d ':' -f 2)";
 	LOG="scripts/docker/log/$SUFFIX.log";
 	[ ! -d "$(dirname "$LOG")" ] && mkdir -p "$(dirname "$LOG")";
-	echo "+ Build Docker image '$1'. See log file $LOG";
+	echo "+ Build Docker image $1. See log file $LOG";
 	docker build \
 		--tag "$1" \
 		--file scripts/docker/"$2" \
@@ -172,7 +172,7 @@ case $OPTION_COMMAND in
 		# Remove images
 		if find_image "$IMAGE_MAIN";
 		then
-			echo "+ Remove main image '$IMAGE_MAIN'";
+			echo "+ Remove main image $IMAGE_MAIN";
 			docker image rm "$IMAGE_MAIN";
 		else
 			echo "  No main image found";
