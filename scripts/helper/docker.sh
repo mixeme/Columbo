@@ -185,7 +185,7 @@ case $OPTION_COMMAND in
 		then
 			echo "+ Remove main image '$IMAGE_NAME'";
 			docker image rm $IMAGE_NAME;
-			else
+		else
 			echo "  No main image found";
 		fi
 		
