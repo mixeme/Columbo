@@ -15,7 +15,9 @@ find_image() {
 }
 
 docker_build_invoke() {
-	LOG=scripts/docker/log/$1.log;
+	SUFFIX=$(echo $1 | cut -d ':' -f 2);
+	LOG=scripts/docker/log/$SUFFIX.log;
+	[ ! -d $(dirname $LOG) ] && mkdir -p $(dirname $LOG);
 	echo "+ Build Docker image '$1'. See log file $PWD/$LOG";
 	docker build \
 		--tag $1 \
