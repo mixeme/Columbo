@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Test Docker binary
+[ -z $(which docker) ] && echo "No 'docker' binary. Exit" && exit 1;
+
 # Change location to the project home
 cd "$(dirname "$0")" || exit 1;
 cd ../..;
