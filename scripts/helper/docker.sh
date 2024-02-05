@@ -118,9 +118,6 @@ case $OPTION_COMMAND in
 			--file scripts/docker/$DOCKERFILE \
 			scripts/docker > scripts/docker/$TAG.log
 	;;
-	2 | pull )
-		echo "+ Pull main Docker image: $IMAGE_NAME";
-		docker pull $IMAGE_NAME
 	;;
 	3 | run )
 		# Run application
