@@ -151,7 +151,6 @@ case $OPTION_COMMAND in
 	4 | binary )
 		# Build binary
 		echo "+ Build binary";
-		echo "Build tag: $TAG";
 		docker run \
 			--user "$(id -u)":"$(id -g)" \
 			-it --rm \
