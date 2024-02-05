@@ -33,9 +33,9 @@ esac
 if [ ! -v OPTION_IMAGE ];
 then
 	echo "Available images:
-  [1] Debian 11 (reference)
-  [2] Debian 10 (legacy)
-  [3] CentOS 7  (legacy)
+  [1] Debian 11 {deb11}   (reference)
+  [2] Debian 10 {deb10}   (legacy)
+  [3] CentOS 7  {centos7} (legacy)
 "
 	read -p "Select image. Enter [1-3]: " OPTION_IMAGE;
 fi
