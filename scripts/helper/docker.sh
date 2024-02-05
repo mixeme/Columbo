@@ -189,15 +189,12 @@ case $OPTION_COMMAND in
 			echo "  No main image found";
 		fi
 		
-		if [ -v BASE_IMAGE ];
+		if [ -v BASE_IMAGE ] && find_image $BASE_IMAGE;
 		then
-			if find_image "$BASE_IMAGE";
-			then
-				echo "+ Remove base image '$BASE_IMAGE'";
-				docker image rm $BASE_IMAGE;
-			else
-				echo "  No base image found";
-			fi
+			echo "+ Remove base image '$BASE_IMAGE'";
+			docker image rm $BASE_IMAGE;
+		else
+			[ -v BASE_IMAGE ] && echo "  No base image found";
 		fi
 	;;
 	* )
