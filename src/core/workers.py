@@ -2,7 +2,7 @@ import os
 
 from PyQt5.QtCore import QRunnable, QObject, pyqtSignal
 
-import core.file
+from core import file
 
 
 class Signals(QObject):
@@ -31,7 +31,7 @@ class ClearEmptyDirsWorker(QRunnable):
 class ClearSnapshotWorker(QRunnable):
     signals = Signals()
 
-    def __init__(self, root_path: str, tester: core.file.SnapshotTester):
+    def __init__(self, root_path: str, tester: file.SnapshotTester):
         super().__init__()
         self.root_path = root_path
         self.tester = tester

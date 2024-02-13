@@ -1,0 +1,30 @@
+id: ru.mixeme.Columbo
+runtime: org.kde.Platform
+runtime-version: '5.15-23.08'
+sdk: org.kde.Sdk
+base: com.riverbankcomputing.PyQt.BaseApp
+base-version: '5.15-23.08'
+command: /app/columbo/src/main.py
+modules:
+  - name: Columbo
+    buildsystem: simple
+    build-commands:
+       - mkdir /app/columbo
+       - cp -R src /app/columbo/
+       - cp -R resources /app/columbo/
+       - chmod +x /app/columbo/src/main.py
+    sources:
+      - type: dir
+        path: ../../	# Path can be absolute or relative to the .yaml location
+        skip:
+          - dist/
+          - _gsdata_/
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=xdg-config/kdeglobals:ro
+  - --filesystem=host
+

@@ -7,7 +7,7 @@ from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
-import core.file
+from core import file
 from core.tree import FileTreeWorker
 from core.types import TreeType, OperationType
 from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
@@ -20,11 +20,11 @@ class HistoryUI(QtWidgets.QMainWindow):
         super().__init__()
 
         # Load GUI layout
-        uic.loadUi(os.path.join(project_home, 'gui/history.ui'), self)
+        uic.loadUi(os.path.join(project_home, 'src/gui/history.ui'), self)
 
         # Set window properties
         self.setWindowTitle("Columbo - Synchronization history observer")
-        self.setWindowIcon(QtGui.QIcon(os.path.join(project_home, 'icons/search.png')))
+        self.setWindowIcon(QtGui.QIcon(os.path.join(project_home, 'resources/icons/search.png')))
         self.setAcceptDrops(True)
 
         # Load icons
@@ -98,7 +98,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         dialog.setFileMode(QFileDialog.FileMode.Directory)
         if dialog.exec():
             selected_dir = dialog.selectedFiles()[0]
-            self.path_field.setText(selected_dir)
+            self.path_field.setText(selected_dir.replace("/", os.sep))
 
     def update_tree(self, _, model) -> None:
         self.file_tree_view.setModel(model)
@@ -119,8 +119,8 @@ class HistoryUI(QtWidgets.QMainWindow):
 
             # Switch filter
             if op_type == OperationType.FILTERED_TREE:
-                tester = core.file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
-                                                  self.checked()[0])
+                tester = file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
+                                             self.checked()[0])
                 worker.set_filter(tester)
 
             # Start worker in another thread
@@ -145,7 +145,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def restore_action(self) -> None:
         # Get path to item
         selected_path, selected_item = self.get_selected_path()
-        extension = core.file.get_extension(selected_item)
+        extension = file.get_extension(selected_item)
 
         # Define file extension for dialog
         if extension:
@@ -174,7 +174,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def delete_snapshots_action(self) -> None:
         if self.path_field.text():
             bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-            tester = core.file.SnapshotTester(bounds, self.checked()[0])
+            tester = file.SnapshotTester(bounds, self.checked()[0])
             worker = ClearSnapshotWorker(self.path_field.text(), tester)
             worker.signals.progress.connect(lambda x: print(x))
             QThreadPool.globalInstance().start(worker)

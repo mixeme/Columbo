@@ -28,15 +28,15 @@ SET BIN_NAME=columbo-win
 
 :: Run PyInstaller
 python -m PyInstaller ^
-    --name columbo-win ^
+    --name %BIN_NAME% ^
 	--onefile ^
  	--windowed ^
  	--noconfirm ^
 	--clean ^
-	--add-data="./gui;./gui" ^
+	--add-data="./src/gui;./src/gui" ^
 	--add-data="./icons;./icons" ^
 	--icon=icons/search.ico ^
-	main.py
+	src/main.py
 
 rmdir /S /Q build
 del %BIN_NAME%.spec

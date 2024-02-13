@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, pyqtSignal, QObject
 from PyQt5.QtGui import QStandardItemModel
 
-from core import nodes, file
+from core import file, nodes
 from core.nodes import PathArray
 from core.types import TreeType, OperationType
 
