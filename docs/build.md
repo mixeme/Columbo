@@ -1,9 +1,9 @@
-## Run / Build / Install 
+# Run / Build
 ## Run from source
-#### Windows
+### Windows
 1. Install CPython interpreter **(required 3.9+ version)** from
 > https://www.python.org/downloads/windows/
-2. Open PowerShell as administrator;
+2. Open PowerShell (as administrator if you what to install packages for all users, otherwise only for current user);
 3. Install `pip`
 ```shell
 py -m ensurepip --upgrade
@@ -23,115 +23,50 @@ py -m pip install PyQt5
 py <path-to-the-unpacked-repo>/main.py
 ```
 
-#### Linux
+### Linux
 CPython 3.9+ is required.
 ```shell
-# Debian 11 Bullseye version
+# CentOs 7 & Debain 10 Buster does not have Python 3.9+ in its repo. See instructions for Docker image below
+
+# Debian 11 Bullseye example
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5
 git clone -b main https://github.com/mixeme/Columbo.git
 python3 Columbo/main.py
 ```
 
-### Build binary
-#### Natively
+## Build binary
+### Natively
 1. Check that you can successfully run Columbo from the source. See instructions in the section above;
 2. Install [PyInstaller](https://pyinstaller.org/) with `pip`
-
 ```shell
 py -m pip install pyinstaller         # For Windows  
 python3 -m pip install pyinstaller    # For Linux
 ```
-
 3. Run `scripts/build-win.bat` for Windows and `scripts/build-lnx.sh` for Linux;
-4. Find your binary in `<repo>/dist` folder.
+4. Find your binary in `dist` folder.
 
-#### With Docker image
-1. Install Docker engine;
+### Another distribution
+If you need to run Columbo in another environment than compiled binaries, prepare your own with Docker. You can use our build flow as an example.
 
-```shell
-apt install docker docker.io apparmor # For example
-```
-
-2. Build an image with the required environment 
-
-```shell
-# Debian 10 Buster
-docker build  --tag mixeme/columbo:debian-buster \
-              --file Dockerfile-deb10 \
-              https://github.com/mixeme/Columbo.git#dev:scripts/docker
-
-# Debian 10 Bullseye
-docker build  --tag mixeme/columbo:debian-bullseye \
-              --file Dockerfile-deb11 \
-              https://github.com/mixeme/Columbo.git#dev:scripts/docker
-
-# CentOS 7 (x86_64)
-docker build  --tag mixeme/columbo:centos-7 \
-              --file Dockerfile-centos7-x86_64 \
-              https://github.com/mixeme/Columbo.git#dev:scripts/docker
-```
-
-3. Clone Columbo repository
-
+### Docker-based build flow
+1. [Install](https://docs.docker.com/engine/install/) Docker engine;
+2. Clone Columbo repository
 ```shell
 git clone -b main https://github.com/mixeme/Columbo.git
 cd Columbo
 ```
+3. Run helper script `scripts/helper/docker.sh`. This script relies on the set of the prepared images (available on [Docker Hub](https://hub.docker.com/r/mixeme/columbo)). You can inspect images through
+> `scripts/docker/Dockerfile-deb11`          (Debian 11 Bullseye);
+> `scripts/docker/Dockerfile-deb10`          (Debian 10 Buster);
+> `scripts/docker/Dockerfile-centos7`        (CentOS 7);
+> `scripts/docker/Dockerfile-centos7-python` (CentOS 7 with CPython 3.9+, auxiliary image for the one above);
 
-4. Run a container to build a binary
-
+### Flatpak-based build flow
+1. [Install](https://flatpak.org/setup/) `flatpak` and `flatpak-builder`;
+2. Clone Columbo repository
 ```shell
-docker run  --user $(id -u):$(id -g) \
-            -it --rm \
-            --name columbo-build \
-            -v $PWD:/project \
-            -v /etc/passwd:/etc/passwd:ro \
-            -v /etc/group:/etc/group:ro \
-            -v /etc/shadow:/etc/shadow:ro \
-            mixeme/columbo:<your-image-version>
+git clone -b main https://github.com/mixeme/Columbo.git
+cd Columbo
 ```
-
-5. Get your binary in `dist` folder.  
-
-If you need to test compatibility of the built environment, use the following command to run Columbo from the source inside a container
-
-```shell
-docker run  --user $(id -u):$(id -g) \
-            -it --rm \
-            --name columbo-build \
-            -v $PWD:/project \
-            -v /etc/passwd:/etc/passwd:ro \
-            -v /etc/group:/etc/group:ro \
-            -v /etc/shadow:/etc/shadow:ro \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -e DISPLAY=$DISPLAY \
-            mixeme/columbo:<your-image-version> \
-            python3 main.py
-            # or `python3.9 main.py` for some images
-```
-
-### Install from source
-1. Run `scripts/install.sh`. For example
-```shell
-wget https://github.com/mixeme/Columbo/raw/main/scripts/install.sh \
-    && sudo bash [source | regular | standalone]
-   
-sudo apt install -y git \
-    && git clone -b main https://github.com/mixeme/Columbo.git \
-    && sudo bash Columbo/scripts/install-git.sh [source | regular | standalone]
-```
-2. Run Columbo
-```shell
-    /opt/Columbo/main.py  # for `source` option
-    columbo               # for `regular` & `standalone` options 
-```
-
-
-
-#### Natively
-
-
-#### With Docker image
-
-### Windows
+3. Run helper script `scripts/helper/flatpak.sh`. This script relies on the `scripts/flatpak/ru.mixeme.Columbo.yaml` description.
 
