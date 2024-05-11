@@ -66,10 +66,10 @@ class HistoryUI(QtWidgets.QMainWindow):
         return self.file_tree_view.selectedIndexes()
 
     def get_selected_path(self) -> (str, str):
-        index = self.file_tree_view.selectedIndexes()[0]  # Get the selected index
-        snapshot = index.siblingAtColumn(2).data()      # Get snapshot
-        selected_item = index.data()                    # Get item for the selected index
-        selected_path = selected_item                   # Prepare selected path
+        index = self.file_tree_view.selectedIndexes()[0]    # Get the selected index
+        snapshot = index.siblingAtColumn(2).data()          # Get snapshot name
+        selected_item = index.data()                        # Get item value for the selected index
+        selected_path = selected_item                       # Prepare selected path
 
         # Go up for a versioned file
         if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
@@ -204,7 +204,8 @@ class HistoryUI(QtWidgets.QMainWindow):
             return
 
         context_menu = QMenu()
-        if nodes[0].siblingAtColumn(1).data() != "Folder":
+        if nodes[0].siblingAtColumn(1).data() != "Folder":  # If a file is selected
+            # Create context menu
             openfile = context_menu.addAction("Open")
             restore = context_menu.addAction("Restore")
             context_menu.addSeparator()
