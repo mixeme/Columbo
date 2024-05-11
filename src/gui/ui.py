@@ -225,7 +225,10 @@ class HistoryUI(QtWidgets.QMainWindow):
                 selected_nodes = self.get_selected_nodes()
                 snapshot = selected_nodes[0].siblingAtColumn(2).data()
                 self.filter_to_field.setText(snapshot)
-        else:
+            if action == open_folder:
+                file_path = self.get_selected_path()[0]     # Get path of the selected item
+                open_file(os.path.dirname(file_path))       # Open folder contains this item
+        else:   # If a folder is selected
             expand = context_menu.addAction("Expand recursively")
 
             delete = None
