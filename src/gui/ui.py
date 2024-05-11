@@ -102,8 +102,13 @@ class HistoryUI(QtWidgets.QMainWindow):
             self.path_field.setText(selected_dir.replace("/", os.sep))
 
     def set_from_snapshot(self):
-        selected_nodes = self.get_selected_nodes()              # Get selected nodes
-        snapshot = selected_nodes[0].siblingAtColumn(2).data()  # Get value from its third column
+        selected_node = self.get_selected_nodes()[0]            # Get selected node
+
+        if selected_node.siblingAtColumn(1).data() == "Folder":
+            snapshot = selected_node.data()                     # Get value from its name
+        else:
+            snapshot = selected_node.siblingAtColumn(2).data()  # Get value from its third column
+
         self.filter_from_field.setText(snapshot)                # Set field text
 
     def update_tree(self, _, model) -> None:
