@@ -14,6 +14,13 @@ from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
 from gui import icons
 
 
+def open_file(path: str) -> None:
+    try:
+        os.startfile(path)                  # Windows version
+    except AttributeError:
+        subprocess.call(['open', path])     # Linux version
+
+
 class HistoryUI(QtWidgets.QMainWindow):
     def __init__(self, project_home: str):
         # Load GUI layout
@@ -85,13 +92,6 @@ class HistoryUI(QtWidgets.QMainWindow):
             selected_path = os.path.join(parent_item, selected_path)
             index = index.parent()
         return selected_path, selected_item
-
-    def _open_file(self):
-        file = self.get_selected_path()[0]
-        try:
-            os.startfile(file)
-        except AttributeError:
-            subprocess.call(['open', file])
 
     def browse_action(self) -> None:
         dialog = QFileDialog(self)
