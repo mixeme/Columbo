@@ -214,7 +214,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
 
             if action == openfile:
-                self._open_file()
+                open_file(self.get_selected_path()[0])
             if action == restore:
                 self.restore_action()
             if action == from_snapshot:
