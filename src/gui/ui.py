@@ -101,6 +101,11 @@ class HistoryUI(QtWidgets.QMainWindow):
             selected_dir = dialog.selectedFiles()[0]
             self.path_field.setText(selected_dir.replace("/", os.sep))
 
+    def set_from_snapshot(self):
+        selected_nodes = self.get_selected_nodes()              # Get selected nodes
+        snapshot = selected_nodes[0].siblingAtColumn(2).data()  # Get value from its third column
+        self.filter_from_field.setText(snapshot)                # Set field text
+
     def update_tree(self, _, model) -> None:
         self.file_tree_view.setModel(model)
         self.file_tree_view.header().resizeSection(0, 300)
@@ -222,9 +227,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             if action == restore:
                 self.restore_action()
             if action == from_snapshot:
-                selected_nodes = self.get_selected_nodes()
-                snapshot = selected_nodes[0].siblingAtColumn(2).data()
-                self.filter_from_field.setText(snapshot)
+                self.set_from_snapshot()
             if action == to_snapshot:
                 selected_nodes = self.get_selected_nodes()
                 snapshot = selected_nodes[0].siblingAtColumn(2).data()
