@@ -236,6 +236,12 @@ class HistoryUI(QtWidgets.QMainWindow):
                 file_path = self.get_selected_path()[0]     # Get path of the selected item
                 open_file(os.path.dirname(file_path))       # Open folder contains this item
         else:   # If a folder is selected
+            if self.checked() == (TreeType.BY_DATE, TreeType.BY_DATE) \
+                    and nodes[0].parent().data() == self.path_field.text():
+                from_snapshot = context_menu.addAction("From snapshot")
+                to_snapshot = context_menu.addAction("To snapshot")
+                context_menu.addSeparator()
+
             expand = context_menu.addAction("Expand recursively")
 
             delete = None
