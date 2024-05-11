@@ -249,8 +249,8 @@ class HistoryUI(QtWidgets.QMainWindow):
                 file_path = self.get_selected_path()[0]     # Get path of the selected item
                 open_file(os.path.dirname(file_path))       # Open folder contains this item
         else:   # If a folder is selected
-            if self.checked() == (TreeType.BY_DATE, TreeType.BY_DATE) \
-                    and nodes[0].parent().data() == self.path_field.text():
+            from_snapshot, to_snapshot = None, None
+            if self.to_checked() == TreeType.BY_DATE and nodes[0].parent().data() == self.path_field.text():
                 from_snapshot = context_menu.addAction("From snapshot")
                 to_snapshot = context_menu.addAction("To snapshot")
                 context_menu.addSeparator()
@@ -263,6 +263,8 @@ class HistoryUI(QtWidgets.QMainWindow):
                 delete = context_menu.addAction("Delete empty directory")
 
             action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
+            if action is None:
+                return
             if action == expand:
                 self.file_tree_view.expandRecursively(self.get_selected_nodes()[0])
             if self.clear_all_button.isEnabled() and action == delete:
@@ -272,3 +274,7 @@ class HistoryUI(QtWidgets.QMainWindow):
                     self.statusbar.showMessage("Delete", selected_path)
                 except OSError:
                     self.statusbar.showMessage("Failed to delete", selected_path)
+            if action == from_snapshot:
+                self.set_from_snapshot()
+            if action == to_snapshot:
+                self.set_to_snapshot()
