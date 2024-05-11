@@ -91,6 +91,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
             selected_path = os.path.join(parent_item, selected_path)
             index = index.parent()
+
         return selected_path, selected_item
 
     def browse_action(self) -> None:
@@ -215,6 +216,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             open_folder = context_menu.addAction("Open in folder")
             action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
 
+            # Resolve action
             if action == openfile:
                 open_file(self.get_selected_path()[0])
             if action == restore:
