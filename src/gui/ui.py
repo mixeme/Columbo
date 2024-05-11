@@ -111,6 +111,16 @@ class HistoryUI(QtWidgets.QMainWindow):
 
         self.filter_from_field.setText(snapshot)                # Set field text
 
+    def set_to_snapshot(self):
+        selected_node = self.get_selected_nodes()[0]            # Get selected node
+
+        if selected_node.siblingAtColumn(1).data() == "Folder":
+            snapshot = selected_node.data()                     # Get value from its name
+        else:
+            snapshot = selected_node.siblingAtColumn(2).data()  # Get value from its third column
+
+        self.filter_to_field.setText(snapshot)                  # Set field text
+
     def update_tree(self, _, model) -> None:
         self.file_tree_view.setModel(model)
         self.file_tree_view.header().resizeSection(0, 300)
@@ -234,9 +244,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             if action == from_snapshot:
                 self.set_from_snapshot()
             if action == to_snapshot:
-                selected_nodes = self.get_selected_nodes()
-                snapshot = selected_nodes[0].siblingAtColumn(2).data()
-                self.filter_to_field.setText(snapshot)
+                self.set_to_snapshot()
             if action == open_folder:
                 file_path = self.get_selected_path()[0]     # Get path of the selected item
                 open_file(os.path.dirname(file_path))       # Open folder contains this item
