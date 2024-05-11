@@ -211,6 +211,8 @@ class HistoryUI(QtWidgets.QMainWindow):
             context_menu.addSeparator()
             from_snapshot = context_menu.addAction("From snapshot")
             to_snapshot = context_menu.addAction("To snapshot")
+            context_menu.addSeparator()
+            open_folder = context_menu.addAction("Open in folder")
             action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
 
             if action == openfile:
