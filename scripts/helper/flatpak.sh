@@ -39,7 +39,7 @@ case $OPTION_ACTION in
 		
 		echo "+ Install development tools";
 		#sudo apt install -y flatpak flatpak-builder;
-		flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+		flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 		flatpak install -y --user \
 			org.kde.Platform/$ARCH/5.15-23.08 \
 			org.kde.Sdk/$ARCH/5.15-23.08 \

@@ -34,8 +34,8 @@ python -m PyInstaller ^
  	--noconfirm ^
 	--clean ^
 	--add-data="./src/gui;./src/gui" ^
-	--add-data="./icons;./icons" ^
-	--icon=icons/search.ico ^
+	--add-data="./resources/icons;./resources/icons" ^
+	--icon=resources/icons/search.ico ^
 	src/main.py
 
 rmdir /S /Q build

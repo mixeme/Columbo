@@ -14,6 +14,13 @@ from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
 from gui import icons
 
 
+def open_file(path: str) -> None:
+    try:
+        os.startfile(path)                  # Windows version
+    except AttributeError:
+        subprocess.call(['open', path])     # Linux version
+
+
 class HistoryUI(QtWidgets.QMainWindow):
     def __init__(self, project_home: str):
         # Load GUI layout
@@ -59,10 +66,10 @@ class HistoryUI(QtWidgets.QMainWindow):
         return self.file_tree_view.selectedIndexes()
 
     def get_selected_path(self) -> (str, str):
-        index = self.file_tree_view.selectedIndexes()[0]  # Get the selected index
-        snapshot = index.siblingAtColumn(2).data()      # Get snapshot
-        selected_item = index.data()                    # Get item for the selected index
-        selected_path = selected_item                   # Prepare selected path
+        index = self.file_tree_view.selectedIndexes()[0]    # Get the selected index
+        snapshot = index.siblingAtColumn(2).data()          # Get snapshot name
+        selected_item = index.data()                        # Get item value for the selected index
+        selected_path = selected_item                       # Prepare selected path
 
         # Go up for a versioned file
         if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
@@ -84,14 +91,8 @@ class HistoryUI(QtWidgets.QMainWindow):
 
             selected_path = os.path.join(parent_item, selected_path)
             index = index.parent()
-        return selected_path, selected_item
 
-    def _open_file(self):
-        file = self.get_selected_path()[0]
-        try:
-            os.startfile(file)
-        except AttributeError:
-            subprocess.call(['open', file])
+        return selected_path, selected_item
 
     def browse_action(self) -> None:
         dialog = QFileDialog(self)
@@ -99,6 +100,26 @@ class HistoryUI(QtWidgets.QMainWindow):
         if dialog.exec():
             selected_dir = dialog.selectedFiles()[0]
             self.path_field.setText(selected_dir.replace("/", os.sep))
+
+    def set_from_snapshot(self):
+        selected_node = self.get_selected_nodes()[0]            # Get selected node
+
+        if selected_node.siblingAtColumn(1).data() == "Folder":
+            snapshot = selected_node.data()                     # Get value from its name
+        else:
+            snapshot = selected_node.siblingAtColumn(2).data()  # Get value from its third column
+
+        self.filter_from_field.setText(snapshot)                # Set field text
+
+    def set_to_snapshot(self):
+        selected_node = self.get_selected_nodes()[0]            # Get selected node
+
+        if selected_node.siblingAtColumn(1).data() == "Folder":
+            snapshot = selected_node.data()                     # Get value from its name
+        else:
+            snapshot = selected_node.siblingAtColumn(2).data()  # Get value from its third column
+
+        self.filter_to_field.setText(snapshot)                  # Set field text
 
     def update_tree(self, _, model) -> None:
         self.file_tree_view.setModel(model)
@@ -204,27 +225,36 @@ class HistoryUI(QtWidgets.QMainWindow):
             return
 
         context_menu = QMenu()
-        if nodes[0].siblingAtColumn(1).data() != "Folder":
+        if nodes[0].siblingAtColumn(1).data() != "Folder":  # If a file is selected
+            # Create context menu
             openfile = context_menu.addAction("Open")
             restore = context_menu.addAction("Restore")
             context_menu.addSeparator()
             from_snapshot = context_menu.addAction("From snapshot")
             to_snapshot = context_menu.addAction("To snapshot")
+            context_menu.addSeparator()
+            open_folder = context_menu.addAction("Open in folder")
             action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
 
+            # Resolve action
             if action == openfile:
-                self._open_file()
+                open_file(self.get_selected_path()[0])
             if action == restore:
                 self.restore_action()
             if action == from_snapshot:
-                selected_nodes = self.get_selected_nodes()
-                snapshot = selected_nodes[0].siblingAtColumn(2).data()
-                self.filter_from_field.setText(snapshot)
+                self.set_from_snapshot()
             if action == to_snapshot:
-                selected_nodes = self.get_selected_nodes()
-                snapshot = selected_nodes[0].siblingAtColumn(2).data()
-                self.filter_to_field.setText(snapshot)
-        else:
+                self.set_to_snapshot()
+            if action == open_folder:
+                file_path = self.get_selected_path()[0]     # Get path of the selected item
+                open_file(os.path.dirname(file_path))       # Open folder contains this item
+        else:   # If a folder is selected
+            from_snapshot, to_snapshot = None, None
+            if self.to_checked() == TreeType.BY_DATE and nodes[0].parent().data() == self.path_field.text():
+                from_snapshot = context_menu.addAction("From snapshot")
+                to_snapshot = context_menu.addAction("To snapshot")
+                context_menu.addSeparator()
+
             expand = context_menu.addAction("Expand recursively")
 
             delete = None
@@ -233,6 +263,8 @@ class HistoryUI(QtWidgets.QMainWindow):
                 delete = context_menu.addAction("Delete empty directory")
 
             action = context_menu.exec_(self.file_tree_view.mapToGlobal(position))
+            if action is None:
+                return
             if action == expand:
                 self.file_tree_view.expandRecursively(self.get_selected_nodes()[0])
             if self.clear_all_button.isEnabled() and action == delete:
@@ -242,3 +274,7 @@ class HistoryUI(QtWidgets.QMainWindow):
                     self.statusbar.showMessage("Delete", selected_path)
                 except OSError:
                     self.statusbar.showMessage("Failed to delete", selected_path)
+            if action == from_snapshot:
+                self.set_from_snapshot()
+            if action == to_snapshot:
+                self.set_to_snapshot()
