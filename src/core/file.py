@@ -53,6 +53,10 @@ class SnapshotTester:
         self.type = source_type
 
     def test_snapshot(self, snapshot: str) -> bool:
+        """
+        :param snapshot: the timestamp of a snapshot
+        :return: `True` if snapshot is within specified bounds; `False` - if not within specified bounds
+        """
         if self.bounds[0] and snapshot < self.bounds[0]:
             return False
 
