@@ -10,6 +10,10 @@ def get_last_modified(path: str) -> str:
 
 
 def get_snapshot(filename: str) -> str:
+    """
+    :param filename: Name of a file that contains a timestamp as a suffix starting with "_"
+    :return: Timestamp designating snapshot
+    """
     dot = filename.rfind(".")
     if dot == -1:
         dot = len(filename)
