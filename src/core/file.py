@@ -43,8 +43,6 @@ def clear_snapshots(root_path: str, test_snapshot_fun) -> None:
                     os.remove(os.path.join(root, f))
                 except OSError:
                     pass
-                #except FileNotFoundError:
-                #    pass
 
 
 class SnapshotTester:
