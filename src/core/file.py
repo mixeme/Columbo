@@ -45,6 +45,11 @@ def clear_snapshots(root_path: str, test_snapshot_fun) -> None:
                     pass
 
 
+class Cleaner:
+    def __init__(self, logger) -> None:
+        self.logger = logger
+
+
 class SnapshotTester:
     def __init__(self, bounds: list[str], source_type: TreeType) -> None:
         self.bounds = bounds
