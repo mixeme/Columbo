@@ -144,14 +144,14 @@ class HistoryUI(QtWidgets.QMainWindow):
     def switch_delete_snapshots(self, op_type: OperationType, _) -> None:
         self.delete_button.setEnabled(op_type == OperationType.FILTERED_TREE)
 
-    def build_file_tree(self, op_type: OperationType) -> None:
+    def build_file_tree(self, operation_type: OperationType) -> None:
         if self.path_field.text():
             worker = FileTreeWorker(self.path_field.text(),
                                     self.checked(),
-                                    op_type)
+                                    operation_type)
 
             # Switch filter
-            if op_type == OperationType.FILTERED_TREE:
+            if operation_type == OperationType.FILTERED_TREE:
                 tester = file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
                                              self.checked()[0])
                 worker.set_filter(tester)
