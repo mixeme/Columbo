@@ -85,6 +85,12 @@ class FileTreeWorker(QRunnable):
         self.root_node = root_node[0]
 
     def split_path(self, path: str) -> PathArray:
+        """
+
+        :param path: Some path as a string
+        :return: List of path components split by the OS path separator. The root component `root_path` is removed
+                 from the path
+        """
         return path.removeprefix(self.root_path).split(os.sep)
 
     def create_tree(self, routine):
