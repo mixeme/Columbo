@@ -149,7 +149,7 @@ class FileTreeWorker(QRunnable):
                 # Get sibling item with snapshot data
                 sibling = snapshot_node.index().siblingAtColumn(2)
 
-                # Set snapshot value at snapshot node
+                # Set a snapshot comment at the snapshot node if it is absent
                 if sibling.data() == "---":
                     sibling.model().itemFromIndex(sibling).setText(snapshot)
 
