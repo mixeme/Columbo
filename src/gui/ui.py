@@ -46,6 +46,10 @@ class HistoryUI(QtWidgets.QMainWindow):
         ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
 
     def from_checked(self) -> TreeType:
+        """
+
+        :return: Type of the source presentation
+        """
         if self.from_unified.isChecked():
             return TreeType.UNIFIED
 
@@ -53,6 +57,10 @@ class HistoryUI(QtWidgets.QMainWindow):
             return TreeType.BY_DATE
 
     def to_checked(self) -> TreeType:
+        """
+
+        :return: Type of the target presentation
+        """
         if self.to_unified.isChecked():
             return TreeType.UNIFIED
 
@@ -60,6 +68,10 @@ class HistoryUI(QtWidgets.QMainWindow):
             return TreeType.BY_DATE
 
     def checked(self) -> (TreeType, TreeType):
+        """
+
+        :return: A tuple of the (source,  target) presentation
+        """
         return self.from_checked(), self.to_checked()
 
     def get_selected_nodes(self) -> list[QModelIndex]:
