@@ -31,6 +31,14 @@ def create_file(filename: str, root=None, snapshot=None) -> TreeNode:
 
 
 def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
+    """
+
+    :param parent: Parent node
+    :param val: Required value as a child of the parent node
+    :param create_fun: A function handle for child node creation if it is absent
+    :return: Found or created child node
+    """
+
     for i in range(0, parent.rowCount()):   # Find existing folder
         if parent.child(i).text() == val:
             return parent.child(i)          # Return existing node
@@ -43,6 +51,12 @@ def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
 
 
 def get_dir_node(parent: QStandardItem, val: str) -> QStandardItem:
+    """
+    Function finds or creates node for `val` inside `parent` node
+    :param parent:
+    :param val:
+    :return:
+    """
     return get_node(parent, val, create_folder)
 
 
