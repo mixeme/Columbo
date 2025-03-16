@@ -45,8 +45,17 @@ class HistoryUI(QtWidgets.QMainWindow):
         ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
         ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
 
+    def get_path(self):
+        return self.path_field.text()
+
     def set_root_path(self, path: str):
         self.path_field.setText(path)
+
+    def get_sub_path(self):
+        return self.subpath_field.text()
+
+    def set_sub_path(self, path: str):
+        self.subpath_field.setText(path)
 
     def from_checked(self) -> TreeType:
         """
