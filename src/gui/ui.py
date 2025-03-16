@@ -147,6 +147,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def build_file_tree(self, operation_type: OperationType) -> None:
         if self.path_field.text():
             worker = FileTreeWorker(self.path_field.text(),
+                                    self.subpath_field.text(),
                                     self.checked(),
                                     operation_type)
 
