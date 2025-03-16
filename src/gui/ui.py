@@ -294,9 +294,13 @@ class HistoryUI(QtWidgets.QMainWindow):
             if self.from_checked() == TreeType.UNIFIED:
                 set_as_root = context_menu.addAction("Set as root")
                 context_menu.addSeparator()
+            else:
+                set_as_root = None
             if self.from_checked() == TreeType.BY_DATE:
                 set_as_sub_path = context_menu.addAction("Set as sub-path")
                 context_menu.addSeparator()
+            else:
+                set_as_sub_path = None
 
             expand = context_menu.addAction("Expand recursively")
 
