@@ -66,11 +66,11 @@ class SnapshotTester:
         self.source_type = source_type
         self.sub_path = sub_path
 
-    def test_root(self, root: str) -> bool:
+    def test_root(self, path_parts: list[str]) -> bool:
         if len(self.sub_path) == 0:
             return True
         else:
-            return root.startswith(self.sub_path)
+            return os.sep.join(path_parts[2:]).startswith(self.sub_path)
 
     def test_snapshot(self, snapshot: str) -> bool:
         """
