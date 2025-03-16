@@ -64,7 +64,7 @@ legacy means that distro image was not shipped with Python 3.9+
 fi
 
 # Resolve image option
-IMAGE_BASENAME="mixeme/columbo";
+IMAGE_BASENAME="git.mxme.ru/mix/columbo";
 case $OPTION_IMAGE in
 	1 | deb11 )
 		IMAGE_MAIN="$IMAGE_BASENAME:debian-bullseye-$ARCH";
