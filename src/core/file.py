@@ -55,9 +55,22 @@ class Cleaner:
 
 
 class SnapshotTester:
-    def __init__(self, bounds: list[str], source_type: TreeType) -> None:
+    def __init__(self, bounds: list[str], source_type: TreeType, sub_path: str) -> None:
+        """
+
+        :param bounds: Structure of left and right bounds for snapshot filter
+        :param source_type: Type of source tree
+        :param sub_path: Sub-path inside tree for `by date` source tree type
+        """
         self.bounds = bounds
-        self.type = source_type
+        self.source_type = source_type
+        self.sub_path = sub_path
+
+    def test_root(self, root: str) -> bool:
+        if len(self.sub_path) == 0:
+            return True
+        else:
+            return root.startswith(self.sub_path)
 
     def test_snapshot(self, snapshot: str) -> bool:
         """
@@ -72,11 +85,11 @@ class SnapshotTester:
 
         return True
 
-    def test_file(self, root, file) -> bool:
+    def test_file(self, root: str, file: str) -> bool:
         snapshot = None
-        if self.type == TreeType.UNIFIED:
+        if self.source_type == TreeType.UNIFIED:
             snapshot = get_snapshot(file)
-        if self.type == TreeType.BY_DATE:
+        if self.source_type == TreeType.BY_DATE:
             snapshot = root.split(os.sep)[1]
 
         return self.test_snapshot(snapshot)
