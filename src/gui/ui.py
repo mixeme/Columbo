@@ -94,10 +94,11 @@ class HistoryUI(QtWidgets.QMainWindow):
         return self.file_tree_view.selectedIndexes()
 
     def get_selected_path(self) -> (str, str):
-        index = self.file_tree_view.selectedIndexes()[0]    # Get the selected index
-        snapshot = index.siblingAtColumn(2).data()          # Get snapshot name
-        selected_item = index.data()                        # Get item value for the selected index
-        selected_path = selected_item                       # Prepare selected path
+        selected_nodes = self.get_selected_nodes()
+        index = selected_nodes[0]               # Get the selected index
+        snapshot = selected_nodes[2].data()     # Get snapshot name
+        selected_item = index.data()            # Get item value for the selected index
+        selected_path = selected_item           # Prepare selected path
 
         # Go up for a versioned file
         if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
