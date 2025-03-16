@@ -50,10 +50,18 @@ class FileTreeWorker(QRunnable):
     columns = ["Name", "Last modified", "Snapshot"]
     signals = Signals()
 
-    def __init__(self, root_path: str, checked_options: (TreeType, TreeType), operation: OperationType):
+    def __init__(self, root_path: str, sub_path: str, checked_options: (TreeType, TreeType), operation: OperationType):
+        """
+
+        :param root_path: A path for history storage
+        :param sub_path: A sub-path inside history storage
+        :param checked_options: A tuple of the (source,  target) tree presentation
+        :param operation: A requested operation
+        """
         super().__init__()
         # Store input values
         self.root_path = root_path
+        self.sub_path = sub_path
         self.checked_options = checked_options
         self.operation = operation
 
