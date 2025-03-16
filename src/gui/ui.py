@@ -303,3 +303,5 @@ class HistoryUI(QtWidgets.QMainWindow):
                 self.set_from_snapshot()
             if action == to_snapshot:
                 self.set_to_snapshot()
+            if action == set_as_root:
+                self.set_root_path(self.get_selected_path()[0])
