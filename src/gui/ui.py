@@ -101,7 +101,9 @@ class HistoryUI(QtWidgets.QMainWindow):
         selected_path = selected_item           # Prepare selected path
 
         # Go up for a versioned file
-        if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
+        if (self.from_checked() == TreeType.BY_DATE) \
+                and (self.to_checked() == TreeType.UNIFIED)\
+                and (not is_folder_row(selected_nodes)):
             index = index.parent()
 
         index = index.parent()                          # Get its parent
@@ -111,7 +113,9 @@ class HistoryUI(QtWidgets.QMainWindow):
             # If we reach the root
             if parent_item == self.path_field.text():
                 # Add snapshot to the path for By date -> Unified
-                if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
+                if (self.from_checked() == TreeType.BY_DATE) \
+                        and (self.to_checked() == TreeType.UNIFIED) \
+                        and (not is_folder_row(selected_nodes)):
                     parent_item = os.path.join(parent_item, snapshot)
 
                 # Remove snapshot from the path for Unified -> By date
