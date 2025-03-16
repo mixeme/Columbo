@@ -147,14 +147,16 @@ class HistoryUI(QtWidgets.QMainWindow):
     def build_file_tree(self, operation_type: OperationType) -> None:
         if self.path_field.text():
             worker = FileTreeWorker(self.path_field.text(),
-                                    self.subpath_field.text(),
                                     self.checked(),
-                                    operation_type)
+                                    operation_type
+                                    )
 
             # Switch filter
             if operation_type == OperationType.FILTERED_TREE:
                 tester = file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
-                                             self.checked()[0])
+                                             source_type=self.checked()[0],
+                                             sub_path=self.subpath_field.text()
+                                             )
                 worker.set_filter(tester)
 
             # Start worker in another thread
