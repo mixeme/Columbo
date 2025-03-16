@@ -327,3 +327,6 @@ class HistoryUI(QtWidgets.QMainWindow):
                 self.set_to_snapshot()
             if (set_as_root is not None) and (action == set_as_root):
                 self.set_root_path(self.get_selected_path()[0])
+            if (set_as_sub_path is not None) and (action == set_as_sub_path):
+                sub_path: str = self.get_selected_path()[0].removeprefix(self.get_path() + os.sep)
+                self.set_sub_path(sub_path)
