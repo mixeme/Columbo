@@ -261,7 +261,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             return
 
         context_menu = QMenu()
-        if nodes[0].siblingAtColumn(1).data() != "Folder":  # If a file is selected
+        if not is_folder_row(nodes):    # If a file is selected
             # Create context menu
             openfile = context_menu.addAction("Open")
             restore = context_menu.addAction("Restore")
