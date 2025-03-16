@@ -21,7 +21,7 @@ def open_file(path: str) -> None:
         subprocess.call(['open', path])     # Linux version
 
 
-def is_folder_row(nodes: list[QModelIndex]):
+def is_folder_row(nodes: list[QModelIndex]) -> bool:
     return nodes[0].siblingAtColumn(1).data() == "Folder"
 
 
