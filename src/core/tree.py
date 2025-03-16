@@ -177,7 +177,9 @@ class FileTreeWorker(QRunnable):
             snapshot = path_parts[1]
         else:
             snapshot = ""
-        if not self.tester or (self.tester and self.tester.test_snapshot(snapshot)):
+        if not self.tester or (self.tester
+                               and self.tester.test_snapshot(snapshot)
+                               and self.tester.test_root(path_parts)):
             current = nodes.descend(self.root_node, path_parts[2:])  # Find corresponding node for the root
             for f in files:
                 nodes.add_versioned_file(current, f, root, snapshot)
