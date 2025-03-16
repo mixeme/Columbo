@@ -21,6 +21,10 @@ def open_file(path: str) -> None:
         subprocess.call(['open', path])     # Linux version
 
 
+def is_folder_row(nodes: list[QModelIndex]):
+    return nodes[0].siblingAtColumn(1).data() == "Folder"
+
+
 class HistoryUI(QtWidgets.QMainWindow):
     def __init__(self, project_home: str):
         # Load GUI layout
