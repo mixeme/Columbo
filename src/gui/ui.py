@@ -70,7 +70,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def checked(self) -> (TreeType, TreeType):
         """
 
-        :return: A tuple of the (source,  target) presentation
+        :return: A tuple of the (source,  target) tree presentation
         """
         return self.from_checked(), self.to_checked()
 
