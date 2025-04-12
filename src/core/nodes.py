@@ -1,5 +1,6 @@
 import os
 
+from PyQt5.QtCore import QModelIndex
 from PyQt5.QtGui import QStandardItem
 
 from core import file
@@ -74,3 +75,7 @@ def descend(parent: QStandardItem, parts: PathArray):
 def add_versioned_file(dir_node, filename, root, snapshot):
     node = get_file_node(dir_node, filename)                # Get or create node with filename in dir_node
     node.appendRow(create_file(filename, root, snapshot))   # Add file version
+
+
+def is_folder_row(nodes: list[QModelIndex]) -> bool:
+    return nodes[0].siblingAtColumn(1).data() == "Folder"

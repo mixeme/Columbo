@@ -1,6 +1,5 @@
 import os
 import shutil
-import subprocess
 
 from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
@@ -8,21 +7,12 @@ from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
 from core import file
+from core.file import open_file
+from core.nodes import is_folder_row
 from core.tree import FileTreeWorker
 from core.types import TreeType, OperationType
 from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
 from gui import icons
-
-
-def open_file(path: str) -> None:
-    try:
-        os.startfile(path)                  # Windows version
-    except AttributeError:
-        subprocess.call(['open', path])     # Linux version
-
-
-def is_folder_row(nodes: list[QModelIndex]) -> bool:
-    return nodes[0].siblingAtColumn(1).data() == "Folder"
 
 
 class HistoryUI(QtWidgets.QMainWindow):

@@ -1,4 +1,6 @@
+import os
 import os.path
+import subprocess
 import time
 from core.types import TreeType
 
@@ -93,3 +95,10 @@ class SnapshotTester:
             snapshot = root.split(os.sep)[1]
 
         return self.test_snapshot(snapshot)
+
+
+def open_file(path: str) -> None:
+    try:
+        os.startfile(path)                  # Windows version
+    except AttributeError:
+        subprocess.call(['open', path])     # Linux version
