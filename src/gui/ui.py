@@ -47,7 +47,11 @@ class HistoryUI(QtWidgets.QMainWindow):
         """
         return self.path_field.text()
 
-    def set_root_path(self, path: str):
+    def set_path(self, path: str) -> None:
+        """
+
+        :param path: Value of text field with history path
+        """
         self.path_field.setText(path)
 
     def get_sub_path(self) -> str:
@@ -127,7 +131,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         dialog.setFileMode(QFileDialog.FileMode.Directory)
         if dialog.exec():
             selected_dir = dialog.selectedFiles()[0]
-            self.path_field.setText(selected_dir.replace("/", os.sep))
+            self.set_path(selected_dir.replace("/", os.sep))
 
     def set_from_snapshot(self):
         selected_node = self.get_selected_nodes()[0]            # Get selected node
@@ -321,7 +325,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             if action == to_snapshot:
                 self.set_to_snapshot()
             if action == set_as_root:
-                self.set_root_path(self.get_selected_path()[0])
+                self.set_path(self.get_selected_path()[0])
             if action == set_as_sub_path:
                 sub_path: str = self.get_selected_path()[0].removeprefix(self.get_path() + os.sep)
                 self.set_sub_path(sub_path)
