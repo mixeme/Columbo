@@ -230,7 +230,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def delete_snapshots_action(self) -> None:
         if self.path_field.text():
             bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-            tester = core.snapshot.SnapshotTester(bounds, self.checked()[0])
+            tester = core.snapshot.SnapshotTester(bounds, self.checked()[0], "")
             worker = ClearSnapshotWorker(self.path_field.text(), tester)
             worker.signals.progress.connect(lambda x: print(x))
             QThreadPool.globalInstance().start(worker)
