@@ -22,12 +22,12 @@ def create_file_node(name: str, root=None, snapshot=None) -> TreeNode:
         mod_date = "File version"
         snapshot = "---"
     else:
-        mod_date = file.get_last_modified(os.path.join(root, filename))
+        mod_date = file.get_last_modified(os.path.join(root, name))
 
     if snapshot is None:
-        snapshot = file.get_snapshot(filename)
+        snapshot = core.snapshot.get_snapshot(name)
 
-    return [QStandardItem(icons.IconsLoader.singleton.file, filename),
+    return [QStandardItem(icons.IconsLoader.singleton.file, name),
             QStandardItem(mod_date),
             QStandardItem(snapshot)]
 
