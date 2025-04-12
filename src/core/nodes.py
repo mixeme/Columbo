@@ -10,13 +10,13 @@ TreeNode = list[QStandardItem]      # Type alias for return values
 PathArray = list[str]               # Type alias for split path string
 
 
-def create_folder(path: str) -> TreeNode:
-    return [QStandardItem(icons.IconsLoader.singleton.folder, path),
+def create_folder_node(name: str) -> TreeNode:
+    return [QStandardItem(icons.IconsLoader.singleton.folder, name),
             QStandardItem("Folder"),
             QStandardItem("---")]
 
 
-def create_file(filename: str, root=None, snapshot=None) -> TreeNode:
+def create_file_node(name: str, root=None, snapshot=None) -> TreeNode:
     if root is None:
         mod_date = "File version"
         snapshot = "---"
@@ -58,14 +58,14 @@ def get_dir_node(parent: QStandardItem, val: str) -> QStandardItem:
     :param val:
     :return:
     """
-    return get_node(parent, val, create_folder)
+    return get_node(parent, val, create_folder_node)
 
 
 def get_file_node(parent: QStandardItem, val: str):
-    return get_node(parent, val, create_file)
+    return get_node(parent, val, create_file_node)
 
 
-def descend(parent: QStandardItem, parts: PathArray):
+def descend_by_path(parent: QStandardItem, parts: PathArray):
     current = parent
     for i in range(0, len(parts)):
         current = get_dir_node(current, parts[i])       # Get the next node with name from parts

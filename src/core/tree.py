@@ -76,7 +76,7 @@ class FileTreeWorker(QRunnable):
 
     def init_root(self) -> None:
         # Create root node
-        root_node = nodes.create_folder(self.root_path)
+        root_node = nodes.create_folder_node(self.root_path)
 
         # Create data model
         model = QStandardItemModel()
@@ -109,14 +109,14 @@ class FileTreeWorker(QRunnable):
 
     def routine_simple(self, root: str, dirs: PathArray, files: PathArray, path_parts: PathArray, snapshot=None):
         # Find corresponding node for the root
-        current = nodes.descend(self.root_node, path_parts)
+        current = nodes.descend_by_path(self.root_node, path_parts)
 
         # Add folders
-        for i in map(lambda x: nodes.create_folder(x), dirs):
+        for i in map(lambda x: nodes.create_folder_node(x), dirs):
             current.appendRow(i)
 
         # Add files
-        for i in map(lambda x: nodes.create_file(x, root, snapshot), files):
+        for i in map(lambda x: nodes.create_file_node(x, root, snapshot), files):
             current.appendRow(i)
 
     def routine_filter(self, path_parts: PathArray, files: list[str], map_fun, filter_fun):
@@ -126,7 +126,7 @@ class FileTreeWorker(QRunnable):
         # If there are items to add
         if len(items) > 0:
             # Find corresponding node for the root
-            current = nodes.descend(self.root_node, path_parts)
+            current = nodes.descend_by_path(self.root_node, path_parts)
 
             # Add files
             for i in items:
@@ -135,7 +135,7 @@ class FileTreeWorker(QRunnable):
     def routine_unified_unified(self, root: str, dirs: list[str], files: list[str], path_parts: PathArray):
         if self.tester:
             self.routine_filter(path_parts[1:], files,
-                                lambda x: nodes.create_file(x, root),
+                                lambda x: nodes.create_file_node(x, root),
                                 lambda x: self.tester.test_snapshot(x[2].text()))
         else:
             self.routine_simple(root, dirs, files, path_parts[1:])
@@ -148,14 +148,14 @@ class FileTreeWorker(QRunnable):
         if self.tester:
             if self.tester.test_snapshot(snapshot):
                 self.routine_filter(path_parts[1:], files,
-                                    lambda x: nodes.create_file(x, root, snapshot),
+                                    lambda x: nodes.create_file_node(x, root, snapshot),
                                     lambda x: True)
         else:
             self.routine_simple(root, dirs, files, path_parts[1:], snapshot)
 
     def routine_unified_bydate(self, root: str, dirs, files: list[str], path_parts: list[str]):
         for i in files:
-            snapshot = file.get_snapshot(i)
+            snapshot = core.snapshot.get_snapshot(i)
             if not self.tester or (self.tester and self.tester.test_snapshot(snapshot)):
                 # Find corresponding node for the snapshot
                 snapshot_node = nodes.get_dir_node(self.root_node, snapshot)
@@ -168,10 +168,10 @@ class FileTreeWorker(QRunnable):
                     sibling.model().itemFromIndex(sibling).setText(snapshot)
 
                 # Find corresponding node for the root
-                parent_node = nodes.descend(snapshot_node, path_parts[1:])
+                parent_node = nodes.descend_by_path(snapshot_node, path_parts[1:])
 
                 # Place file in tree
-                parent_node.appendRow(nodes.create_file(i, root, snapshot))
+                parent_node.appendRow(nodes.create_file_node(i, root, snapshot))
 
     def routine_bydate_unified(self, root: str, dirs, files: list[str], path_parts: list[str]):
         if len(path_parts) > 1:
@@ -181,13 +181,13 @@ class FileTreeWorker(QRunnable):
         if not self.tester or (self.tester
                                and self.tester.test_snapshot(snapshot)
                                and self.tester.test_root(path_parts)):
-            current = nodes.descend(self.root_node, path_parts[2:])  # Find corresponding node for the root
+            current = nodes.descend_by_path(self.root_node, path_parts[2:])  # Find corresponding node for the root
             for f in files:
                 nodes.add_versioned_file(current, f, root, snapshot)
 
     def routine_empty_dirs(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         if len(dirs) == 0 and len(files) == 0:
-            nodes.descend(self.root_node, path_parts[1:])   # Find corresponding node for the root
+            nodes.descend_by_path(self.root_node, path_parts[1:])   # Find corresponding node for the root
 
     def run(self) -> None:
         routine = None
