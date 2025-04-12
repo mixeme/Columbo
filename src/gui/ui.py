@@ -112,8 +112,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             # If we reach the root
             if parent_item == self.get_path():
                 # Add snapshot to the path for By date -> Unified
-                if (self.from_checked() == TreeType.BY_DATE) \
-                        and (self.to_checked() == TreeType.UNIFIED) \
+                if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED) \
                         and (not is_folder_row(selected_nodes)):
                     parent_item = os.path.join(parent_item, snapshot)
 
