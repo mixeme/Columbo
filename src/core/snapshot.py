@@ -1,6 +1,5 @@
 import os
 
-from core.file import get_snapshot
 from core.types import TreeType
 
 
@@ -48,3 +47,19 @@ class SnapshotTester:
 class Cleaner:
     def __init__(self, logger) -> None:
         self.logger = logger
+
+
+def get_snapshot(filename: str) -> str:
+    """
+    :param filename: Name of a file that contains a timestamp as a suffix starting with "_"
+    :return: Timestamp designating snapshot
+    """
+    dot = filename.rfind(".")
+    if dot == -1:
+        dot = len(filename)
+
+    sep = filename.rfind("_", 0, dot)
+    if sep == -1:
+        return ""
+
+    return filename[sep+1:dot]
