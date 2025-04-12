@@ -17,7 +17,7 @@ from gui import icons
 
 class HistoryUI(QtWidgets.QMainWindow):
     def __init__(self, project_home: str):
-        # Load GUI layout
+        # Call QtWidgets.QMainWindow constructor
         super().__init__()
 
         # Load GUI layout
@@ -31,15 +31,20 @@ class HistoryUI(QtWidgets.QMainWindow):
         # Load icons
         icons.IconsLoader(project_home)
 
-        # Connect signals
+        # Connect signals of tree building finish
         FileTreeWorker.signals.finished.connect(self.update_tree)               # Connect to slot for finishing
         FileTreeWorker.signals.finished.connect(self.switch_clear_all)          # Switch Clear all button
         FileTreeWorker.signals.finished.connect(self.switch_delete_snapshots)   # Switch Clear all button
 
+        # Connect signals of files cleaning finish
         ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
         ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
 
-    def get_path(self):
+    def get_path(self) -> str:
+        """
+
+        :return: Value of text field with history path
+        """
         return self.path_field.text()
 
     def set_root_path(self, path: str):
@@ -76,7 +81,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def checked(self) -> (TreeType, TreeType):
         """
 
-        :return: A tuple of the (source,  target) tree presentation
+        :return: A tuple of the (source, target) tree presentation
         """
         return self.from_checked(), self.to_checked()
 
@@ -87,7 +92,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         selected_nodes = self.get_selected_nodes()
         index = selected_nodes[0]               # Get the selected index
         snapshot = selected_nodes[2].data()     # Get snapshot name
-        selected_item = index.data()            # Get item value for the selected index
+        selected_item = index.data()            # Get data of the selected index
         selected_path = selected_item           # Prepare selected path
 
         # Go up for a versioned file
