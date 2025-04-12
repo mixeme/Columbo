@@ -35,8 +35,8 @@ def get_extension(filename: str) -> str:
         return filename[dot+1:]
 
 
-def clear_empty_dirs(root_path: str) -> None:
-    for root, dirs, files in os.walk(root_path):
+def remove_empty_dirs(path: str) -> None:
+    for root, dirs, files in os.walk(path):
         if len(dirs) == 0 and len(files) == 0:
             os.removedirs(root)
 
