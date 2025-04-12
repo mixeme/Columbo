@@ -6,6 +6,7 @@ from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
+import core.snapshot
 from core import file
 from core.file import open_file
 from core.nodes import is_folder_row
@@ -172,10 +173,10 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
             # Switch filter
             if operation_type == OperationType.FILTERED_TREE:
-                tester = file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
-                                             source_type=self.checked()[0],
-                                             sub_path=self.subpath_field.text()
-                                             )
+                tester = core.snapshot.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
+                                                      source_type=self.checked()[0],
+                                                      sub_path=self.subpath_field.text()
+                                                      )
                 worker.set_filter(tester)
 
             # Start worker in another thread
@@ -200,7 +201,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def restore_action(self) -> None:
         # Get path to item
         selected_path, selected_item = self.get_selected_path()
-        extension = file.get_extension(selected_item)
+        extension = file.get_file_extension(selected_item)
 
         # Define file extension for dialog
         if extension:
@@ -229,7 +230,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def delete_snapshots_action(self) -> None:
         if self.path_field.text():
             bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-            tester = file.SnapshotTester(bounds, self.checked()[0])
+            tester = core.snapshot.SnapshotTester(bounds, self.checked()[0])
             worker = ClearSnapshotWorker(self.path_field.text(), tester)
             worker.signals.progress.connect(lambda x: print(x))
             QThreadPool.globalInstance().start(worker)
