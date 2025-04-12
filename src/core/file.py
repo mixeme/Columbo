@@ -27,7 +27,7 @@ def get_snapshot(filename: str) -> str:
     return filename[sep+1:dot]
 
 
-def get_extension(filename: str) -> str:
+def get_file_extension(filename: str) -> str:
     dot = filename.rfind(".")
     if dot == -1:
         return ""
