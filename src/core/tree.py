@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, pyqtSignal, QObject
 from PyQt5.QtGui import QStandardItemModel
 
+import core.snapshot
 from core import file, nodes
 from core.nodes import PathArray
 from core.types import TreeType, OperationType
@@ -70,7 +71,7 @@ class FileTreeWorker(QRunnable):
         self.tester = None
         self.model = None
 
-    def set_filter(self, tester: file.SnapshotTester):
+    def set_filter(self, tester: core.snapshot.SnapshotTester):
         self.tester = tester
 
     def init_root(self) -> None:
