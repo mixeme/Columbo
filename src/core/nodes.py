@@ -31,6 +31,10 @@ def create_file_node(name: str, root=None, snapshot=None) -> TreeNode:
             QStandardItem(snapshot)]
 
 
+def is_folder_row(nodes: list[QModelIndex]) -> bool:
+    return nodes[0].siblingAtColumn(1).data() == "Folder"
+
+
 def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
     """
 
@@ -74,8 +78,4 @@ def descend_by_path(parent: QStandardItem, parts: PathArray):
 
 def add_versioned_file(dir_node, filename, root, snapshot):
     node = get_file_node(dir_node, filename)                # Get or create node with filename in dir_node
-    node.appendRow(create_file(filename, root, snapshot))   # Add file version
-
-
-def is_folder_row(nodes: list[QModelIndex]) -> bool:
-    return nodes[0].siblingAtColumn(1).data() == "Folder"
+    node.appendRow(create_file_node(filename, root, snapshot))   # Add file version

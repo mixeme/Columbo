@@ -4,33 +4,17 @@ import subprocess
 import time
 
 
-def get_last_modified(path: str) -> str:
-    time_val = os.path.getmtime(path)
-    time_format = "%d.%m.%Y %H:%M:%S"  # Setup time format
-    return time.strftime(time_format, time.localtime(time_val))
-
-
-def get_snapshot(filename: str) -> str:
-    """
-    :param filename: Name of a file that contains a timestamp as a suffix starting with "_"
-    :return: Timestamp designating snapshot
-    """
-    dot = filename.rfind(".")
-    if dot == -1:
-        dot = len(filename)
-
-    sep = filename.rfind("_", 0, dot)
-    if sep == -1:
-        return ""
-
-    return filename[sep+1:dot]
-
-
 def open_file(path: str) -> None:
     try:
         os.startfile(path)                  # Windows version
     except AttributeError:
         subprocess.call(['open', path])     # Linux version
+
+
+def get_last_modified(path: str) -> str:
+    time_val = os.path.getmtime(path)
+    time_format = "%d.%m.%Y %H:%M:%S"  # Setup time format
+    return time.strftime(time_format, time.localtime(time_val))
 
 
 def get_file_extension(filename: str) -> str:
