@@ -57,7 +57,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def get_sub_path(self) -> str:
         return self.subpath_field.text()
 
-    def set_sub_path(self, path: str):
+    def set_sub_path(self, path: str) -> None:
         self.subpath_field.setText(path)
 
     def from_checked(self) -> TreeType:
