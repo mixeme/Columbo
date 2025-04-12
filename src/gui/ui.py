@@ -110,7 +110,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             parent_item = index.data()                  # Get parent name
 
             # If we reach the root
-            if parent_item == self.path_field.text():
+            if parent_item == self.get_path():
                 # Add snapshot to the path for By date -> Unified
                 if (self.from_checked() == TreeType.BY_DATE) \
                         and (self.to_checked() == TreeType.UNIFIED) \
