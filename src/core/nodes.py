@@ -3,6 +3,7 @@ import os
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtGui import QStandardItem
 
+import core.snapshot
 from core import file
 from gui import icons
 
