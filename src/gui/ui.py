@@ -50,7 +50,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def set_root_path(self, path: str):
         self.path_field.setText(path)
 
-    def get_sub_path(self):
+    def get_sub_path(self) -> str:
         return self.subpath_field.text()
 
     def set_sub_path(self, path: str):
