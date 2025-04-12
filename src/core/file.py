@@ -41,10 +41,10 @@ def clear_empty_dirs(root_path: str) -> None:
             os.removedirs(root)
 
 
-def clear_snapshots(root_path: str, test_snapshot_fun) -> None:
-    for root, dirs, files in os.walk(root_path):
+def remove_files(path: str, predicate_fun) -> None:
+    for root, dirs, files in os.walk(path):
         for f in files:
-            if test_snapshot_fun(root, f):
+            if predicate_fun(root, f):
                 try:
                     os.remove(os.path.join(root, f))
                 except OSError:
