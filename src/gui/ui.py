@@ -15,7 +15,7 @@ from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
 from gui import icons
 
 
-class HistoryUI(QtWidgets.QMainWindow):
+class ApplicationUI(QtWidgets.QMainWindow):
     def __init__(self, project_home: str):
         # Call QtWidgets.QMainWindow constructor
         super().__init__()
