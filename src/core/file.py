@@ -2,7 +2,6 @@ import os
 import os.path
 import subprocess
 import time
-from core.types import TreeType
 
 
 def get_last_modified(path: str) -> str:
@@ -25,6 +24,13 @@ def get_snapshot(filename: str) -> str:
         return ""
 
     return filename[sep+1:dot]
+
+
+def open_file(path: str) -> None:
+    try:
+        os.startfile(path)                  # Windows version
+    except AttributeError:
+        subprocess.call(['open', path])     # Linux version
 
 
 def get_file_extension(filename: str) -> str:
