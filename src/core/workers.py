@@ -3,7 +3,6 @@ import os
 from PyQt5.QtCore import QRunnable, QObject, pyqtSignal
 
 import core.snapshot
-from core import file
 
 
 class Signals(QObject):
