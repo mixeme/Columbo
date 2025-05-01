@@ -40,10 +40,10 @@ def is_folder_row(nodes: TreeRow) -> bool:
 
 def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
     """
-
+    Function finds or creates a node (with `create_fun`) for `val` inside a `parent` node
     :param parent: Parent node
-    :param val: Required value as a child of the parent node
-    :param create_fun: A function handle for child node creation if it is absent
+    :param val: Required value for a child of the specified parent node
+    :param create_fun: A function handle for a child node creation if it is absent
     :return: Found or created child node
     """
 
