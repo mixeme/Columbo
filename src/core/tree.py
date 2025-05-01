@@ -35,7 +35,7 @@ class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
             return False                    # Folder not less than file
 
         # Left & right items are files with the same name
-        # This is case "by date -> unified"
+        # This is the case "by date -> unified"
         if left_name == right_name:
             return left_snapshot < right_snapshot   # Compare timestamp of snapshots
 
