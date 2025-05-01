@@ -7,7 +7,7 @@ class SnapshotValidator:
     def __init__(self, bounds: list[str], source_type: TreeType, sub_path: str) -> None:
         """
 
-        :param bounds: Structure of left and right bounds for snapshot filter
+        :param bounds: Structure of left and right bounds for timestamp filtering
         :param source_type: Type of source tree
         :param sub_path: Sub-path inside tree for `by date` source tree type
         """
@@ -15,36 +15,50 @@ class SnapshotValidator:
         self.source_type = source_type
         self.sub_path = sub_path
 
-    def validate(self):
+    def validate(self, file_path: str):
         pass
 
-    def test_root(self, path_parts: list[str]) -> bool:
+    def validate_root(self, path_parts: list[str]) -> bool:
+        """
+        Function validates that path is within
+        :param path_parts:
+        :return:
+        """
         if len(self.sub_path) == 0:
             return True
         else:
             return os.sep.join(path_parts[2:]).startswith(self.sub_path)
 
-    def test_snapshot(self, snapshot: str) -> bool:
+    def validate_timestamp(self, timestamp: str) -> bool:
         """
-        :param snapshot: the timestamp of a snapshot
+        :param timestamp: the timestamp of a snapshot
         :return: `True` if snapshot is within specified bounds; `False` - if not within specified bounds
         """
-        if self.bounds[0] and snapshot < self.bounds[0]:
+        if self.bounds[0] and timestamp < self.bounds[0]:
             return False
 
-        if self.bounds[1] and snapshot > self.bounds[1]:
+        if self.bounds[1] and timestamp > self.bounds[1]:
             return False
 
         return True
 
-    def test_file(self, root: str, file: str) -> bool:
-        snapshot = None
+    def validate_file(self, path: str) -> bool:
+        timestamp = None
         if self.source_type == TreeType.UNIFIED:
-            snapshot = get_snapshot(file)
+            timestamp = get_timestamp(os.path.basename(path))
         if self.source_type == TreeType.BY_DATE:
-            snapshot = root.split(os.sep)[1]
+            timestamp = path.split(os.sep)[1]
 
-        return self.test_snapshot(snapshot)
+        return self.validate_timestamp(timestamp)
+
+    def test_file(self, root: str, file: str) -> bool:
+        timestamp = None
+        if self.source_type == TreeType.UNIFIED:
+            timestamp = get_timestamp(file)
+        if self.source_type == TreeType.BY_DATE:
+            timestamp = root.split(os.sep)[1]
+
+        return self.validate_timestamp(timestamp)
 
 
 class Cleaner:
@@ -52,7 +66,7 @@ class Cleaner:
         self.logger = logger
 
 
-def get_snapshot(filename: str) -> str:
+def get_timestamp(filename: str) -> str:
     """
     :param filename: Name of a file that contains a timestamp as a suffix starting with "_"
     :return: Timestamp designating snapshot
