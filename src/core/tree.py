@@ -9,15 +9,16 @@ from core import nodes
 from core.types import TreeType, OperationType, PathArray
 
 
+# Class for sorting tree view
 class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
     def lessThan(self, left, right):
-        # Retrieve names
+        # Retrieve file names
         left_name = left.data()
         right_name = right.data()
-        # Retrieve dates
+        # Retrieve file last modified dates
         left_date = left.siblingAtColumn(1).data()
         right_date = right.siblingAtColumn(1).data()
-        # Retrieve snapshots
+        # Retrieve snapshot timestamps
         left_snapshot = left.siblingAtColumn(2).data()
         right_snapshot = right.siblingAtColumn(2).data()
 
