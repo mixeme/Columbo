@@ -14,7 +14,7 @@ def create_folder_node(name: str) -> TreeNode:
             QStandardItem("---")]
 
 
-def create_file_node(name: str, root=None, snapshot=None) -> TreeNode:
+def create_file_node(name: str, root=None, timestamp=None) -> TreeNode:
     if root is None:
         modification_date = "File version"
         timestamp = "---"
