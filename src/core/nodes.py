@@ -35,9 +35,9 @@ def create_file_node(name: str, root=None, timestamp=None) -> TreeNode:
 
 def is_folder_row(nodes: TreeRow) -> bool:
     """
-
-    :param nodes: list of node indices in a row
-    :return: whether the specified row designates a folder
+    Test tree row whether it is a folder row or not
+    :param nodes: List of node indices in a row
+    :return: Whether the specified row designates a folder
     """
     return nodes[1].data() == "Folder"
 
