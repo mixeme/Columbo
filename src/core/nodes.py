@@ -16,17 +16,17 @@ def create_folder_node(name: str) -> TreeNode:
 
 def create_file_node(name: str, root=None, snapshot=None) -> TreeNode:
     if root is None:
-        mod_date = "File version"
-        snapshot = "---"
+        modification_date = "File version"
+        timestamp = "---"
     else:
-        mod_date = file.get_last_modified(os.path.join(root, name))
+        modification_date = file.get_last_modified(os.path.join(root, name))
 
-    if snapshot is None:
-        snapshot = core.snapshot.get_snapshot(name)
+    if timestamp is None:
+        timestamp = core.snapshot.get_snapshot(name)
 
     return [QStandardItem(icons.IconsLoader.singleton.file, name),
-            QStandardItem(mod_date),
-            QStandardItem(snapshot)]
+            QStandardItem(modification_date),
+            QStandardItem(timestamp)]
 
 
 def is_folder_row(nodes: list[QModelIndex]) -> bool:
