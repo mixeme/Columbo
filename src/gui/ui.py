@@ -176,7 +176,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
                                                          source_type=self.checked()[0],
                                                          sub_path=self.subpath_field.text()
                                                          )
-                worker.set_filter(tester)
+                worker.validator = tester
 
             # Start worker in another thread
             QThreadPool.globalInstance().start(worker)
