@@ -7,7 +7,7 @@ from PyQt5.QtGui import QStandardItemModel
 import core.snapshot
 from core import nodes
 from core.tree import FileSortFilterProxyModel
-from core.types import TreeType, OperationType, PathArray
+from core.types import TreeType, OperationType
 
 
 # Define signals for events
@@ -15,6 +15,15 @@ class Signals(QObject):
     build_finished = pyqtSignal(OperationType, QStandardItemModel)
     clear_finished = pyqtSignal()
     progress = pyqtSignal(str)
+
+
+class ByDateLogic:
+    @staticmethod
+    def get_timestamp(path_parts: list[str]):
+        if len(path_parts) > 1:
+            return path_parts[1]
+        else:
+            return ""
 
 
 class FileTreeWorker(QRunnable):
@@ -37,11 +46,8 @@ class FileTreeWorker(QRunnable):
         # Declare fields
         self.root_node = None
         self.sort_rows = None
-        self.filter_fun = None
-        self.model = None
-
-    def set_filter(self, tester: core.snapshot.SnapshotValidator):
-        self.filter_fun = tester
+        self.validator = None
+        self.data_model = None
 
     def init_root(self) -> None:
         # Create root node
@@ -52,16 +58,16 @@ class FileTreeWorker(QRunnable):
         model.invisibleRootItem().appendRow(root_node)
         model.setHorizontalHeaderLabels(FileTreeWorker.columns)
 
-        # Create proxy data model for sorting customisation
+        # Create proxy data model for sorting customization
         proxy_model = FileSortFilterProxyModel()
         proxy_model.setSourceModel(model)
         self.sort_rows = lambda: proxy_model.sort(0, QtCore.Qt.AscendingOrder)
-        self.model = proxy_model
+        self.data_model = proxy_model
 
         # Store 1st column of the root node
         self.root_node = root_node[0]
 
-    def split_path(self, path: str) -> PathArray:
+    def split_path(self, path: str) -> list[str]:
         """
 
         :param path: Some path as a string
@@ -70,13 +76,16 @@ class FileTreeWorker(QRunnable):
         """
         return path.removeprefix(self.root_path).split(os.sep)
 
+    def relative_path(self, path:str) -> str:
+        return path.removeprefix(self.root_path)
+
     def create_tree(self, routine):
         self.init_root()
         for root, dirs, files in os.walk(self.root_path):
-            path_parts = self.split_path(root)      # Remove root path component and convert to array
+            path_parts = self.split_path(root)      # Remove root path component and convert it to array
             routine(root, dirs, files, path_parts)  # Perform routine
 
-    def routine_simple(self, root: str, dirs: PathArray, files: PathArray, path_parts: PathArray, snapshot=None):
+    def routine_simple(self, root: str, dirs: list[str], files: list[str], path_parts: list[str], timestamp=None):
         # Find corresponding node for the root
         current = nodes.descend_by_path(self.root_node, path_parts)
 
@@ -85,12 +94,25 @@ class FileTreeWorker(QRunnable):
             current.appendRow(i)
 
         # Add files
-        for i in map(lambda x: nodes.create_file_node(x, root, snapshot), files):
+        for i in map(lambda x: nodes.create_file_node(x, root, timestamp), files):
             current.appendRow(i)
 
-    def routine_filter(self, path_parts: PathArray, files: list[str], map_fun, filter_fun):
+    # def routine_filter(self, files: list[str], path_parts: list[str], map_fun, filter_fun):
+    #     # Prepare list of items
+    #     items = tuple(filter(filter_fun, tuple(map(map_fun, files))))
+    #
+    #     # If there are items to add
+    #     if len(items) > 0:
+    #         # Find corresponding node for the root
+    #         current = nodes.descend_by_path(self.root_node, path_parts)
+    #
+    #         # Add files
+    #         for i in items:
+    #             current.appendRow(i)
+
+    def routine_filter2(self, files: list[str], path_parts: list[str], filter_fun, map_fun):
         # Prepare list of items
-        items = tuple(filter(filter_fun, tuple(map(map_fun, files))))
+        items = tuple(map(map_fun, tuple(filter(filter_fun, files))))
 
         # If there are items to add
         if len(items) > 0:
@@ -101,58 +123,51 @@ class FileTreeWorker(QRunnable):
             for i in items:
                 current.appendRow(i)
 
-    def routine_unified_unified(self, root: str, dirs: list[str], files: list[str], path_parts: PathArray):
-        if self.filter_fun:
-            self.routine_filter(path_parts[1:], files,
-                                lambda x: nodes.create_file_node(x, root),
-                                lambda x: self.filter_fun.test_snapshot(x[2].text()))
-        else:
+    def routine_unified_unified(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
+        if self.validator is None:
             self.routine_simple(root, dirs, files, path_parts[1:])
-
-    def routine_bydate_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: PathArray):
-        if len(path_parts) > 1:
-            snapshot = path_parts[1]
         else:
-            snapshot = ""
-        if self.filter_fun:
-            if self.filter_fun.test_snapshot(snapshot):
-                self.routine_filter(path_parts[1:], files,
-                                    lambda x: nodes.create_file_node(x, root, snapshot),
-                                    lambda x: True)
-        else:
-            self.routine_simple(root, dirs, files, path_parts[1:], snapshot)
+            self.routine_filter2(files, path_parts[1:],
+                                 lambda x: self.validator.validate_timestamp(x),
+                                 lambda x: nodes.create_file_node(x, root))
 
-    def routine_unified_bydate(self, root: str, dirs, files: list[str], path_parts: list[str]):
-        for i in files:
-            snapshot = core.snapshot.get_snapshot(i)
-            if not self.filter_fun or (self.filter_fun and self.filter_fun.test_snapshot(snapshot)):
+    def routine_bydate_bydate(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
+        timestamp = ByDateLogic.get_timestamp(path_parts)
+        if self.validator is None:
+            self.routine_simple(root, dirs, files, path_parts[1:], timestamp)
+        else:
+            if self.validator.validate_timestamp(timestamp):
+                self.routine_filter2(files, path_parts[1:],
+                                     lambda x: True,
+                                     lambda x: nodes.create_file_node(x, root, timestamp))
+
+    def routine_unified_bydate(self, root: str, dirs: str, files: list[str], path_parts: list[str]):
+        for f in files:
+            timestamp = core.snapshot.get_timestamp(f)
+            if self.validator is None or self.validator.validate_timestamp(timestamp):
                 # Find corresponding node for the snapshot
-                snapshot_node = nodes.get_dir_node(self.root_node, snapshot)
+                snapshot_node = nodes.get_dir_node(self.root_node, timestamp)
 
                 # Get sibling item with snapshot data
                 sibling = snapshot_node.index().siblingAtColumn(2)
 
                 # Set a snapshot comment at the snapshot node if it is absent
                 if sibling.data() == "---":
-                    sibling.model().itemFromIndex(sibling).setText(snapshot)
+                    sibling.model().itemFromIndex(sibling).setText(timestamp)
 
                 # Find corresponding node for the root
                 parent_node = nodes.descend_by_path(snapshot_node, path_parts[1:])
 
                 # Place file in tree
-                parent_node.appendRow(nodes.create_file_node(i, root, snapshot))
+                parent_node.appendRow(nodes.create_file_node(f, root, timestamp))
 
-    def routine_bydate_unified(self, root: str, dirs, files: list[str], path_parts: list[str]):
-        if len(path_parts) > 1:
-            snapshot = path_parts[1]
-        else:
-            snapshot = ""
-        if not self.filter_fun or (self.filter_fun
-                                   and self.filter_fun.test_snapshot(snapshot)
-                                   and self.filter_fun.test_root(path_parts)):
+    def routine_bydate_unified(self, root: str, dirs: str, files: list[str], path_parts: list[str]):
+        timestamp = ByDateLogic.get_timestamp(path_parts)
+        if self.validator is None or (self.validator.validate_timestamp(timestamp)
+                                      and self.validator.validate_root(path_parts)):
             current = nodes.descend_by_path(self.root_node, path_parts[2:])  # Find corresponding node for the root
             for f in files:
-                nodes.add_file_version(current, f, root, snapshot)
+                nodes.add_file_version(current, f, root, timestamp)
 
     def routine_empty_dirs(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         if len(dirs) == 0 and len(files) == 0:
@@ -181,10 +196,10 @@ class FileTreeWorker(QRunnable):
 
             # Signal object should possess the sending data
             self.signals.operation = self.operation
-            self.signals.model = self.model
+            self.signals.model = self.data_model
 
             # Signal tree update
-            self.signals.build_finished.emit(self.operation, self.model)
+            self.signals.build_finished.emit(self.operation, self.data_model)
 
 
 class ClearEmptyDirsWorker(QRunnable):
