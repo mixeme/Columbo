@@ -34,8 +34,9 @@ def remove_empty_dirs(path: str) -> None:
 def remove_files(path: str, predicate_fun) -> None:
     for root, dirs, files in os.walk(path):
         for f in files:
-            if predicate_fun(root, f):
+            file_path = os.path.join(root, f)
+            if predicate_fun(root, f, file_path):
                 try:
-                    os.remove(os.path.join(root, f))
+                    os.remove(file_path)
                 except OSError:
                     pass
