@@ -33,9 +33,9 @@ class ApplicationUI(QtWidgets.QMainWindow):
         icons.IconsLoader(project_home)
 
         # Connect signals of tree building finish
-        FileTreeWorker.signals.finished.connect(self.update_tree)               # Connect to slot for finishing
-        FileTreeWorker.signals.finished.connect(self.switch_clear_all)          # Switch button for Clear all
-        FileTreeWorker.signals.finished.connect(self.switch_delete_snapshots)   # Switch buttons for snapshots
+        FileTreeWorker.signals.build_finished.connect(self.update_tree)               # Connect to slot for finishing
+        FileTreeWorker.signals.build_finished.connect(self.switch_clear_all)          # Switch button for Clear all
+        FileTreeWorker.signals.build_finished.connect(self.switch_delete_snapshots)   # Switch buttons for snapshots
 
         # Connect signals of files cleaning finish
         ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))

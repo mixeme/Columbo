@@ -44,7 +44,7 @@ class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
 
 
 class Signals(QObject):
-    finished = pyqtSignal(OperationType, QStandardItemModel)
+    build_finished = pyqtSignal(OperationType, QStandardItemModel)
 
 
 class FileTreeWorker(QRunnable):
@@ -215,4 +215,4 @@ class FileTreeWorker(QRunnable):
             self.signals.model = self.model
 
             # Signal tree update
-            self.signals.finished.emit(self.operation, self.model)
+            self.signals.build_finished.emit(self.operation, self.model)
