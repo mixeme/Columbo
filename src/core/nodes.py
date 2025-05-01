@@ -1,10 +1,10 @@
 import os
 
-from PyQt5.QtCore import QModelIndex
 from PyQt5.QtGui import QStandardItem
 
 import core.snapshot
 from core import file
+from core.types import TreeNode, PathArray, TreeRow
 from gui import icons
 
 
