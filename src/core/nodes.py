@@ -7,9 +7,6 @@ import core.snapshot
 from core import file
 from gui import icons
 
-TreeNode = list[QStandardItem]      # Type alias for return values
-PathArray = list[str]               # Type alias for split path string
-
 
 def create_folder_node(name: str) -> TreeNode:
     return [QStandardItem(icons.IconsLoader.singleton.folder, name),
