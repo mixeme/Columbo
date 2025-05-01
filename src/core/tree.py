@@ -183,7 +183,7 @@ class FileTreeWorker(QRunnable):
                                and self.tester.test_root(path_parts)):
             current = nodes.descend_by_path(self.root_node, path_parts[2:])  # Find corresponding node for the root
             for f in files:
-                nodes.add_versioned_file(current, f, root, snapshot)
+                nodes.add_file_version(current, f, root, snapshot)
 
     def routine_empty_dirs(self, root: str, dirs: list[str], files: list[str], path_parts: list[str]):
         if len(dirs) == 0 and len(files) == 0:

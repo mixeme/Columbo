@@ -83,6 +83,17 @@ def descend_by_path(parent: QStandardItem, parts: PathArray):
     return current
 
 
-def add_versioned_file(dir_node, filename, root, snapshot):
-    node = get_file_node(dir_node, filename)                # Get or create node with filename in dir_node
-    node.appendRow(create_file_node(filename, root, snapshot))   # Add file version
+def add_file_version(dir_node, filename, root, snapshot):
+    """
+    Function adds file version within the specified directory
+    :param dir_node: A directory contains a file
+    :param filename: A name of file
+    :param root:
+    :param snapshot:
+    :return:
+    """
+    # Get or create a versioned file node inside the specified directory node
+    versioned_node = get_node(dir_node, filename, create_file_node)
+
+    # Add a file version entry to the versioned node
+    versioned_node.appendRow(create_file_node(filename, root, snapshot))
