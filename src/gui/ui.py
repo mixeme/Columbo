@@ -38,8 +38,8 @@ class ApplicationUI(QtWidgets.QMainWindow):
         FileTreeWorker.signals.build_finished.connect(self.switch_delete_snapshots)   # Switch buttons for snapshots
 
         # Connect signals of files cleaning finish
-        ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
-        ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
+        ClearSnapshotWorker.signals.clear_finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
+        ClearEmptyDirsWorker.signals.clear_finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
 
     def get_path(self) -> str:
         """

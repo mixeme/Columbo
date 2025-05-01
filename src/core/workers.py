@@ -5,7 +5,10 @@ from PyQt5.QtCore import QRunnable, QObject, pyqtSignal
 import core.snapshot
 
 
+# Define signals for events
 class Signals(QObject):
+    build_finished = pyqtSignal(OperationType, QStandardItemModel)
+    clear_finished = pyqtSignal()
     progress = pyqtSignal(str)
 
 
@@ -194,7 +197,7 @@ class ClearEmptyDirsWorker(QRunnable):
                     self.signals.progress.emit("Delete" + root)
                 except OSError:
                     self.signals.progress.emit("Failed to delete" + root)
-        self.signals.finished.emit()
+        self.signals.clear_finished.emit()
 
 
 class ClearSnapshotWorker(QRunnable):
@@ -215,4 +218,4 @@ class ClearSnapshotWorker(QRunnable):
                         self.signals.progress.emit("Delete " + path)
                     except OSError:
                         self.signals.progress.emit("Failed to delete " + path)
-        self.signals.finished.emit()
+        self.signals.clear_finished.emit()
