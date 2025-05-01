@@ -47,7 +47,7 @@ def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
     :return: Found or created child node
     """
 
-    for i in range(0, parent.rowCount()):   # Find existing folder
+    for i in range(0, parent.rowCount()):   # Find existing child nodes
         if parent.child(i).text() == val:
             return parent.child(i)          # Return existing node
 
