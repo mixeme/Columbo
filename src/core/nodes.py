@@ -60,10 +60,10 @@ def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
 
 def get_dir_node(parent: QStandardItem, val: str) -> QStandardItem:
     """
-    Function finds or creates node for `val` inside `parent` node
-    :param parent:
-    :param val:
-    :return:
+    Function finds or creates a directory node for `val` inside a `parent` node
+    :param parent: Parent node
+    :param val: Required value for a directory node of the specified parent node
+    :return: Found or created child directory node
     """
     return get_node(parent, val, create_folder_node)
 
