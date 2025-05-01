@@ -51,7 +51,7 @@ def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
         if parent.child(i).text() == val:
             return parent.child(i)          # Return existing node
 
-    # If such a folder does not exist
+    # If such a child does not exist
     new_node = create_fun(val)
     parent.appendRow(new_node)
 
