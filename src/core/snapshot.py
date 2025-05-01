@@ -3,7 +3,7 @@ import os
 from core.types import TreeType
 
 
-class SnapshotTester:
+class SnapshotValidator:
     def __init__(self, bounds: list[str], source_type: TreeType, sub_path: str) -> None:
         """
 
@@ -14,6 +14,9 @@ class SnapshotTester:
         self.bounds = bounds
         self.source_type = source_type
         self.sub_path = sub_path
+
+    def validate(self):
+        pass
 
     def test_root(self, path_parts: list[str]) -> bool:
         if len(self.sub_path) == 0:

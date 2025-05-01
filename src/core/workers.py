@@ -1,8 +1,13 @@
 import os
 
+from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, QObject, pyqtSignal
+from PyQt5.QtGui import QStandardItemModel
 
 import core.snapshot
+from core import nodes
+from core.tree import FileSortFilterProxyModel
+from core.types import TreeType, OperationType, PathArray
 
 
 # Define signals for events
@@ -203,7 +208,7 @@ class ClearEmptyDirsWorker(QRunnable):
 class ClearSnapshotWorker(QRunnable):
     signals = Signals()
 
-    def __init__(self, root_path: str, tester: core.snapshot.SnapshotTester):
+    def __init__(self, root_path: str, tester: core.snapshot.SnapshotValidator):
         super().__init__()
         self.root_path = root_path
         self.tester = tester

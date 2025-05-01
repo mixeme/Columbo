@@ -10,9 +10,8 @@ import core.snapshot
 from core import file
 from core.file import open_file
 from core.nodes import is_folder_row
-from core.tree import FileTreeWorker
 from core.types import TreeType, OperationType
-from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
+from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker, FileTreeWorker
 from gui import icons
 
 
@@ -173,10 +172,10 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
             # Switch filter
             if operation_type == OperationType.FILTERED_TREE:
-                tester = core.snapshot.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
-                                                      source_type=self.checked()[0],
-                                                      sub_path=self.subpath_field.text()
-                                                      )
+                tester = core.snapshot.SnapshotValidator([self.filter_from_field.text(), self.filter_to_field.text()],
+                                                         source_type=self.checked()[0],
+                                                         sub_path=self.subpath_field.text()
+                                                         )
                 worker.set_filter(tester)
 
             # Start worker in another thread
@@ -230,7 +229,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def delete_snapshots_action(self) -> None:
         if self.path_field.text():
             bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-            tester = core.snapshot.SnapshotTester(bounds, self.checked()[0], "")
+            tester = core.snapshot.SnapshotValidator(bounds, self.checked()[0], "")
             worker = ClearSnapshotWorker(self.path_field.text(), tester)
             worker.signals.progress.connect(lambda x: print(x))
             QThreadPool.globalInstance().start(worker)
