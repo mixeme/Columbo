@@ -29,8 +29,13 @@ def create_file_node(name: str, root=None, timestamp=None) -> TreeNode:
             QStandardItem(timestamp)]
 
 
-def is_folder_row(nodes: list[QModelIndex]) -> bool:
-    return nodes[0].siblingAtColumn(1).data() == "Folder"
+def is_folder_row(nodes: TreeRow) -> bool:
+    """
+
+    :param nodes: list of node indices in a row
+    :return: whether the specified row designates a folder
+    """
+    return nodes[1].data() == "Folder"
 
 
 def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
