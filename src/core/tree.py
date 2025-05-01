@@ -6,8 +6,7 @@ from PyQt5.QtGui import QStandardItemModel
 
 import core.snapshot
 from core import file, nodes
-from core.nodes import PathArray
-from core.types import TreeType, OperationType
+from core.types import TreeType, OperationType, PathArray
 
 
 class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
