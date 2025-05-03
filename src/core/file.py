@@ -25,6 +25,21 @@ def get_file_extension(filename: str) -> str:
         return filename[dot+1:]
 
 
+def list_dir(root: str) -> (list[str], list[(str, int)]):
+    dirs = []
+    files = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        # Obtain absolute paths
+        dirnames = [os.path.join(dirpath, i) for i in dirnames]
+        filenames = [os.path.join(dirpath, i) for i in filenames]
+
+        # Store items to lists
+        dirs.extend(map(lambda x: x.removeprefix(root), dirnames))
+        files.extend(map(lambda x: (x.removeprefix(root), get_last_modified(x)), files))
+
+    return dirs, files
+
+
 def remove_empty_dirs(path: str) -> None:
     for root, dirs, files in os.walk(path):
         if len(dirs) == 0 and len(files) == 0:

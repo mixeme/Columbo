@@ -7,9 +7,10 @@ from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
 import core.snapshot
+import core.validator
 from core import file
 from core.file import open_file
-from core.nodes import is_folder_row
+from core.node import is_folder_row
 from core.types import TreeType, OperationType
 from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker, FileTreeWorker
 from gui import icons
@@ -172,10 +173,10 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
             # Switch filter
             if operation_type == OperationType.FILTERED_TREE:
-                tester = core.snapshot.SnapshotValidator([self.filter_from_field.text(), self.filter_to_field.text()],
-                                                         source_type=self.checked()[0],
-                                                         sub_path=self.subpath_field.text()
-                                                         )
+                tester = core.validator.SnapshotValidator([self.filter_from_field.text(), self.filter_to_field.text()],
+                                                          source_type=self.checked()[0],
+                                                          sub_path=self.subpath_field.text()
+                                                          )
                 worker.validator = tester
 
             # Start worker in another thread
@@ -229,7 +230,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def delete_snapshots_action(self) -> None:
         if self.path_field.text():
             bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-            tester = core.snapshot.SnapshotValidator(bounds, self.checked()[0], "")
+            tester = core.validator.SnapshotValidator(bounds, self.checked()[0], "")
             worker = ClearSnapshotWorker(self.path_field.text(), tester)
             worker.signals.progress.connect(lambda x: print(x))
             QThreadPool.globalInstance().start(worker)

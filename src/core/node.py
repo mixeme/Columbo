@@ -2,8 +2,7 @@ import os
 
 from PyQt5.QtGui import QStandardItem
 
-import core.snapshot
-from core import file
+from core import file, snapshot
 from core.types import TreeNode, TreeRow
 from gui import icons
 
@@ -14,18 +13,21 @@ def create_folder_node(name: str) -> TreeNode:
             QStandardItem("---")]
 
 
-def create_file_node(name: str, root=None, timestamp=None) -> TreeNode:
+def create_file_node(name: str, root=None, timestamp=None, last_modified=None) -> TreeNode:
     if root is None:
         # If a root of file is not specified, then consider a node as a versioned file
         modification_date = "File version"
         timestamp = "---"
     else:
-        # Otherwise, retrieve the last modified date from the filesystem
-        modification_date = file.get_last_modified(os.path.join(root, name))
+        if last_modified is None:
+            # Otherwise, retrieve the last modified date from the filesystem
+            modification_date = file.get_last_modified(os.path.join(root, name))
+        else:
+            modification_date = last_modified
 
     if timestamp is None:
         # If a timestamp is not specified, retrieve it from a filename
-        timestamp = core.snapshot.get_timestamp(name)
+        timestamp = snapshot.get_timestamp(name)
 
     # Create and return file node
     return [QStandardItem(icons.IconsLoader.singleton.file, name),
@@ -79,17 +81,17 @@ def descend_by_path(parent: QStandardItem, path_parts: list[str]):
     return current
 
 
-def add_file_version(dir_node, filename, root, snapshot):
+def add_file_version(dir_node, filename, root, timestamp):
     """
     Function adds file version within the specified directory
     :param dir_node: A directory contains a file
     :param filename: A name of file
     :param root:
-    :param snapshot:
+    :param timestamp:
     :return:
     """
     # Get or create a versioned file node inside the specified directory node
     versioned_node = get_node(dir_node, filename, create_file_node)
 
     # Add a file version entry to the versioned node
-    versioned_node.appendRow(create_file_node(filename, root, snapshot))
+    versioned_node.appendRow(create_file_node(filename, root, timestamp))

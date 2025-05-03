@@ -4,8 +4,8 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, QObject, pyqtSignal
 from PyQt5.QtGui import QStandardItemModel
 
-import core.snapshot
-from core import nodes
+import core.validator
+from core import node, file, snapshot
 from core.tree import FileSortFilterProxyModel
 from core.types import TreeType, OperationType
 
@@ -48,6 +48,8 @@ class FileTreeWorker(QRunnable):
         self.sort_rows = None
         self.validator = None
         self.data_model = None
+        self.dirs = []
+        self.files = []
 
     def init_root(self) -> None:
         # Create root node
@@ -109,6 +111,44 @@ class FileTreeWorker(QRunnable):
     #         # Add files
     #         for i in items:
     #             current.appendRow(i)
+
+
+
+    def new_routine(self, predicate):
+        predicate_dir, predicate_file = predicate
+
+        timestamp_fun = self.get_timestamp_fun()
+
+        file_parts = [i.split(os.sep) for i in self.files]
+
+
+        # Normalize path
+        if self.checked_options0[0] == TreeType.UNIFIED:
+            for i in file_parts:
+                i.insert(0, )
+
+
+
+
+        for dir_path in self.dirs:
+            if predicate_dir.validate(dir_path):
+                # Split directory path to components
+                parts = dir_path.split(os.sep)
+
+                # Find corresponding node for the root
+                current = nodes.descend_by_path(self.root_node, parts[1:-2])
+
+                current.appendRow(nodes.create_folder_node(parts[-1]))
+
+        for file_path in self.files:
+            if predicate_file.validate(file_path):
+                # Split directory path to components
+                parts = file_path.split(os.sep)
+
+                # Find corresponding node for the root
+                current = nodes.descend_by_path(self.root_node, parts[1:-2])
+
+                current.appendRow(nodes.create_file_node(parts[-1]))
 
     def routine_filter2(self, files: list[str], path_parts: list[str], filter_fun, map_fun):
         # Prepare list of items
@@ -223,7 +263,7 @@ class ClearEmptyDirsWorker(QRunnable):
 class ClearSnapshotWorker(QRunnable):
     signals = Signals()
 
-    def __init__(self, root_path: str, tester: core.snapshot.SnapshotValidator):
+    def __init__(self, root_path: str, tester: core.validator.SnapshotValidator):
         super().__init__()
         self.root_path = root_path
         self.tester = tester
