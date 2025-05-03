@@ -20,6 +20,8 @@ def get_timestamp(filename: str) -> str:
 def get_timestamp_fun(source_type: types.TreeType):
     if source_type == types.TreeType.UNIFIED:
         return lambda x: get_timestamp(x[-1])
+
     if source_type == types.TreeType.BY_DATE:
         return lambda x: x[0]
+
     return None
