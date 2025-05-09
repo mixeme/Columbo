@@ -19,14 +19,14 @@ class SnapshotValidator:
     def __call__(self, file_parts: list[str]):
         # Validate timestamp
         timestamp = self.timestamp_fun(file_parts)
-        if (self.bounds[0] is not None) and (timestamp < self.bounds[0]):
+        if (len(self.bounds[0]) > 0) and (timestamp < self.bounds[0]):
             return False
 
-        if (self.bounds[1] is not None) and (timestamp > self.bounds[1]):
+        if (len(self.bounds[1]) > 0) and (timestamp > self.bounds[1]):
             return False
 
         # Validate sub-path
-        if (len(self.sub_path) != 0) and (not os.sep.join(file_parts[1:]).startswith(self.sub_path)):
+        if (len(self.sub_path) > 0) and (not os.sep.join(file_parts[1:]).startswith(self.sub_path)):
             return False
 
         return True
