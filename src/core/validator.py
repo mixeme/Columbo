@@ -30,30 +30,3 @@ class SnapshotValidator:
             return False
 
         return True
-
-    def validate_timestamp(self, timestamp: str) -> bool:
-        """
-        :param timestamp: the timestamp of a snapshot
-        :return: `True` if snapshot is within specified bounds; `False` - if not within specified bounds
-        """
-        if self.bounds[0] and timestamp < self.bounds[0]:
-            return False
-
-        if self.bounds[1] and timestamp > self.bounds[1]:
-            return False
-
-        return True
-
-    def test_file(self, root: str, file: str) -> bool:
-        timestamp = None
-        if self.source_type == TreeType.UNIFIED:
-            timestamp = get_timestamp(file)
-        if self.source_type == TreeType.BY_DATE:
-            timestamp = root.split(os.sep)[1]
-
-        return self.validate_timestamp(timestamp)
-
-
-class Cleaner:
-    def __init__(self, logger) -> None:
-        self.logger = logger
