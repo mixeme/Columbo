@@ -55,17 +55,13 @@ def descend_by_path(parent: QStandardItem, path_parts: list[str]):
     return current
 
 
-def add_file_version(dir_node, filename, root, timestamp):
-    """
-    Function adds file version within the specified directory
-    :param dir_node: A directory contains a file
-    :param filename: A name of file
-    :param root:
-    :param timestamp:
-    :return:
-    """
-    # Get or create a versioned file node inside the specified directory node
-    versioned_node = get_node(dir_node, filename, create_file_node)
+def add_file_node(parent: QStandardItem, tree_type: (TreeType, TreeType), filename, last_mod_date, timestamp):
+    # Unpack types of trees
+    source_tree, target_tree = tree_type
 
-    # Add a file version entry to the versioned node
-    versioned_node.appendRow(create_file_node(filename, root, timestamp))
+    if source_tree == TreeType.BY_DATE and target_tree == TreeType.UNIFIED:
+        # Get or create a versioned file node inside the specified directory node
+        parent = get_node(parent, filename, create_file_node)
+
+    # Create node and append it to the tree
+    parent.appendRow(create_file_node(filename, last_mod_date, timestamp))
