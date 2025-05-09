@@ -6,11 +6,7 @@ from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
-import core.snapshot
-import core.validator
-from core import file
-from core.file import open_file
-from core.node import is_folder_row
+from core import file, node, validator
 from core.types import TreeType, OperationType
 from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker, FileTreeWorker
 from gui import icons
