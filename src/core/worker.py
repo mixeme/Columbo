@@ -62,29 +62,32 @@ class FileTreeWorker(QRunnable):
         self.init_root()
 
         # List directory
-        dirs, files = file.list_dir(self.root_path)
+        if (len(self.dirs) == 0) and (len(self.files) == 0):
+            self.dirs, self.files = file.list_dir(self.root_path)
 
         # Create tree nodes
-        routine(dirs, files, self.validator)
+        routine()
 
-    def routine_files(self, dirs, files: list[tuple[str, str]]):
+    def tree_files(self):
         timestamp_fun = snapshot.get_timestamp_fun(self.checked_options[0])
 
         # Split path into components
-        files_parts = [(path.split(os.sep), last_date) for path, last_date in files]
+        files_parts = [(path.split(os.sep), date) for path, date in self.files]
 
-        # Normalize paths
+        # Normalize paths to "by date" format: append a timestamp as the first path component
         if self.checked_options[0] == TreeType.UNIFIED:
             for path_parts, _ in files_parts:
                 path_parts.insert(0, timestamp_fun(path_parts))
 
+        # Define starting component of a path
+        # "by date" view starts with a timestamp component; "unified" view skips a timestamp component
         if self.checked_options[1] == TreeType.BY_DATE:
             start_pos = 0
         else:
             start_pos = 1
 
-        for file_parts, last_mod_date in files_parts:
-            if self.validator.validate(file_parts):
+        for file_parts, last_modified in files_parts:
+            if self.validator(file_parts):
                 # Find corresponding node for the root
                 current = node.descend_by_path(self.root_node, file_parts[start_pos:-1])
 
@@ -95,29 +98,21 @@ class FileTreeWorker(QRunnable):
                 timestamp = timestamp_fun(file_parts)
 
                 # Add file node
-                node.add_file_node(current, self.checked_options, filename, last_mod_date, timestamp)
+                node.add_file_node(current, self.checked_options, filename, last_modified, timestamp)
 
-    def routine_empty_dirs(self, dirs: list[str], files: list[tuple[str, str]]):
-        for d in dirs:
-            if is_empty_dir(d, files):
-                node.descend_by_path(self.root_node, d.split(os.sep))  # Find corresponding node for the root
+    def tree_empty_dirs(self):
+        for d in self.dirs:
+            if file.is_empty_dir(d, self.files):
+                # Find corresponding node for the root
+                node.descend_by_path(self.root_node, d.split(os.sep))
 
-    def clear_files(self, dirs, files: list[tuple[str, str]]):
-        timestamp_fun = snapshot.get_timestamp_fun(self.checked_options[0])
-
+    def clear_files(self):
         # Split path into components
-        files_parts = [(path.split(os.sep), last_date) for path, last_date in files]
+        files_parts = [(path.split(os.sep), date) for path, date in self.files]
 
-        # Normalize paths
-        start_pos = 0
-        if self.checked_options[0] == TreeType.UNIFIED:
-            for path_parts, _ in files_parts:
-                path_parts.insert(0, timestamp_fun(path_parts))
-                start_pos = 1
-
-        for file_parts, last_mod_date in files_parts:
-            if self.validator.validate(file_parts):
-                path = os.path.join(self.root_path, os.sep.join(file_parts[start_pos:]))
+        for file_parts, _ in files_parts:
+            if self.validator(file_parts):
+                path = os.path.join(self.root_path, os.sep.join(file_parts))
                 try:
                     os.remove(path)
                     self.signals.progress.emit("Deleted " + path)
@@ -125,9 +120,9 @@ class FileTreeWorker(QRunnable):
                     self.signals.progress.emit("Failed to delete " + path)
         self.signals.clear_finished.emit()
 
-    def clear_empty_dirs(self, dirs, files: list[tuple[str, str]]):
-        for d in dirs:
-            if is_empty_dir(d, files):
+    def clear_empty_dirs(self):
+        for d in self.dirs:
+            if file.is_empty_dir(d, self.files):
                 path = os.path.join(self.root_path, d)
                 try:
                     os.removedirs(path)
