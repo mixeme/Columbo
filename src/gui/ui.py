@@ -277,7 +277,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
     def dropEvent(self, event: QDropEvent) -> None:
         files = [url.toLocalFile() for url in event.mimeData().urls()]
-        self.path_field.setText(files[0])
+        self.set_path(files[0])
 
     def contextMenuEvent(self, position) -> None:
         # Don't open context menu for no selection
@@ -311,7 +311,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
                 file.open_file(os.path.dirname(file_path))       # Open folder contains this item
         else:   # If a folder is selected
             from_snapshot, to_snapshot = None, None
-            if self.to_checked() == TreeType.BY_DATE and nodes[0].parent().data() == self.path_field.text():
+            if self.to_checked() == TreeType.BY_DATE and nodes[0].parent().data() == self.get_path():
                 from_snapshot = context_menu.addAction("From snapshot")
                 to_snapshot = context_menu.addAction("To snapshot")
                 context_menu.addSeparator()
