@@ -16,3 +16,5 @@ class OperationType(Enum):
     FILE_TREE = 0
     FILTERED_TREE = 1
     EMPTY_DIRS = 2
+    CLEAR_SNAPSHOTS = 3
+    CLEAR_EMPTY_DIRS = 4
