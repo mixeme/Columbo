@@ -165,3 +165,13 @@ class FileTreeWorker(QRunnable):
             # Create tree nodes
             routine_clear()
 
+
+# Class is used to prevent error
+# RuntimeError: wrapped C/C++ object of type FileTreeWorker has been deleted
+class WorkerWrapper(QRunnable):
+    def __init__(self, worker: FileTreeWorker) -> None:
+        super().__init__()
+        self.worker = worker
+
+    def run(self) -> None:
+        self.worker.run()
