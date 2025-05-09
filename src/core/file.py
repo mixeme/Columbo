@@ -45,20 +45,3 @@ def list_dir(root: str) -> (list[str], list[(str, int)]):
         files.extend(map(lambda x: (x.removeprefix(root + os.sep), get_last_modified(x)), filenames))
 
     return dirs, files
-
-
-def remove_empty_dirs(path: str) -> None:
-    for root, dirs, files in os.walk(path):
-        if len(dirs) == 0 and len(files) == 0:
-            os.removedirs(root)
-
-
-def remove_files(path: str, predicate_fun) -> None:
-    for root, dirs, files in os.walk(path):
-        for f in files:
-            file_path = os.path.join(root, f)
-            if predicate_fun(root, f, file_path):
-                try:
-                    os.remove(file_path)
-                except OSError:
-                    pass
