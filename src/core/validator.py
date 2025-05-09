@@ -17,8 +17,11 @@ class SnapshotValidator:
         self.source_type = source_type
         self.sub_path = sub_path
 
-    def validate(self, file_path: str):
-        pass
+    def validate(self, file_parts: list[str]):
+        # Validate timestamp
+        timestamp = self.timestamp_fun(file_parts)
+        if (self.bounds[0] is not None) and (timestamp < self.bounds[0]):
+            return False
 
     def validate_root(self, path_parts: list[str]) -> bool:
         """
@@ -30,6 +33,14 @@ class SnapshotValidator:
             return True
         else:
             return os.sep.join(path_parts[2:]).startswith(self.sub_path)
+        if (self.bounds[1] is not None) and (timestamp > self.bounds[1]):
+            return False
+
+        # Validate sub-path
+        if (len(self.sub_path) != 0) and (not os.sep.join(file_parts[1:]).startswith(self.sub_path)):
+            return False
+
+        return True
 
     def validate_timestamp(self, timestamp: str) -> bool:
         """
