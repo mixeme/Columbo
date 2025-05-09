@@ -47,20 +47,11 @@ def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
     return new_node[0]                      # Return 1st column of the new node
 
 
-def get_dir_node(parent: QStandardItem, val: str) -> QStandardItem:
-    """
-    Function finds or creates a directory node for `val` inside a `parent` node
-    :param parent: Parent node
-    :param val: Required value for a directory node of the specified parent node
-    :return: Found or created child directory node
-    """
-    return get_node(parent, val, create_folder_node)
-
-
 def descend_by_path(parent: QStandardItem, path_parts: list[str]):
     current = parent
     for part in path_parts:
-        current = get_dir_node(current, part)   # Get the next node with a name from path parts
+        # Get the next node with a name from path parts
+        current = get_node(current, part, create_folder_node)
     return current
 
 
