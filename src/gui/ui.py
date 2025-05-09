@@ -99,7 +99,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
         # Go up for a versioned file
         if (self.from_checked() == TreeType.BY_DATE) \
                 and (self.to_checked() == TreeType.UNIFIED)\
-                and (not is_folder_row(selected_nodes)):
+                and (not node.is_folder_row(selected_nodes)):
             index = index.parent()
 
         index = index.parent()                          # Get its parent
@@ -110,7 +110,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
             if parent_item == self.get_path():
                 # Add snapshot to the path for By date -> Unified
                 if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED) \
-                        and (not is_folder_row(selected_nodes)):
+                        and (not node.is_folder_row(selected_nodes)):
                     parent_item = os.path.join(parent_item, snapshot)
 
                 # Remove snapshot from the path for Unified -> By date
@@ -256,7 +256,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
             return
 
         context_menu = QMenu()
-        if not is_folder_row(nodes):    # If a file is selected
+        if not node.is_folder_row(nodes):    # If a file is selected
             # Create context menu
             openfile = context_menu.addAction("Open")
             restore = context_menu.addAction("Restore")
@@ -269,7 +269,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
             # Resolve action
             if action == openfile:
-                open_file(self.get_selected_path()[0])
+                file.open_file(self.get_selected_path()[0])
             if action == restore:
                 self.restore_action()
             if action == from_snapshot:
@@ -278,7 +278,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
                 self.set_to_snapshot()
             if action == open_folder:
                 file_path = self.get_selected_path()[0]     # Get path of the selected item
-                open_file(os.path.dirname(file_path))       # Open folder contains this item
+                file.open_file(os.path.dirname(file_path))       # Open folder contains this item
         else:   # If a folder is selected
             from_snapshot, to_snapshot = None, None
             if self.to_checked() == TreeType.BY_DATE and nodes[0].parent().data() == self.path_field.text():
