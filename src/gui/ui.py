@@ -171,11 +171,15 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
             # Switch filter
             if operation_type == OperationType.FILTERED_TREE:
-                tester = core.validator.SnapshotValidator([self.filter_from_field.text(), self.filter_to_field.text()],
-                                                          source_type=self.checked()[0],
-                                                          sub_path=self.subpath_field.text()
-                                                          )
-                worker.validator = tester
+                bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
+                source_type = self.checked()[0]
+                sub_path = self.subpath_field.text()
+            else:
+                bounds = [None, None]
+                source_type = self.checked()[0]
+                sub_path = ""
+
+            worker.validator = validator.SnapshotValidator(bounds, source_type, sub_path)
 
             # Start worker in another thread
             QThreadPool.globalInstance().start(worker)
