@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QFileDialog, QMenu
 
 from core import file, node, validator
 from core.types import TreeType, OperationType
-from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker, FileTreeWorker
+from core.worker import FileTreeWorker
 from gui import icons
 
 
