@@ -1,9 +1,6 @@
-import os
-
 from PyQt5.QtGui import QStandardItem
 
-from core import file, snapshot
-from core.types import TreeNode, TreeRow
+from core.types import TreeNode, TreeRow, TreeType
 from gui import icons
 
 
