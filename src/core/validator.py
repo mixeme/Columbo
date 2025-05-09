@@ -1,5 +1,6 @@
 import os
 
+from core import snapshot
 from core.snapshot import get_timestamp
 from core.types import TreeType
 
