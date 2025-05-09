@@ -16,6 +16,7 @@ class SnapshotValidator:
         self.bounds = bounds
         self.source_type = source_type
         self.sub_path = sub_path
+        self.timestamp_fun = snapshot.get_timestamp_fun(source_type)
 
     def validate(self, file_parts: list[str]):
         # Validate timestamp
