@@ -133,19 +133,21 @@ class FileTreeWorker(QRunnable):
 
     def run(self) -> None:
         # Define routine function independence of operation
-        routine = None
+        routine_tree = None
+        routine_clear = None
         if (self.operation == OperationType.FILE_TREE) or (self.operation == OperationType.FILTERED_TREE):
-            routine = self.routine_files
+            routine_tree = self.tree_files
         if self.operation == OperationType.EMPTY_DIRS:
-            routine = self.routine_empty_dirs
-        if self.operation == OperationType.CLEAR_SNAPSHOTS:
-            routine = self.clear_files
-        if self.operation == OperationType.CLEAR_EMPTY_DIRS:
-            routine = self.clear_empty_dirs
+            routine_tree = self.tree_empty_dirs
 
-        if routine is not None:
+        if self.operation == OperationType.CLEAR_SNAPSHOTS:
+            routine_clear = self.clear_files
+        if self.operation == OperationType.CLEAR_EMPTY_DIRS:
+            routine_clear = self.clear_empty_dirs
+
+        if routine_tree is not None:
             # Finishing tree build
-            self.create_tree(routine)   # Build tree
+            self.create_tree(routine_tree)   # Build tree
             self.sort_rows()            # Sort nodes
 
             # Signal object should possess the sending data
@@ -154,3 +156,12 @@ class FileTreeWorker(QRunnable):
 
             # Signal tree update
             self.signals.build_finished.emit(self.operation, self.data_model)
+
+        if routine_clear is not None:
+            # List directory
+            if (len(self.dirs) == 0) and (len(self.files) == 0):
+                self.dirs, self.files = file.list_dir(self.root_path)
+
+            # Create tree nodes
+            routine_clear()
+
