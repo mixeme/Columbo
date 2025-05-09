@@ -167,26 +167,33 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def switch_delete_snapshots(self, op_type: OperationType, _) -> None:
         self.delete_button.setEnabled(op_type == OperationType.FILTERED_TREE)
 
+    def create_validator(self, operation_type: OperationType):
+        if (operation_type == OperationType.FILTERED_TREE) or (operation_type == operation_type.CLEAR_SNAPSHOTS):
+            bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
+            source_type = self.checked()[0]
+            sub_path = self.subpath_field.text()
+        else:
+            bounds = [None, None]
+            source_type = self.checked()[0]
+            sub_path = ""
+
+        return validator.SnapshotValidator(bounds, source_type, sub_path)
+
+    def create_worker(self, operation_type: OperationType):
+        # Create worker
+        worker = FileTreeWorker(self.path_field.text(), self.checked(), operation_type)
+
+        # Create & set validator
+        worker.validator = self.create_validator(operation_type)
+
+        return worker
+
     def build_file_tree(self, operation_type: OperationType) -> None:
-        if self.path_field.text():
-            worker = FileTreeWorker(self.path_field.text(),
-                                    self.checked(),
-                                    operation_type
-                                    )
+        if len(self.path_field.text()) > 0:
+            # Create worker
+            worker = self.create_worker(operation_type)
 
-            # Switch filter
-            if operation_type == OperationType.FILTERED_TREE:
-                bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-                source_type = self.checked()[0]
-                sub_path = self.subpath_field.text()
-            else:
-                bounds = [None, None]
-                source_type = self.checked()[0]
-                sub_path = ""
-
-            worker.validator = validator.SnapshotValidator(bounds, source_type, sub_path)
-
-            # Start worker in another thread
+            # Start a worker in another thread
             QThreadPool.globalInstance().start(worker)
             self.statusbar.showMessage("Start tree building")
 
