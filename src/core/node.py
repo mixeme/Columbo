@@ -5,6 +5,7 @@ from gui import icons
 
 
 def create_folder_node(name: str) -> TreeNode:
+    # Create and return directory node
     return [QStandardItem(icons.IconsLoader.singleton.folder, name),
             QStandardItem("Folder"),
             QStandardItem("---")]
