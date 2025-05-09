@@ -5,7 +5,7 @@ from core.types import TreeType
 
 
 class SnapshotValidator:
-    def __init__(self, bounds: list[str], source_type: TreeType, sub_path: str) -> None:
+    def __init__(self, bounds: (str, str), source_type: TreeType, sub_path: str) -> None:
         """
 
         :param bounds: Structure of left and right bounds for timestamp filtering
@@ -13,11 +13,10 @@ class SnapshotValidator:
         :param sub_path: Sub-path inside tree for `by date` source tree type
         """
         self.bounds = bounds
-        self.source_type = source_type
         self.sub_path = sub_path
         self.timestamp_fun = snapshot.get_timestamp_fun(source_type)
 
-    def validate(self, file_parts: list[str]):
+    def __call__(self, file_parts: list[str]):
         # Validate timestamp
         timestamp = self.timestamp_fun(file_parts)
         if (self.bounds[0] is not None) and (timestamp < self.bounds[0]):
