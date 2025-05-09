@@ -23,16 +23,6 @@ class SnapshotValidator:
         if (self.bounds[0] is not None) and (timestamp < self.bounds[0]):
             return False
 
-    def validate_root(self, path_parts: list[str]) -> bool:
-        """
-        Function validates that path is within
-        :param path_parts:
-        :return:
-        """
-        if len(self.sub_path) == 0:
-            return True
-        else:
-            return os.sep.join(path_parts[2:]).startswith(self.sub_path)
         if (self.bounds[1] is not None) and (timestamp > self.bounds[1]):
             return False
 
@@ -54,15 +44,6 @@ class SnapshotValidator:
             return False
 
         return True
-
-    def validate_file(self, path: str) -> bool:
-        timestamp = None
-        if self.source_type == TreeType.UNIFIED:
-            timestamp = get_timestamp(os.path.basename(path))
-        if self.source_type == TreeType.BY_DATE:
-            timestamp = path.split(os.sep)[1]
-
-        return self.validate_timestamp(timestamp)
 
     def test_file(self, root: str, file: str) -> bool:
         timestamp = None
