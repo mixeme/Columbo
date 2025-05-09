@@ -57,13 +57,16 @@ class FileTreeWorker(QRunnable):
         # Store 1st column of the root row
         self.root_node = root_row[0]
 
+    def list_dir(self):
+        if (len(self.dirs) == 0) and (len(self.files) == 0):
+            self.dirs, self.files = file.list_dir(self.root_path)
+
     def create_tree(self, routine):
         # Create tree root
         self.init_root()
 
         # List directory
-        if (len(self.dirs) == 0) and (len(self.files) == 0):
-            self.dirs, self.files = file.list_dir(self.root_path)
+        self.list_dir()
 
         # Create tree nodes
         routine()
@@ -118,6 +121,8 @@ class FileTreeWorker(QRunnable):
                     self.signals.progress.emit("Deleted " + path)
                 except OSError:
                     self.signals.progress.emit("Failed to delete " + path)
+
+        self.signals.operation = self.operation
         self.signals.clear_finished.emit(self.operation)
 
     def clear_empty_dirs(self):
@@ -129,6 +134,8 @@ class FileTreeWorker(QRunnable):
                     self.signals.progress.emit("Deleted " + path)
                 except OSError:
                     self.signals.progress.emit("Failed to delete" + path)
+
+        self.signals.operation = self.operation
         self.signals.clear_finished.emit(self.operation)
 
     def run(self) -> None:
@@ -158,12 +165,8 @@ class FileTreeWorker(QRunnable):
             self.signals.build_finished.emit(self.operation, self.data_model)
 
         if routine_clear is not None:
-            # List directory
-            if (len(self.dirs) == 0) and (len(self.files) == 0):
-                self.dirs, self.files = file.list_dir(self.root_path)
-
-            # Create tree nodes
-            routine_clear()
+            self.list_dir()     # List directory
+            routine_clear()     # Create tree nodes
 
 
 # Class is used to prevent error
