@@ -4,7 +4,8 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRunnable, QObject, pyqtSignal
 from PyQt5.QtGui import QStandardItemModel
 
-from core import node, snapshot, validator
+from core import file, node, snapshot, validator
+from core.file import is_empty_dir
 from core.tree import FileSortFilterProxyModel
 from core.types import TreeType, OperationType
 
