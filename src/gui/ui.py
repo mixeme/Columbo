@@ -40,9 +40,9 @@ class ApplicationUI(QtWidgets.QMainWindow):
         FileTreeWorker.signals.\
             progress.connect(lambda x: self.statusbar.showMessage(x))
         FileTreeWorker.signals.\
-            clear_finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
+            clear_finished.connect(self.response_clear_finished)
         FileTreeWorker.signals.\
-            clear_finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
+            clear_finished.connect(self.response_clear_finished)
 
         # Declare fields
         self.worker = None
@@ -261,6 +261,15 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
             QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start clear snapshots")
+
+    def response_clear_finished(self, operation: OperationType):
+        if operation == OperationType.CLEAR_SNAPSHOTS:
+            self.statusbar.showMessage("Snapshots are cleared")
+        if operation == OperationType.CLEAR_EMPTY_DIRS:
+            self.statusbar.showMessage("Empty directories are cleared")
+
+        # Drop worker
+        self.worker = None
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         if event.mimeData().hasUrls():

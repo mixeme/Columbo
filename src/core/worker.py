@@ -12,7 +12,7 @@ from core.types import TreeType, OperationType
 # Define signals for events
 class Signals(QObject):
     build_finished = pyqtSignal(OperationType, QStandardItemModel)
-    clear_finished = pyqtSignal()
+    clear_finished = pyqtSignal(OperationType)
     progress = pyqtSignal(str)
 
 
@@ -118,7 +118,7 @@ class FileTreeWorker(QRunnable):
                     self.signals.progress.emit("Deleted " + path)
                 except OSError:
                     self.signals.progress.emit("Failed to delete " + path)
-        self.signals.clear_finished.emit()
+        self.signals.clear_finished.emit(self.operation)
 
     def clear_empty_dirs(self):
         for d in self.dirs:
@@ -129,7 +129,7 @@ class FileTreeWorker(QRunnable):
                     self.signals.progress.emit("Deleted " + path)
                 except OSError:
                     self.signals.progress.emit("Failed to delete" + path)
-        self.signals.clear_finished.emit()
+        self.signals.clear_finished.emit(self.operation)
 
     def run(self) -> None:
         # Define routine function independence of operation
