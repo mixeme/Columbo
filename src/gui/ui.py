@@ -247,15 +247,19 @@ class ApplicationUI(QtWidgets.QMainWindow):
         self.filter_to_field.clear()
 
     def clear_all_action(self) -> None:
-        if self.path_field.text():
-            worker = self.create_worker(OperationType.CLEAR_EMPTY_DIRS)
-            QThreadPool.globalInstance().start(worker)
+        if self.get_path():
+            # Create a worker if absent
+            self.worker = self.create_worker(OperationType.CLEAR_EMPTY_DIRS)
+
+            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start clear empty directories")
 
     def delete_snapshots_action(self) -> None:
-        if self.path_field.text():
-            worker = self.create_worker(OperationType.CLEAR_SNAPSHOTS)
-            QThreadPool.globalInstance().start(worker)
+        if self.get_path():
+            # Create a worker if absent
+            self.worker = self.create_worker(OperationType.CLEAR_SNAPSHOTS)
+
+            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start clear snapshots")
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
