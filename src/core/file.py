@@ -25,6 +25,13 @@ def get_file_extension(filename: str) -> str:
         return filename[dot+1:]
 
 
+def is_empty_dir(dir: str, files: list[tuple[str, str]]) -> bool:
+    for file, _ in files:
+        if file.startswith(dir):
+            return False
+    return True
+
+
 def list_dir(root: str) -> (list[str], list[(str, int)]):
     dirs = []
     files = []
