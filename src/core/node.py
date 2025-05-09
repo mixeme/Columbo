@@ -11,25 +11,10 @@ def create_folder_node(name: str) -> TreeNode:
             QStandardItem("---")]
 
 
-def create_file_node(name: str, root=None, timestamp=None, last_modified=None) -> TreeNode:
-    if root is None:
-        # If a root of file is not specified, then consider a node as a versioned file
-        modification_date = "File version"
-        timestamp = "---"
-    else:
-        if last_modified is None:
-            # Otherwise, retrieve the last modified date from the filesystem
-            modification_date = file.get_last_modified(os.path.join(root, name))
-        else:
-            modification_date = last_modified
-
-    if timestamp is None:
-        # If a timestamp is not specified, retrieve it from a filename
-        timestamp = snapshot.get_timestamp(name)
-
+def create_file_node(name: str, last_modified="File version", timestamp="---") -> TreeNode:
     # Create and return file node
     return [QStandardItem(icons.IconsLoader.singleton.file, name),
-            QStandardItem(modification_date),
+            QStandardItem(last_modified),
             QStandardItem(timestamp)]
 
 
