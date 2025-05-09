@@ -44,6 +44,9 @@ class ApplicationUI(QtWidgets.QMainWindow):
         FileTreeWorker.signals.\
             clear_finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
 
+        # Declare fields
+        self.worker = None
+
     def get_path(self) -> str:
         """
 
@@ -57,6 +60,9 @@ class ApplicationUI(QtWidgets.QMainWindow):
         :param path: Value of text field with history path
         """
         self.path_field.setText(path)
+
+        # Drop a worker if path is changed
+        self.worker = None
 
     def get_sub_path(self) -> str:
         return self.subpath_field.text()
@@ -173,28 +179,34 @@ class ApplicationUI(QtWidgets.QMainWindow):
             source_type = self.checked()[0]
             sub_path = self.subpath_field.text()
         else:
-            bounds = [None, None]
+            bounds = ["", ""]
             source_type = self.checked()[0]
             sub_path = ""
 
         return validator.SnapshotValidator(bounds, source_type, sub_path)
 
     def create_worker(self, operation_type: OperationType):
-        # Create worker
-        worker = FileTreeWorker(self.path_field.text(), self.checked(), operation_type)
+        # Test worker presence
+        if self.worker is None:
+            # Create worker
+            self.worker = FileTreeWorker(self.get_path())
+
+        # Set options
+        self.worker.checked_options = self.checked()
+        self.worker.operation = operation_type
 
         # Create & set validator
-        worker.validator = self.create_validator(operation_type)
+        self.worker.validator = self.create_validator(operation_type)
 
-        return worker
+        return self.worker
 
     def build_file_tree(self, operation_type: OperationType) -> None:
-        if len(self.path_field.text()) > 0:
-            # Create worker
-            worker = self.create_worker(operation_type)
+        if len(self.get_path()) > 0:
+            # Create a worker if absent
+            self.worker = self.create_worker(operation_type)
 
             # Start a worker in another thread
-            QThreadPool.globalInstance().start(worker)
+            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start tree building")
 
     def scan_action(self) -> None:
