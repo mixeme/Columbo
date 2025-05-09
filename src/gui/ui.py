@@ -28,15 +28,20 @@ class ApplicationUI(QtWidgets.QMainWindow):
         # Load icons
         icons.IconsLoader(project_home)
 
-        # Connect signals of tree building finish
-        FileTreeWorker.signals.build_finished.connect(self.update_tree)               # Connect to slot for finishing
-        FileTreeWorker.signals.build_finished.connect(self.switch_clear_all)          # Switch button for Clear all
-        FileTreeWorker.signals.build_finished.connect(self.switch_delete_snapshots)   # Switch buttons for snapshots
+        # Connect signals of tree building
+        FileTreeWorker.signals.\
+            build_finished.connect(self.update_tree)               # Connect to slot for finishing
+        FileTreeWorker.signals.\
+            build_finished.connect(self.switch_clear_all)          # Switch button for Clear all
+        FileTreeWorker.signals.\
+            build_finished.connect(self.switch_delete_snapshots)   # Switch buttons for snapshots
 
-        # Connect signals of files cleaning finish
-        ClearSnapshotWorker.signals.\
+        # Connect signals of files cleaning
+        FileTreeWorker.signals.\
+            progress.connect(lambda x: self.statusbar.showMessage(x))
+        FileTreeWorker.signals.\
             clear_finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
-        ClearEmptyDirsWorker.signals.\
+        FileTreeWorker.signals.\
             clear_finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
 
     def get_path(self) -> str:
