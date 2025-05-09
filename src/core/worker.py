@@ -40,12 +40,12 @@ class FileTreeWorker(QRunnable):
         self.files = []
 
     def init_root(self) -> None:
-        # Create root node
-        root_node = node.create_folder_node(self.root_path)
+        # Create root row
+        root_row = node.create_folder_node(self.root_path)
 
         # Create data model
         model = QStandardItemModel()
-        model.invisibleRootItem().appendRow(root_node)
+        model.invisibleRootItem().appendRow(root_row)
         model.setHorizontalHeaderLabels(FileTreeWorker.columns)
 
         # Create proxy data model for sorting customization
@@ -54,8 +54,8 @@ class FileTreeWorker(QRunnable):
         self.sort_rows = lambda: proxy_model.sort(0, QtCore.Qt.AscendingOrder)
         self.data_model = proxy_model
 
-        # Store 1st column of the root node
-        self.root_node = root_node[0]
+        # Store 1st column of the root row
+        self.root_node = root_row[0]
 
     def create_tree(self, routine):
         # Create tree root
