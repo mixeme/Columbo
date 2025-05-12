@@ -3,9 +3,9 @@
 import os
 import sys
 
-from gui.ui import HistoryUI
-
 from PyQt5.QtWidgets import QApplication
+
+from gui.ui import ApplicationUI
 
 
 def __get_bundle_dir() -> str:
@@ -30,9 +30,9 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     # Create window
-    history_win = HistoryUI(__get_bundle_dir())
+    app_win = ApplicationUI(__get_bundle_dir())
     # Show window
-    history_win.show()
+    app_win.show()
 
     # Start application
     sys.exit(app.exec())

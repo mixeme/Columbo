@@ -53,6 +53,8 @@ case $OPTION_ACTION in
 		
 		# Build & install
 		echo "+ Build & install $APP_ID";
+		echo "Warning: build does not work in command-line sessions!"
+		#export XDG_RUNTIME_DIR=/run/user/$(id -u)
 		flatpak-builder --user --install --force-clean build-dir "$MANIFEST"
 	;;
 	2 | run )

@@ -1,29 +1,20 @@
 import os
 import shutil
-import subprocess
 
 from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
-from core import file
-from core.tree import FileTreeWorker
+from core import file, node, validator
 from core.types import TreeType, OperationType
-from core.workers import ClearSnapshotWorker, ClearEmptyDirsWorker
+from core.worker import FileTreeWorker, WorkerWrapper
 from gui import icons
 
 
-def open_file(path: str) -> None:
-    try:
-        os.startfile(path)                  # Windows version
-    except AttributeError:
-        subprocess.call(['open', path])     # Linux version
-
-
-class HistoryUI(QtWidgets.QMainWindow):
+class ApplicationUI(QtWidgets.QMainWindow):
     def __init__(self, project_home: str):
-        # Load GUI layout
+        # Call QtWidgets.QMainWindow constructor
         super().__init__()
 
         # Load GUI layout
@@ -37,15 +28,53 @@ class HistoryUI(QtWidgets.QMainWindow):
         # Load icons
         icons.IconsLoader(project_home)
 
-        # Connect signals
-        FileTreeWorker.signals.finished.connect(self.update_tree)               # Connect to slot for finishing
-        FileTreeWorker.signals.finished.connect(self.switch_clear_all)          # Switch Clear all button
-        FileTreeWorker.signals.finished.connect(self.switch_delete_snapshots)   # Switch Clear all button
+        # Connect signals of tree building
+        FileTreeWorker.signals.\
+            build_finished.connect(self.update_tree)               # Connect to slot for finishing
+        FileTreeWorker.signals.\
+            build_finished.connect(self.switch_clear_all)          # Switch button for Clear all
+        FileTreeWorker.signals.\
+            build_finished.connect(self.switch_delete_snapshots)   # Switch buttons for snapshots
 
-        ClearSnapshotWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Snapshots are cleared"))
-        ClearEmptyDirsWorker.signals.finished.connect(lambda: self.statusbar.showMessage("Empty directories are cleared"))
+        # Connect signals of files cleaning
+        FileTreeWorker.signals.\
+            progress.connect(lambda x: self.statusbar.showMessage(x))
+        FileTreeWorker.signals.\
+            clear_finished.connect(self.response_clear_finished)
+        FileTreeWorker.signals.\
+            clear_finished.connect(self.response_clear_finished)
+
+        # Declare fields
+        self.worker = None
+
+    def get_path(self) -> str:
+        """
+
+        :return: Value of text field with history path
+        """
+        return self.path_field.text()
+
+    def set_path(self, path: str) -> None:
+        """
+
+        :param path: Value of text field with history path
+        """
+        self.path_field.setText(path)
+
+        # Drop a worker if path is changed
+        self.worker = None
+
+    def get_sub_path(self) -> str:
+        return self.subpath_field.text()
+
+    def set_sub_path(self, path: str) -> None:
+        self.subpath_field.setText(path)
 
     def from_checked(self) -> TreeType:
+        """
+
+        :return: Type of the source presentation
+        """
         if self.from_unified.isChecked():
             return TreeType.UNIFIED
 
@@ -53,6 +82,10 @@ class HistoryUI(QtWidgets.QMainWindow):
             return TreeType.BY_DATE
 
     def to_checked(self) -> TreeType:
+        """
+
+        :return: Type of the target presentation
+        """
         if self.to_unified.isChecked():
             return TreeType.UNIFIED
 
@@ -60,19 +93,26 @@ class HistoryUI(QtWidgets.QMainWindow):
             return TreeType.BY_DATE
 
     def checked(self) -> (TreeType, TreeType):
+        """
+
+        :return: A tuple of the (source, target) tree presentation
+        """
         return self.from_checked(), self.to_checked()
 
     def get_selected_nodes(self) -> list[QModelIndex]:
         return self.file_tree_view.selectedIndexes()
 
     def get_selected_path(self) -> (str, str):
-        index = self.file_tree_view.selectedIndexes()[0]    # Get the selected index
-        snapshot = index.siblingAtColumn(2).data()          # Get snapshot name
-        selected_item = index.data()                        # Get item value for the selected index
-        selected_path = selected_item                       # Prepare selected path
+        selected_nodes = self.get_selected_nodes()
+        index = selected_nodes[0]               # Get the selected index
+        snapshot = selected_nodes[2].data()     # Get snapshot name
+        selected_item = index.data()            # Get data of the selected index
+        selected_path = selected_item           # Prepare selected path
 
         # Go up for a versioned file
-        if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
+        if (self.from_checked() == TreeType.BY_DATE) \
+                and (self.to_checked() == TreeType.UNIFIED)\
+                and (not node.is_folder_row(selected_nodes)):
             index = index.parent()
 
         index = index.parent()                          # Get its parent
@@ -80,9 +120,10 @@ class HistoryUI(QtWidgets.QMainWindow):
             parent_item = index.data()                  # Get parent name
 
             # If we reach the root
-            if parent_item == self.path_field.text():
+            if parent_item == self.get_path():
                 # Add snapshot to the path for By date -> Unified
-                if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED):
+                if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED) \
+                        and (not node.is_folder_row(selected_nodes)):
                     parent_item = os.path.join(parent_item, snapshot)
 
                 # Remove snapshot from the path for Unified -> By date
@@ -99,7 +140,7 @@ class HistoryUI(QtWidgets.QMainWindow):
         dialog.setFileMode(QFileDialog.FileMode.Directory)
         if dialog.exec():
             selected_dir = dialog.selectedFiles()[0]
-            self.path_field.setText(selected_dir.replace("/", os.sep))
+            self.set_path(selected_dir.replace("/", os.sep))
 
     def set_from_snapshot(self):
         selected_node = self.get_selected_nodes()[0]            # Get selected node
@@ -132,20 +173,40 @@ class HistoryUI(QtWidgets.QMainWindow):
     def switch_delete_snapshots(self, op_type: OperationType, _) -> None:
         self.delete_button.setEnabled(op_type == OperationType.FILTERED_TREE)
 
-    def build_file_tree(self, op_type: OperationType) -> None:
-        if self.path_field.text():
-            worker = FileTreeWorker(self.path_field.text(),
-                                    self.checked(),
-                                    op_type)
+    def create_validator(self, operation_type: OperationType):
+        if (operation_type == OperationType.FILTERED_TREE) or (operation_type == operation_type.CLEAR_SNAPSHOTS):
+            bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
+            source_type = self.checked()[0]
+            sub_path = self.subpath_field.text()
+        else:
+            bounds = ["", ""]
+            source_type = self.checked()[0]
+            sub_path = ""
 
-            # Switch filter
-            if op_type == OperationType.FILTERED_TREE:
-                tester = file.SnapshotTester([self.filter_from_field.text(), self.filter_to_field.text()],
-                                             self.checked()[0])
-                worker.set_filter(tester)
+        return validator.SnapshotValidator(bounds, source_type, sub_path)
 
-            # Start worker in another thread
-            QThreadPool.globalInstance().start(worker)
+    def create_worker(self, operation_type: OperationType):
+        # Test worker presence
+        if self.worker is None:
+            # Create worker
+            self.worker = FileTreeWorker(self.get_path())
+
+        # Set options
+        self.worker.checked_options = self.checked()
+        self.worker.operation = operation_type
+
+        # Create & set validator
+        self.worker.validator = self.create_validator(operation_type)
+
+        return self.worker
+
+    def build_file_tree(self, operation_type: OperationType) -> None:
+        if len(self.get_path()) > 0:
+            # Create a worker if absent
+            self.worker = self.create_worker(operation_type)
+
+            # Start a worker in another thread
+            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start tree building")
 
     def scan_action(self) -> None:
@@ -166,7 +227,7 @@ class HistoryUI(QtWidgets.QMainWindow):
     def restore_action(self) -> None:
         # Get path to item
         selected_path, selected_item = self.get_selected_path()
-        extension = file.get_extension(selected_item)
+        extension = file.get_file_extension(selected_item)
 
         # Define file extension for dialog
         if extension:
@@ -186,20 +247,29 @@ class HistoryUI(QtWidgets.QMainWindow):
         self.filter_to_field.clear()
 
     def clear_all_action(self) -> None:
-        if self.path_field.text():
-            worker = ClearEmptyDirsWorker(self.path_field.text())
-            worker.signals.progress.connect(lambda x: print(x))
-            QThreadPool.globalInstance().start(worker)
+        if self.get_path():
+            # Create a worker if absent
+            self.worker = self.create_worker(OperationType.CLEAR_EMPTY_DIRS)
+
+            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start clear empty directories")
 
     def delete_snapshots_action(self) -> None:
-        if self.path_field.text():
-            bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-            tester = file.SnapshotTester(bounds, self.checked()[0])
-            worker = ClearSnapshotWorker(self.path_field.text(), tester)
-            worker.signals.progress.connect(lambda x: print(x))
-            QThreadPool.globalInstance().start(worker)
+        if self.get_path():
+            # Create a worker if absent
+            self.worker = self.create_worker(OperationType.CLEAR_SNAPSHOTS)
+
+            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start clear snapshots")
+
+    def response_clear_finished(self, operation: OperationType):
+        if operation == OperationType.CLEAR_SNAPSHOTS:
+            self.statusbar.showMessage("Snapshots are cleared")
+        if operation == OperationType.CLEAR_EMPTY_DIRS:
+            self.statusbar.showMessage("Empty directories are cleared")
+
+        # Drop worker
+        self.worker = None
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         if event.mimeData().hasUrls():
@@ -216,7 +286,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
     def dropEvent(self, event: QDropEvent) -> None:
         files = [url.toLocalFile() for url in event.mimeData().urls()]
-        self.path_field.setText(files[0])
+        self.set_path(files[0])
 
     def contextMenuEvent(self, position) -> None:
         # Don't open context menu for no selection
@@ -225,7 +295,7 @@ class HistoryUI(QtWidgets.QMainWindow):
             return
 
         context_menu = QMenu()
-        if nodes[0].siblingAtColumn(1).data() != "Folder":  # If a file is selected
+        if not node.is_folder_row(nodes):    # If a file is selected
             # Create context menu
             openfile = context_menu.addAction("Open")
             restore = context_menu.addAction("Restore")
@@ -238,7 +308,7 @@ class HistoryUI(QtWidgets.QMainWindow):
 
             # Resolve action
             if action == openfile:
-                open_file(self.get_selected_path()[0])
+                file.open_file(self.get_selected_path()[0])
             if action == restore:
                 self.restore_action()
             if action == from_snapshot:
@@ -247,13 +317,24 @@ class HistoryUI(QtWidgets.QMainWindow):
                 self.set_to_snapshot()
             if action == open_folder:
                 file_path = self.get_selected_path()[0]     # Get path of the selected item
-                open_file(os.path.dirname(file_path))       # Open folder contains this item
+                file.open_file(os.path.dirname(file_path))       # Open folder contains this item
         else:   # If a folder is selected
             from_snapshot, to_snapshot = None, None
-            if self.to_checked() == TreeType.BY_DATE and nodes[0].parent().data() == self.path_field.text():
+            if self.to_checked() == TreeType.BY_DATE and nodes[0].parent().data() == self.get_path():
                 from_snapshot = context_menu.addAction("From snapshot")
                 to_snapshot = context_menu.addAction("To snapshot")
                 context_menu.addSeparator()
+
+            if self.from_checked() == TreeType.UNIFIED:
+                set_as_root = context_menu.addAction("Set as root")
+                context_menu.addSeparator()
+            else:
+                set_as_root = None
+            if self.from_checked() == TreeType.BY_DATE:
+                set_as_sub_path = context_menu.addAction("Set as sub-path")
+                context_menu.addSeparator()
+            else:
+                set_as_sub_path = None
 
             expand = context_menu.addAction("Expand recursively")
 
@@ -278,3 +359,8 @@ class HistoryUI(QtWidgets.QMainWindow):
                 self.set_from_snapshot()
             if action == to_snapshot:
                 self.set_to_snapshot()
+            if action == set_as_root:
+                self.set_path(self.get_selected_path()[0])
+            if action == set_as_sub_path:
+                sub_path: str = self.get_selected_path()[0].removeprefix(self.get_path() + os.sep)
+                self.set_sub_path(sub_path)

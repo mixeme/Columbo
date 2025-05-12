@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>623</width>
+    <width>973</width>
     <height>600</height>
    </rect>
   </property>
@@ -261,6 +261,18 @@
        </widget>
       </item>
       <item>
+       <widget class="QGroupBox" name="groupBox_8">
+        <property name="title">
+         <string>Subpath</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QLineEdit" name="subpath_field"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QGroupBox" name="groupBox_6">
         <property name="title">
          <string>Snapshot actions</string>
@@ -328,8 +340,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>623</width>
-     <height>21</height>
+     <width>973</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>

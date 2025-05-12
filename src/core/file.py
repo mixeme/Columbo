@@ -1,6 +1,14 @@
+import os
 import os.path
+import subprocess
 import time
-from core.types import TreeType
+
+
+def open_file(path: str) -> None:
+    try:
+        os.startfile(path)                  # Windows version
+    except AttributeError:
+        subprocess.call(['open', path])     # Linux version
 
 
 def get_last_modified(path: str) -> str:
@@ -9,19 +17,7 @@ def get_last_modified(path: str) -> str:
     return time.strftime(time_format, time.localtime(time_val))
 
 
-def get_snapshot(filename: str) -> str:
-    dot = filename.rfind(".")
-    if dot == -1:
-        dot = len(filename)
-
-    sep = filename.rfind("_", 0, dot)
-    if sep == -1:
-        return ""
-
-    return filename[sep+1:dot]
-
-
-def get_extension(filename: str) -> str:
+def get_file_extension(filename: str) -> str:
     dot = filename.rfind(".")
     if dot == -1:
         return ""
@@ -29,46 +25,23 @@ def get_extension(filename: str) -> str:
         return filename[dot+1:]
 
 
-def clear_empty_dirs(root_path: str) -> None:
-    for root, dirs, files in os.walk(root_path):
-        if len(dirs) == 0 and len(files) == 0:
-            os.removedirs(root)
-            print("Delete", root)
-
-
-def clear_snapshots(root_path: str, test_snapshot_fun) -> None:
-    for root, dirs, files in os.walk(root_path):
-        for f in files:
-            if test_snapshot_fun(root, f):
-                try:
-                    os.remove(os.path.join(root, f))
-                    print("Delete", os.path.join(root, f))
-                except OSError:
-                    print("Failed to delete", os.path.join(root, f))
-                    pass
-                #except FileNotFoundError:
-                #    pass
-
-
-class SnapshotTester:
-    def __init__(self, bounds: list[str], source_type: TreeType) -> None:
-        self.bounds = bounds
-        self.type = source_type
-
-    def test_snapshot(self, snapshot: str) -> bool:
-        if self.bounds[0] and snapshot < self.bounds[0]:
+def is_empty_dir(dir: str, files: list[tuple[str, str]]) -> bool:
+    for file, _ in files:
+        if file.startswith(dir):
             return False
+    return True
 
-        if self.bounds[1] and snapshot > self.bounds[1]:
-            return False
 
-        return True
+def list_dir(root: str) -> (list[str], list[(str, int)]):
+    dirs = []
+    files = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        # Obtain absolute paths
+        dirnames = [os.path.join(dirpath, i) for i in dirnames]
+        filenames = [os.path.join(dirpath, i) for i in filenames]
 
-    def test_file(self, root, file) -> bool:
-        snapshot = None
-        if self.type == TreeType.UNIFIED:
-            snapshot = get_snapshot(file)
-        if self.type == TreeType.BY_DATE:
-            snapshot = root.split(os.sep)[1]
+        # Store items to lists
+        dirs.extend(map(lambda x: x.removeprefix(root + os.sep), dirnames))
+        files.extend(map(lambda x: (x.removeprefix(root + os.sep), get_last_modified(x)), filenames))
 
-        return self.test_snapshot(snapshot)
+    return dirs, files
