@@ -6,8 +6,7 @@ from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
-import core.data_model
-from core import file, node, validator
+from core import file, node, validator, data_model
 from core.types import TreeType, OperationType
 from core.worker import FileTreeWorker, WorkerWrapper
 from gui import icons
@@ -63,7 +62,8 @@ class ApplicationUI(QtWidgets.QMainWindow):
         self.path_field.setText(path)
 
         # Drop a worker if path is changed
-        self.worker = None
+        if self.worker is not None:
+            self.worker.drop_lists()
 
     def get_sub_path(self) -> str:
         return self.subpath_field.text()
@@ -193,7 +193,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
         self.file_tree_view.collapseAll()
 
     def get_selected_path(self):
-        return core.data_model.restore_path(self.get_path(), self.checked(), self.get_selected_nodes())
+        return data_model.restore_path(self.get_path(), self.checked(), self.get_selected_nodes())
 
     def restore_action(self) -> None:
         # Get path to item
