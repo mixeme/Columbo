@@ -61,6 +61,10 @@ class FileTreeWorker(QRunnable):
         if (len(self.dirs) == 0) and (len(self.files) == 0):
             self.dirs, self.files = file.list_dir(self.root_path)
 
+    def drop_lists(self) -> None:
+        self.dirs = []
+        self.files = []
+
     def create_tree(self, routine):
         # Create tree root
         self.init_root()
