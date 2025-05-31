@@ -5,7 +5,7 @@ from PyQt5.QtCore import QRunnable, QObject, pyqtSignal
 from PyQt5.QtGui import QStandardItemModel
 
 from core import file, node, snapshot
-from core.tree import FileSortFilterProxyModel
+from core.data_model import FileSortFilterProxyModel
 from core.types import TreeType, OperationType
 
 
