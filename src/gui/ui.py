@@ -177,7 +177,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
             QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start tree building")
 
-    def scan_action(self) -> None:
+    def build_tree_action(self) -> None:
         self.build_file_tree(OperationType.FILE_TREE)
 
     def filter_action(self) -> None:
@@ -213,7 +213,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
         if destination_file:
             shutil.copy(selected_path, destination_file)
 
-    def clear_action(self) -> None:
+    def clear_bounds_action(self) -> None:
         self.filter_from_field.clear()
         self.filter_to_field.clear()
 
