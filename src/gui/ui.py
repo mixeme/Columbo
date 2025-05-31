@@ -6,6 +6,7 @@ from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
+import core.data_model
 from core import file, node, validator
 from core.types import TreeType, OperationType
 from core.worker import FileTreeWorker, WorkerWrapper
@@ -102,39 +103,6 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def get_selected_nodes(self) -> list[QModelIndex]:
         return self.file_tree_view.selectedIndexes()
 
-    def get_selected_path(self) -> (str, str):
-        selected_nodes = self.get_selected_nodes()
-        index = selected_nodes[0]               # Get the selected index
-        snapshot = selected_nodes[2].data()     # Get snapshot name
-        selected_item = index.data()            # Get data of the selected index
-        selected_path = selected_item           # Prepare selected path
-
-        # Go up for a versioned file
-        if (self.from_checked() == TreeType.BY_DATE) \
-                and (self.to_checked() == TreeType.UNIFIED)\
-                and (not node.is_folder_row(selected_nodes)):
-            index = index.parent()
-
-        index = index.parent()                          # Get its parent
-        while index.isValid():                          # Combine a path to the selected item
-            parent_item = index.data()                  # Get parent name
-
-            # If we reach the root
-            if parent_item == self.get_path():
-                # Add snapshot to the path for By date -> Unified
-                if (self.from_checked() == TreeType.BY_DATE) and (self.to_checked() == TreeType.UNIFIED) \
-                        and (not node.is_folder_row(selected_nodes)):
-                    parent_item = os.path.join(parent_item, snapshot)
-
-                # Remove snapshot from the path for Unified -> By date
-                if (self.from_checked() == TreeType.UNIFIED) and (self.to_checked() == TreeType.BY_DATE):
-                    selected_path = selected_path[selected_path.find(os.sep)+1:]
-
-            selected_path = os.path.join(parent_item, selected_path)
-            index = index.parent()
-
-        return selected_path, selected_item
-
     def browse_action(self) -> None:
         dialog = QFileDialog(self)
         dialog.setFileMode(QFileDialog.FileMode.Directory)
@@ -223,6 +191,9 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
     def collapse_action(self) -> None:
         self.file_tree_view.collapseAll()
+
+    def get_selected_path(self):
+        return core.data_model.restore_path(self.get_path(), self.checked(), self.get_selected_nodes())
 
     def restore_action(self) -> None:
         # Get path to item
