@@ -4,6 +4,10 @@ import subprocess
 import time
 
 
+# Global constant
+time_format = "%d.%m.%Y %H:%M:%S"  # Setup time format
+
+
 def open_file(path: str) -> None:
     try:
         os.startfile(path)                  # Windows version
@@ -13,7 +17,6 @@ def open_file(path: str) -> None:
 
 def get_last_modified(path: str) -> str:
     time_val = os.path.getmtime(path)
-    time_format = "%d.%m.%Y %H:%M:%S"  # Setup time format
     return time.strftime(time_format, time.localtime(time_val))
 
 
