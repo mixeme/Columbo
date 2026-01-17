@@ -217,7 +217,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
         self.filter_from_field.clear()
         self.filter_to_field.clear()
 
-    def clear_all_action(self) -> None:
+    def delete_empty_dirs_action(self) -> None:
         if self.get_path():
             # Create a worker if absent
             self.worker = self.create_worker(OperationType.CLEAR_EMPTY_DIRS)

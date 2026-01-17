@@ -517,7 +517,7 @@
    <sender>clear_all_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>clear_all_action()</slot>
+   <slot>delete_empty_dirs_action()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>504</x>
@@ -587,7 +587,7 @@
   <slot>empty_dirs_action()</slot>
   <slot>filter_action()</slot>
   <slot>clear_bounds_action()</slot>
-  <slot>clear_all_action()</slot>
+  <slot>delete_empty_dirs_action()</slot>
   <slot>delete_snapshots_action()</slot>
   <slot>contextMenuEvent()</slot>
   <slot>reset_filters_action()</slot>
