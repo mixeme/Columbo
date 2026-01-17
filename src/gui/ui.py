@@ -225,6 +225,10 @@ class ApplicationUI(QtWidgets.QMainWindow):
             QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
             self.statusbar.showMessage("Start clear empty directories")
 
+    def reset_filters_action(self) -> None:
+        self.clear_bounds_action()
+        self.subpath_field.clear()
+
     def delete_snapshots_action(self) -> None:
         if self.get_path():
             # Create a worker if absent
