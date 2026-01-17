@@ -18,7 +18,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
         super().__init__()
 
         # Load GUI layout
-        uic.loadUi(os.path.join(project_home, 'src/gui/history.ui'), self)
+        uic.loadUi(os.path.join(project_home, 'src/gui/history2.ui'), self)
 
         # Set window properties
         self.setWindowTitle("Columbo - Synchronization history observer")
