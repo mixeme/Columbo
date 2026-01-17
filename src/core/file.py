@@ -43,7 +43,7 @@ def list_dir(root: str) -> (list[str], list[(str, int)]):
         dirnames = [os.path.join(dirpath, i) for i in dirnames]
         filenames = [os.path.join(dirpath, i) for i in filenames]
 
-        # Store items to lists
+        # Store relative paths to lists
         dirs.extend(map(lambda x: x.removeprefix(root + os.sep), dirnames))
         files.extend(map(lambda x: (x.removeprefix(root + os.sep), get_last_modified(x)), filenames))
 
