@@ -55,7 +55,7 @@
         <item>
          <widget class="QGroupBox" name="history_path_box">
           <property name="title">
-           <string>History folder</string>
+           <string>History location</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_10">
            <item>
@@ -75,26 +75,10 @@
              </property>
             </widget>
            </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="file_tree_box">
-          <property name="title">
-           <string>File tree</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_13">
            <item>
             <widget class="QPushButton" name="file_tree_load_button">
              <property name="text">
               <string>Load</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="file_tree_reset_button">
-             <property name="text">
-              <string>Reset</string>
              </property>
             </widget>
            </item>
@@ -591,6 +575,7 @@
   <slot>delete_snapshots_action()</slot>
   <slot>contextMenuEvent()</slot>
   <slot>reset_filters_action()</slot>
+  <slot>filetree_load_action()</slot>
  </slots>
  <buttongroups>
   <buttongroup name="buttonGroup_3"/>
