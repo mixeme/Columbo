@@ -6,9 +6,9 @@ from PyQt5.QtCore import QModelIndex, QThreadPool, Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
-from core import file, node, validator, data_model
+from core import file, node, validator, data_model, filetree_loader, pyqtmiscellaneous
 from core.types import TreeType, OperationType
-from core.worker import FileTreeWorker, WorkerWrapper
+from core.filetree_builder import FileTreeWBuilder
 from gui import icons
 
 
@@ -28,24 +28,28 @@ class ApplicationUI(QtWidgets.QMainWindow):
         # Load icons
         icons.IconsLoader(project_home)
 
+        # Connect signals for file tree loading
+        filetree_loader.FileTreeLoader.signals.load_finished.connect(self.load_finished_action())
+
         # Connect signals of tree building
-        FileTreeWorker.signals.\
+        FileTreeWBuilder.signals.\
             build_finished.connect(self.update_tree)               # Connect to slot for finishing
-        FileTreeWorker.signals.\
+        FileTreeWBuilder.signals.\
             build_finished.connect(self.switch_clear_all)          # Switch button for Clear all
-        FileTreeWorker.signals.\
+        FileTreeWBuilder.signals.\
             build_finished.connect(self.switch_delete_snapshots)   # Switch buttons for snapshots
 
         # Connect signals of files cleaning
-        FileTreeWorker.signals.\
+        FileTreeWBuilder.signals.\
             progress.connect(lambda x: self.statusbar.showMessage(x))
-        FileTreeWorker.signals.\
+        FileTreeWBuilder.signals.\
             clear_finished.connect(self.response_clear_finished)
-        FileTreeWorker.signals.\
+        FileTreeWBuilder.signals.\
             clear_finished.connect(self.response_clear_finished)
 
         # Declare fields
-        self.worker = None
+        self.loader = filetree_loader.FileTreeLoader()
+        self.worker = FileTreeWBuilder(self.loader)
 
     def get_path(self) -> str:
         """
@@ -61,9 +65,8 @@ class ApplicationUI(QtWidgets.QMainWindow):
         """
         self.path_field.setText(path)
 
-        # Drop a worker if path is changed
-        if self.worker is not None:
-            self.worker.drop_lists()
+        # Drop lists if path is changed
+        self.loader.reset()
 
     def get_sub_path(self) -> str:
         return self.subpath_field.text()
@@ -71,7 +74,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def set_sub_path(self, path: str) -> None:
         self.subpath_field.setText(path)
 
-    def from_checked(self) -> TreeType:
+    def source_type(self) -> TreeType:
         """
 
         :return: Type of the source presentation
@@ -82,7 +85,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
         if self.from_bydate.isChecked():
             return TreeType.BY_DATE
 
-    def to_checked(self) -> TreeType:
+    def target_view(self) -> TreeType:
         """
 
         :return: Type of the target presentation
@@ -93,12 +96,12 @@ class ApplicationUI(QtWidgets.QMainWindow):
         if self.to_bydate.isChecked():
             return TreeType.BY_DATE
 
-    def checked(self) -> (TreeType, TreeType):
+    def transform_direction(self) -> (TreeType, TreeType):
         """
 
         :return: A tuple of the (source, target) tree presentation
         """
-        return self.from_checked(), self.to_checked()
+        return self.source_type(), self.target_view()
 
     def get_selected_nodes(self) -> list[QModelIndex]:
         return self.file_tree_view.selectedIndexes()
@@ -130,11 +133,6 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
         self.filter_to_field.setText(snapshot)                  # Set field text
 
-    def update_tree(self, _, model) -> None:
-        self.file_tree_view.setModel(model)
-        self.file_tree_view.header().resizeSection(0, 300)
-        self.statusbar.showMessage("Build is finished")
-
     def switch_clear_all(self, op_type: OperationType, _) -> None:
         self.clear_all_button.setEnabled(op_type == OperationType.EMPTY_DIRS)
 
@@ -144,37 +142,32 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def create_validator(self, operation_type: OperationType):
         if (operation_type == OperationType.FILTERED_TREE) or (operation_type == operation_type.CLEAR_SNAPSHOTS):
             bounds = [self.filter_from_field.text(), self.filter_to_field.text()]
-            source_type = self.checked()[0]
+            source_type = self.transform_direction()[0]
             sub_path = self.subpath_field.text()
         else:
             bounds = ["", ""]
-            source_type = self.checked()[0]
+            source_type = self.transform_direction()[0]
             sub_path = ""
 
         return validator.SnapshotValidator(bounds, source_type, sub_path)
 
-    def create_worker(self, operation_type: OperationType):
-        # Test worker presence
-        if self.worker is None:
-            # Create worker
-            self.worker = FileTreeWorker(self.get_path())
+    def setup_worker(self, operation_type: OperationType):
+        # Set root path for loader
+        self.loader.set_root(self.get_path())
 
         # Set options
-        self.worker.checked_options = self.checked()
-        self.worker.operation = operation_type
+        self.worker.set_options(self.transform_direction(), operation_type)
 
         # Create & set validator
-        self.worker.validator = self.create_validator(operation_type)
-
-        return self.worker
+        self.worker.set_validator(self.create_validator(operation_type))
 
     def build_file_tree(self, operation_type: OperationType) -> None:
         if len(self.get_path()) > 0:
-            # Create a worker if absent
-            self.worker = self.create_worker(operation_type)
+            # Setup worker for job
+            self.setup_worker(operation_type)
 
             # Start a worker in another thread
-            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
+            pyqtmiscellaneous.RunnableWrapper.run_async(self.worker)
             self.statusbar.showMessage("Start tree building")
 
     def build_tree_action(self) -> None:
@@ -186,6 +179,11 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def empty_dirs_action(self) -> None:
         self.build_file_tree(OperationType.EMPTY_DIRS)
 
+    def update_tree(self, _, model) -> None:
+        self.filetree_view.setModel(model)
+        self.filetree_view.header().resizeSection(0, 300)
+        self.statusbar.showMessage("Build is finished")
+
     def expand_action(self) -> None:
         self.file_tree_view.expandAll()
 
@@ -193,7 +191,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
         self.file_tree_view.collapseAll()
 
     def get_selected_path(self):
-        return data_model.restore_path(self.get_path(), self.checked(), self.get_selected_nodes())
+        return data_model.restore_path(self.get_path(), self.transform_direction(), self.get_selected_nodes())
 
     def restore_action(self) -> None:
         # Get path to item
@@ -220,9 +218,9 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def delete_empty_dirs_action(self) -> None:
         if self.get_path():
             # Create a worker if absent
-            self.worker = self.create_worker(OperationType.CLEAR_EMPTY_DIRS)
+            self.worker = self.setup_worker(OperationType.CLEAR_EMPTY_DIRS)
 
-            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
+            RunnableWrapper.run_async(self.worker)
             self.statusbar.showMessage("Start clear empty directories")
 
     def reset_filters_action(self) -> None:
@@ -232,10 +230,21 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def delete_snapshots_action(self) -> None:
         if self.get_path():
             # Create a worker if absent
-            self.worker = self.create_worker(OperationType.CLEAR_SNAPSHOTS)
+            self.worker = self.setup_worker(OperationType.CLEAR_SNAPSHOTS)
 
-            QThreadPool.globalInstance().start(WorkerWrapper(self.worker))
+            RunnableWrapper.run_async(self.worker)
             self.statusbar.showMessage("Start clear snapshots")
+
+    def filetree_load_action(self):
+        if len(self.get_path()) > 0:
+            self.build_button.setEnabled(False)
+            self.loader.set_root(self.get_path())
+            pyqtmiscellaneous.RunnableWrapper.run_async(self.loader)
+            self.statusbar.showMessage("Load file tree")
+
+    def load_finished_action(self):
+        self.build_button.setEnabled(self.loader.is_empty())
+        self.statusbar.showMessage("File tree is loaded")
 
     def response_clear_finished(self, operation: OperationType):
         if operation == OperationType.CLEAR_SNAPSHOTS:
@@ -295,17 +304,17 @@ class ApplicationUI(QtWidgets.QMainWindow):
                 file.open_file(os.path.dirname(file_path))       # Open folder contains this item
         else:   # If a folder is selected
             from_snapshot, to_snapshot = None, None
-            if self.to_checked() == TreeType.BY_DATE and nodes[0].parent().data() == self.get_path():
+            if self.target_view() == TreeType.BY_DATE and nodes[0].parent().data() == self.get_path():
                 from_snapshot = context_menu.addAction("From snapshot")
                 to_snapshot = context_menu.addAction("To snapshot")
                 context_menu.addSeparator()
 
-            if self.from_checked() == TreeType.UNIFIED:
+            if self.source_type() == TreeType.UNIFIED:
                 set_as_root = context_menu.addAction("Set as root")
                 context_menu.addSeparator()
             else:
                 set_as_root = None
-            if self.from_checked() == TreeType.BY_DATE:
+            if self.source_type() == TreeType.BY_DATE:
                 set_as_sub_path = context_menu.addAction("Set as sub-path")
                 context_menu.addSeparator()
             else:

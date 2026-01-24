@@ -20,9 +20,6 @@ class FileTreeWBuilder(QRunnable):
         self._loader = loader
 
         # Declare fields
-        self.data_model = None
-        self.dirs = []
-        self.files = []
         self._direction = None
         self._operation = None
         self._validator = None

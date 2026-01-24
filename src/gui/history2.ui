@@ -172,7 +172,10 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
-            <widget class="QPushButton" name="scan_button">
+            <widget class="QPushButton" name="build_button">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Build</string>
              </property>
@@ -356,7 +359,7 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="QTreeView" name="file_tree_view">
+         <widget class="QTreeView" name="filetree_view">
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
@@ -402,7 +405,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>scan_button</sender>
+   <sender>build_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>build_tree_action()</slot>
@@ -530,7 +533,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>file_tree_view</sender>
+   <sender>filetree_view</sender>
    <signal>customContextMenuRequested(QPoint)</signal>
    <receiver>MainWindow</receiver>
    <slot>contextMenuEvent()</slot>

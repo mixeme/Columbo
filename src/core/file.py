@@ -33,18 +33,3 @@ def is_empty_dir(dir: str, files: list[tuple[str, str]]) -> bool:
         if file.startswith(dir):
             return False
     return True
-
-
-def list_dir(root: str) -> (list[str], list[(str, int)]):
-    dirs = []
-    files = []
-    for dirpath, dirnames, filenames in os.walk(root):
-        # Obtain absolute paths
-        dirnames = [os.path.join(dirpath, i) for i in dirnames]
-        filenames = [os.path.join(dirpath, i) for i in filenames]
-
-        # Store relative paths to lists
-        dirs.extend(map(lambda x: x.removeprefix(root + os.sep), dirnames))
-        files.extend(map(lambda x: (x.removeprefix(root + os.sep), get_last_modified(x)), filenames))
-
-    return dirs, files
