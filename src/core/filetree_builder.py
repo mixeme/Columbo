@@ -164,9 +164,6 @@ class FileTreeWBuilder(QRunnable):
         self.signals.clear_finished.emit(self.operation)
 
     def run(self) -> None:
-        if self.loader.is_empty():
-            self.filetree_load_action()
-
         # Define routine function independence of operation
         routine_tree = None
         routine_clear = None
