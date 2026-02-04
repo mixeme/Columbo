@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QStandardItem
 
-from core.types import TreeNode, TreeRow, TreeType
+from core.types import TreeNode, TreeRow, ViewDirection
 from gui import icons
 
 
@@ -55,11 +55,8 @@ def descend_by_path(parent: QStandardItem, path_parts: list[str]):
     return current
 
 
-def add_file_node(parent: QStandardItem, tree_type: (TreeType, TreeType), filename, last_mod_date, timestamp):
-    # Unpack types of trees
-    source_tree, target_tree = tree_type
-
-    if source_tree == TreeType.BY_DATE and target_tree == TreeType.UNIFIED:
+def add_file_node(parent: QStandardItem, tree_type: ViewDirection, filename, last_mod_date, timestamp):
+    if tree_type.by_date_to_unified():
         # Get or create a versioned file node inside the specified directory node
         parent = get_node(parent, filename, create_file_node)
 
