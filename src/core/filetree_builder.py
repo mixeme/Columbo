@@ -155,27 +155,27 @@ class FileTreeWBuilder(QRunnable):
         # Define routine function independence of operation
         routine_tree = None
         routine_clear = None
-        if (self.operation == OperationType.FILE_TREE) or (self.operation == OperationType.FILTERED_TREE):
+        if (self._operation == OperationType.FILE_TREE) or (self._operation == OperationType.FILTERED_TREE):
             routine_tree = self.tree_files
-        if self.operation == OperationType.EMPTY_DIRS:
+        if self._operation == OperationType.EMPTY_DIRS:
             routine_tree = self.tree_empty_dirs
 
-        if self.operation == OperationType.CLEAR_SNAPSHOTS:
+        if self._operation == OperationType.CLEAR_SNAPSHOTS:
             routine_clear = self.clear_files
-        if self.operation == OperationType.CLEAR_EMPTY_DIRS:
+        if self._operation == OperationType.CLEAR_EMPTY_DIRS:
             routine_clear = self.clear_empty_dirs
 
         if routine_tree is not None:
             # Finishing tree build
             self.create_tree(routine_tree)   # Build tree
-            self.sort_rows()            # Sort nodes
+            self._sort_rows()            # Sort nodes
 
             # Signal object should possess the sending data
-            self.signals.operation = self.operation
-            self.signals.model = self.data_model
+            self.signals.operation = self._operation
+            self.signals.model = self._data_model
 
             # Signal tree update
-            self.signals.build_finished.emit(self.operation, self.data_model)
+            self.signals.build_finished.emit(self._operation, self._data_model)
 
         if routine_clear is not None:
             self.list_dir()     # List directory
