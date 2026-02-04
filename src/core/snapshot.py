@@ -1,5 +1,19 @@
 from core import types
 
+# Constant for delimiter
+timestamp_delimiter = "_"
+
+
+def find_dot(filename: str) -> int:
+    # Find dot position
+    dot = filename.rfind(".")
+
+    if dot == -1:
+        # If no dot, return end of string
+        dot = len(filename)
+
+    return dot
+
 
 def get_timestamp(filename: str) -> str:
     """
