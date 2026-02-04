@@ -24,12 +24,12 @@ def restore_path(root, view_direction: ViewDirection, selected_nodes) -> (str, s
         # If we reach the root
         if parent_item == root:
             # Add snapshot to the path for By date -> Unified
-            if (checked_from == TreeType.BY_DATE) and (checked_to == TreeType.UNIFIED) \
+            if view_direction.by_date_to_unified() \
                     and (not node.is_folder_row(selected_nodes)):
                 parent_item = os.path.join(parent_item, snapshot)
 
             # Remove snapshot from the path for Unified -> By date
-            if (checked_from == TreeType.UNIFIED) and (checked_to == TreeType.BY_DATE):
+            if view_direction.unified_to_by_date():
                 selected_path = selected_path[selected_path.find(os.sep) + 1:]
 
         selected_path = os.path.join(parent_item, selected_path)
