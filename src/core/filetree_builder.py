@@ -160,8 +160,8 @@ class FileTreeWBuilder(QRunnable):
                 except OSError:
                     self.signals.progress.emit("Failed to delete" + path)
 
-        self.signals.operation = self.operation
-        self.signals.clear_finished.emit(self.operation)
+        self.signals.operation = self._operation
+        self.signals.clear_finished.emit(self._operation)
 
     def run(self) -> None:
         # Define routine function independence of operation
