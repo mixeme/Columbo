@@ -29,6 +29,7 @@ def get_timestamp(filename: str) -> str:
         # If no delimiter, return empty timestamp
         return ""
 
+    # Cut suffix
     return filename[sep + 1:dot]
 
 
