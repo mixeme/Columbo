@@ -37,6 +37,27 @@ class FileTreeWBuilder(QRunnable):
     def get_abs(self, path: str) -> str:
         return os.path.join(self._loader.get_root(), path)
 
+    def normalize_paths(self):
+        # Get file tree
+        _, files = self._loader.get_lists()
+
+        # Split path into components
+        files_parts = [(path.split(os.sep), date) for path, date in files]
+
+        # Normalize paths
+        # For "unified" source append a timestamp as the first path component
+        # For "by date" source append a timestamp as file name suffix
+        if self._direction.source == TreeType.UNIFIED:
+            for path_parts, _ in files_parts:
+                filename = path_parts[-1]
+                path_parts.insert(0, snapshot.get_timestamp(filename))
+        #if self._direction.source == TreeType.BY_DATE:
+        #    for path_parts, _ in files_parts:
+        #        timestamp = path_parts[0]
+        #        path_parts[-1] = snapshot.set_timestamp(path_parts[-1], timestamp)
+
+        return files_parts
+
     def init_root(self) -> None:
         # Create root row
         root_row = node.create_folder_node(self._loader.get_root())
