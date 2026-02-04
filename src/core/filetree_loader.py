@@ -11,15 +11,15 @@ class FileTreeLoader(QRunnable):
     def __init__(self) -> None:
         # Declare fields
         self._root = None
-        self.dirs = None
-        self.files = None
+        self._dirs = None
+        self._files = None
 
         # Init lists
         self.reset()
 
     def reset(self) -> None:
-        self.dirs = []
-        self.files = []
+        self._dirs = []
+        self._files = []
 
     def set_root(self, root: str) -> None:
         self._root = root
@@ -37,17 +37,17 @@ class FileTreeLoader(QRunnable):
 
             # Store relative paths to lists
             root_path = self._root + os.sep
-            self.dirs.extend(map(lambda x: x.removeprefix(root_path), dirnames))
-            self.files.extend(map(lambda x: (x.removeprefix(root_path), file.get_last_modified(x)), filenames))
+            self._dirs.extend(map(lambda x: x.removeprefix(root_path), dirnames))
+            self._files.extend(map(lambda x: (x.removeprefix(root_path), file.get_last_modified(x)), filenames))
 
         # Notify about load is finished
         FileTreeLoader.signals.load_finished.emit()
 
     def get_lists(self) -> (list[str], list[(str, int)]):
-        return self.dirs, self.files
+        return self._dirs, self._files
 
     def is_empty(self) -> bool:
-        return (len(self.dirs) == 0) and (len(self.files) == 0)
+        return (len(self._dirs) == 0) and (len(self._files) == 0)
 
     def run(self) -> None:
         self.load()
