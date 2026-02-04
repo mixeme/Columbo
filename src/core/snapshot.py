@@ -23,8 +23,10 @@ def get_timestamp(filename: str) -> str:
     # Find dot position
     dot = find_dot(filename)
 
-    sep = filename.rfind("_", 0, dot)
+    # Find delimiter position
+    sep = filename.rfind(timestamp_delimiter, 0, dot)
     if sep == -1:
+        # If no delimiter, return empty timestamp
         return ""
 
     return filename[sep + 1:dot]
