@@ -20,9 +20,8 @@ def get_timestamp(filename: str) -> str:
     :param filename: Name of a file that contains a timestamp as a suffix starting with "_"
     :return: Timestamp designating snapshot
     """
-    dot = filename.rfind(".")
-    if dot == -1:
-        dot = len(filename)
+    # Find dot position
+    dot = find_dot(filename)
 
     sep = filename.rfind("_", 0, dot)
     if sep == -1:
