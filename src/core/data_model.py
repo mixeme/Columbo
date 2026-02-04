@@ -2,13 +2,10 @@ from PyQt5 import QtCore
 
 import os
 from core import node
-from core.types import TreeType
+from core.types import ViewDirection
 
 
-def restore_path(root, checked_options, selected_nodes) -> (str, str):
-    # Unpack checked options for tree
-    checked_from, checked_to = checked_options
-
+def restore_path(root, view_direction: ViewDirection, selected_nodes) -> (str, str):
     index = selected_nodes[0]            # Get the selected index
     snapshot = selected_nodes[2].data()  # Get snapshot name
 
