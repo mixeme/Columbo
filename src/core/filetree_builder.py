@@ -190,5 +190,5 @@ class FileTreeWBuilder(QRunnable):
             self.signals.build_finished.emit(self._operation, self._data_model)
 
         if routine_clear is not None:
-            self.list_dir()     # List directory
+            self._loader.load() # List directory
             routine_clear()     # Create tree nodes
