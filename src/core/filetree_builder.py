@@ -76,19 +76,13 @@ class FileTreeWBuilder(QRunnable):
         # Store 1st column of the root row
         self._root_node = root_row[0]
 
-    def list_dir(self):
-        if self.loader.is_empty():
-            self.loader.load()
-
-    def drop_lists(self) -> None:
-        self.loader.reset()
-
     def create_tree(self, routine):
         # Create tree root
         self.init_root()
 
         # List directory
-        self.list_dir()
+        if self._loader.is_empty():
+            self._loader.load()
 
         # Create tree nodes
         routine()
