@@ -22,8 +22,9 @@ class FileTreeLoader(QRunnable):
         self._files = []
 
     def set_root(self, root: str) -> None:
+        if self._root != root:
+            self.reset()
         self._root = root
-        self.reset()
 
     def get_root(self) -> str:
         return self._root
