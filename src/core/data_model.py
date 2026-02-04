@@ -13,7 +13,7 @@ def restore_path(root, checked_options, selected_nodes) -> (str, str):
     snapshot = selected_nodes[2].data()  # Get snapshot name
 
     # Go up for a versioned file (By date -> Unified)
-    if (checked_from == TreeType.BY_DATE) and (checked_to == TreeType.UNIFIED) \
+    if view_direction.by_date_to_unified() \
             and (not node.is_folder_row(selected_nodes)):
         index = index.parent()
 
