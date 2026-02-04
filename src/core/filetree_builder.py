@@ -93,7 +93,7 @@ class FileTreeWBuilder(QRunnable):
             start_pos = 1
 
         for file_parts, last_modified in files_parts:
-            if self.validator(file_parts):
+            if self._validator(file_parts):
                 # Find corresponding node for the root
                 current = node.descend_by_path(self.root_node, file_parts[start_pos:-1])
 
@@ -101,7 +101,7 @@ class FileTreeWBuilder(QRunnable):
                 filename = file_parts[-1]
 
                 # Get timestamp
-                timestamp = timestamp_fun(file_parts)
+                timestamp = file_parts[0]
 
                 # Add file node
                 node.add_file_node(current, self.direction, filename, last_modified, timestamp)
@@ -130,11 +130,11 @@ class FileTreeWBuilder(QRunnable):
                 except OSError:
                     self.signals.progress.emit("Failed to delete " + path)
 
-        self.signals.operation = self.operation
-        self.signals.clear_finished.emit(self.operation)
+        self.signals.operation = self._operation
+        self.signals.clear_finished.emit(self._operation)
 
     def clear_empty_dirs(self):
-        dirs, files = self.loader.get_lists()
+        dirs, files = self._loader.get_lists()
 
         for d in dirs:
             if file.is_empty_dir(d, files):
