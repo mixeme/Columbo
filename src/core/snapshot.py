@@ -33,6 +33,11 @@ def get_timestamp(filename: str) -> str:
     return filename[sep + 1:dot]
 
 
+def set_timestamp(filename: str, timestamp: str) -> str:
+    dot = find_dot(filename)
+    return filename[:dot] + timestamp_delimiter + timestamp + filename[dot:]
+
+
 def get_timestamp_fun(source_type: types.TreeType):
     if source_type == types.TreeType.UNIFIED:
         return lambda x: get_timestamp(x[-1])
