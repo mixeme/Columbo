@@ -4,6 +4,9 @@ import subprocess
 import time
 
 
+from core import types, snapshot
+
+
 # Global constant
 time_format = "%d.%m.%Y %H:%M:%S"  # Setup time format
 
@@ -28,8 +31,35 @@ def get_file_extension(filename: str) -> str:
         return filename[dot+1:]
 
 
-def is_empty_dir(dir: str, files: list[tuple[str, str]]) -> bool:
+def is_empty_dir(directory: str, files: list[tuple[str, str]]) -> bool:
     for file, _ in files:
-        if file.startswith(dir):
+        if file.startswith(directory):
             return False
     return True
+
+
+def split_path(path: str) -> list[str]:
+    return path.split(os.sep)
+
+
+def join_path(path_parts: list[str]) -> str:
+    return os.sep.join(path_parts)
+
+
+def normalize_path_parts(path: str, source_type: types.TreeType) -> list[str]:
+    # Split path into components
+    path_parts: list[str] = split_path(path)
+
+    # Normalize paths
+    # For "unified" source append a timestamp as the first path component
+    if source_type == types.TreeType.UNIFIED:
+        filename = path_parts[-1]
+        path_parts.insert(0, snapshot.get_timestamp(filename))
+
+    # Join back path
+    return path_parts
+
+
+def normalize_path(path: str, source_type: types.TreeType) -> str:
+    # Join back path
+    return join_path(normalize_path_parts(path, source_type))

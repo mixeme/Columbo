@@ -14,11 +14,11 @@ class TreeType(Enum):
 
 
 class OperationType(Enum):
-    FILE_TREE = 0
+    FULL_TREE = 0
     FILTERED_TREE = 1
     EMPTY_DIRS = 2
-    CLEAR_SNAPSHOTS = 3
-    CLEAR_EMPTY_DIRS = 4
+    DELETE_SNAPSHOTS = 3
+    DELETE_EMPTY_DIRS = 4
 
 
 class ViewDirection:

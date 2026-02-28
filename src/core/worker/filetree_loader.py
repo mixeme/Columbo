@@ -2,7 +2,7 @@ import os
 
 from PyQt5.QtCore import QRunnable
 
-from core import file, pyqtmiscellaneous
+from core import types, file, pyqtmiscellaneous
 
 
 class FileTreeLoader(QRunnable):
@@ -46,6 +46,12 @@ class FileTreeLoader(QRunnable):
 
     def get_lists(self) -> (list[str], list[(str, int)]):
         return self._dirs, self._files
+
+    def get_normalized_paths(self, source_type: types.TreeType) -> list[tuple[str, str]]:
+        return [(file.normalize_path(path, source_type), date) for path, date in self._files]
+
+    def get_normalized_paths_parts(self, source_type: types.TreeType) -> list[tuple[list[str], str]]:
+        return [(file.normalize_path_parts(path, source_type), date) for path, date in self._files]
 
     def is_empty(self) -> bool:
         return (len(self._dirs) == 0) and (len(self._files) == 0)

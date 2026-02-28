@@ -66,7 +66,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="path_field"/>
+            <widget class="QLineEdit" name="history_path_field"/>
            </item>
            <item>
             <widget class="QPushButton" name="browse_button">
@@ -83,7 +83,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="loaded_label">
+            <widget class="QLabel" name="load_label">
              <property name="text">
               <string>Not loaded</string>
              </property>
@@ -103,13 +103,13 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="QGroupBox" name="history_type_box">
+         <widget class="QGroupBox" name="source_type_box">
           <property name="title">
            <string>Source type</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QRadioButton" name="from_unified">
+            <widget class="QRadioButton" name="source_unified">
              <property name="text">
               <string>Unified</string>
              </property>
@@ -122,7 +122,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="from_bydate">
+            <widget class="QRadioButton" name="source_bydate">
              <property name="text">
               <string>By date</string>
              </property>
@@ -141,7 +141,7 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
-            <widget class="QRadioButton" name="to_unified">
+            <widget class="QRadioButton" name="target_unified">
              <property name="text">
               <string>Unified</string>
              </property>
@@ -157,7 +157,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="to_bydate">
+            <widget class="QRadioButton" name="target_bydate">
              <property name="text">
               <string>By date</string>
              </property>
@@ -173,7 +173,45 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_4">
+         <widget class="QGroupBox" name="delimiter_box">
+          <property name="title">
+           <string>Delimiter</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="delimiter_label">
+             <property name="text">
+              <string>Symbol:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="delimiter_field">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>15</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>_</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="view_actions_box">
           <property name="title">
            <string>View</string>
           </property>
@@ -206,20 +244,20 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_3">
+         <widget class="QGroupBox" name="empty_dirs_box">
           <property name="title">
            <string>Empty directores</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QPushButton" name="empty_dirs_button">
+            <widget class="QPushButton" name="build_empty_dirs_button">
              <property name="text">
-              <string>Show</string>
+              <string>Build</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="clear_all_button">
+            <widget class="QPushButton" name="delete_empty_dirs_button">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -257,21 +295,18 @@
         <item>
          <widget class="QGroupBox" name="snapshot_filter_box">
           <property name="title">
-           <string>Snapshot filter</string>
+           <string>Filters</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
-            <widget class="QLineEdit" name="lineEdit"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_2">
+            <widget class="QLabel" name="bounds_from_label">
              <property name="text">
               <string>From:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="filter_from_field"/>
+            <widget class="QLineEdit" name="bounds_from_field"/>
            </item>
            <item>
             <widget class="Line" name="line">
@@ -281,31 +316,36 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_3">
+            <widget class="QLabel" name="bounds_to_label">
              <property name="text">
               <string>To:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="filter_to_field"/>
+            <widget class="QLineEdit" name="bounds_to_field"/>
            </item>
            <item>
-            <widget class="QPushButton" name="clear_button">
+            <widget class="QPushButton" name="bounds_clear_button">
              <property name="text">
               <string>Clear</string>
              </property>
             </widget>
            </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="sub_path_filter_box">
-          <property name="title">
-           <string>Subpath filter</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <item>
+            <widget class="Line" name="line_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="subpath_label">
+             <property name="text">
+              <string>Subpath:</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <widget class="QLineEdit" name="subpath_field"/>
            </item>
@@ -315,25 +355,25 @@
         <item>
          <widget class="QGroupBox" name="snapshot_actions_box">
           <property name="title">
-           <string>Snapshot actions</string>
+           <string>Filter actions</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_9">
            <item>
-            <widget class="QPushButton" name="filter_button">
+            <widget class="QPushButton" name="filter_apply_button">
              <property name="text">
               <string>Apply</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="reset_filters_button">
+            <widget class="QPushButton" name="filter_clear_all_button">
              <property name="text">
-              <string>Reset</string>
+              <string>Clear all</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="delete_button">
+            <widget class="QPushButton" name="filter_delete_button">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -418,7 +458,7 @@
    <sender>build_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>build_tree_action()</slot>
+   <slot>build_action()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>497</x>
@@ -463,10 +503,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>empty_dirs_button</sender>
+   <sender>build_empty_dirs_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>empty_dirs_action()</slot>
+   <slot>build_empty_dirs_action()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>504</x>
@@ -479,10 +519,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>filter_button</sender>
+   <sender>filter_apply_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>filter_action()</slot>
+   <slot>filter_apply_action()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>563</x>
@@ -495,7 +535,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>clear_button</sender>
+   <sender>bounds_clear_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>clear_bounds_action()</slot>
@@ -511,7 +551,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>clear_all_button</sender>
+   <sender>delete_empty_dirs_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>delete_empty_dirs_action()</slot>
@@ -527,7 +567,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>delete_button</sender>
+   <sender>filter_delete_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>delete_snapshots_action()</slot>
@@ -559,10 +599,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>reset_filters_button</sender>
+   <sender>filter_clear_all_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>reset_filters_action()</slot>
+   <slot>filter_clear_action()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>725</x>
@@ -578,7 +618,7 @@
    <sender>load_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>filetree_load_action()</slot>
+   <slot>load_action()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>845</x>
@@ -593,18 +633,18 @@
  </connections>
  <slots>
   <slot>browse_action()</slot>
-  <slot>build_tree_action()</slot>
+  <slot>build_action()</slot>
   <slot>expand_action()</slot>
   <slot>collapse_action()</slot>
   <slot>restore_action()</slot>
-  <slot>empty_dirs_action()</slot>
-  <slot>filter_action()</slot>
+  <slot>build_empty_dirs_action()</slot>
+  <slot>filter_apply_action()</slot>
   <slot>clear_bounds_action()</slot>
   <slot>delete_empty_dirs_action()</slot>
   <slot>delete_snapshots_action()</slot>
   <slot>contextMenuEvent()</slot>
-  <slot>reset_filters_action()</slot>
-  <slot>filetree_load_action()</slot>
+  <slot>filter_clear_action()</slot>
+  <slot>load_action()</slot>
  </slots>
  <buttongroups>
   <buttongroup name="buttonGroup_3"/>

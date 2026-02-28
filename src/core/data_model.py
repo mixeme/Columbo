@@ -1,41 +1,33 @@
 from PyQt5 import QtCore
 
-import os
+from PyQt5.QtCore import QModelIndex
+
 from core import node
-from core.types import ViewDirection
 
 
-def restore_path(root, view_direction: ViewDirection, selected_nodes) -> (str, str):
-    index = selected_nodes[0]            # Get the selected index
-    snapshot = selected_nodes[2].data()  # Get snapshot name
+def gather_path(node_index: QModelIndex) -> list[str]:
+    path = [node_index.data()]                  # Prepare selected path, get data of the selected index
 
-    # Go up for a versioned file (By date -> Unified)
-    if view_direction.by_date_to_unified() \
-            and (not node.is_folder_row(selected_nodes)):
-        index = index.parent()
+    parent_index = node_index.parent()          # Get parent
+    while parent_index.isValid():               # Loop for gathering path components
+        current_index = parent_index            # Store parent
+        parent_index = current_index.parent()   # Go up
 
-    selected_item = index.data()         # Get data of the selected index
-    selected_path = selected_item        # Prepare selected path
+        if node.is_versioned_file_row(current_index):
+            # Skip a versioned file (by date -> Unified)
+            continue
+        else:
+            # Collect a component otherwise
+            path.append(current_index.data())
 
-    index = index.parent()  # Get its parent
-    while index.isValid():  # Combine a path to the selected item
-        parent_item = index.data()  # Get parent name
+    # Reverse components order: root should be the first component
+    path.reverse()
+    return path
 
-        # If we reach the root
-        if parent_item == root:
-            # Add snapshot to the path for By date -> Unified
-            if view_direction.by_date_to_unified() \
-                    and (not node.is_folder_row(selected_nodes)):
-                parent_item = os.path.join(parent_item, snapshot)
 
-            # Remove snapshot from the path for Unified -> By date
-            if view_direction.unified_to_by_date():
-                selected_path = selected_path[selected_path.find(os.sep) + 1:]
-
-        selected_path = os.path.join(parent_item, selected_path)
-        index = index.parent()
-
-    return selected_path, selected_item
+def gather_subnodes_path(node_index: QModelIndex) -> list[list[str]]:
+    nodes: list[QModelIndex] = node.traverse_depth_first(node_index, True)
+    return [gather_path(n) for n in nodes]
 
 
 # Class for sorting tree view

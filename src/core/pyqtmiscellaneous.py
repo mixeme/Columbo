@@ -8,7 +8,7 @@ from core.types import OperationType
 class Signals(QObject):
     load_finished = pyqtSignal()
     build_finished = pyqtSignal(OperationType, QStandardItemModel)
-    clear_finished = pyqtSignal(OperationType)
+    delete_finished = pyqtSignal(OperationType)
     progress = pyqtSignal(str)
 
 
