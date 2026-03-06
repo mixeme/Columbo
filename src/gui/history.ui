@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>973</width>
+    <width>900</width>
     <height>600</height>
    </rect>
   </property>
@@ -340,7 +340,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>973</width>
+     <width>900</width>
      <height>26</height>
     </rect>
    </property>
@@ -369,7 +369,7 @@
    <sender>scan_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>scan_action()</slot>
+   <slot>build_tree_action()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>497</x>
@@ -449,7 +449,7 @@
    <sender>clear_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>clear_action()</slot>
+   <slot>clear_bounds_action()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>590</x>
@@ -512,13 +512,13 @@
  </connections>
  <slots>
   <slot>browse_action()</slot>
-  <slot>scan_action()</slot>
+  <slot>build_tree_action()</slot>
   <slot>expand_action()</slot>
   <slot>collapse_action()</slot>
   <slot>restore_action()</slot>
   <slot>empty_dirs_action()</slot>
   <slot>filter_action()</slot>
-  <slot>clear_action()</slot>
+  <slot>clear_bounds_action()</slot>
   <slot>clear_all_action()</slot>
   <slot>delete_snapshots_action()</slot>
   <slot>contextMenuEvent()</slot>

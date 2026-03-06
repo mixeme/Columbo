@@ -1,6 +1,7 @@
+from PyQt5.QtCore import QModelIndex, QAbstractItemModel
 from PyQt5.QtGui import QStandardItem
 
-from core.types import TreeNode, TreeRow, TreeType
+from core.types import TreeNode, TreeRow, ViewDirection
 from gui import icons
 
 
@@ -25,6 +26,15 @@ def is_folder_row(nodes: TreeRow) -> bool:
     :return: Whether the specified row designates a folder
     """
     return nodes[1].data() == "Folder"
+
+
+def is_versioned_file_row(nodes: QModelIndex) -> bool:
+    """
+    Test tree row whether it is a folder row or not
+    :param nodes: List of node indices in a row
+    :return: Whether the specified row designates a folder
+    """
+    return nodes.siblingAtColumn(1).data() == "File version"
 
 
 def get_node(parent: QStandardItem, val: str, create_fun) -> QStandardItem:
@@ -55,13 +65,34 @@ def descend_by_path(parent: QStandardItem, path_parts: list[str]):
     return current
 
 
-def add_file_node(parent: QStandardItem, tree_type: (TreeType, TreeType), filename, last_mod_date, timestamp):
-    # Unpack types of trees
-    source_tree, target_tree = tree_type
-
-    if source_tree == TreeType.BY_DATE and target_tree == TreeType.UNIFIED:
+def add_file_node(parent: QStandardItem, tree_type: ViewDirection, filename, last_mod_date, timestamp):
+    if tree_type.by_date_to_unified():
         # Get or create a versioned file node inside the specified directory node
         parent = get_node(parent, filename, create_file_node)
 
     # Create node and append it to the tree
     parent.appendRow(create_file_node(filename, last_mod_date, timestamp))
+
+
+def traverse_depth_first(root_index: QModelIndex, leaf_only = False) -> list[QModelIndex]:
+    elements: list = []
+
+    # Create stack of items for traversing
+    stack: list[QModelIndex] = [root_index]
+    while len(stack) > 0:
+        # Retrieve current element
+        current_index: QModelIndex = stack.pop()
+
+        # Get model
+        model: QAbstractItemModel = current_index.model()
+
+        # Store element
+        if (not leaf_only) or (not model.hasChildren(current_index)):
+            elements.append(current_index)
+
+        # Go through children in reverse order as the first child element must be on the top of stack
+        for row in reversed(range(model.rowCount(current_index))):
+            child_index = model.index(row, 0, current_index)
+            stack.append(child_index)
+
+    return elements
