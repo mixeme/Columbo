@@ -11,15 +11,15 @@ class FileTreeLoader(QRunnable):
     def __init__(self) -> None:
         # Declare fields
         self._root = None
-        self._dirs = None
-        self._files = None
+        self._dirs = []
+        self._files = []
 
         # Init lists
         self.reset()
 
     def reset(self) -> None:
-        self._dirs = []
-        self._files = []
+        self._dirs.clear()
+        self._files.clear()
 
     def set_root(self, root: str) -> None:
         if self._root != root:

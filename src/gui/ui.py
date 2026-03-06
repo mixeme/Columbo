@@ -229,7 +229,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
             worker.set_validator(self.create_validator(operation))
 
             # Run builder
-            pyqtmiscellaneous.RunnableWrapper.run_async(self.builder)
+            pyqtmiscellaneous.RunnableWrapper.run_async(worker)
 
             # Switch off tree buttons
             self.switch_tree_buttons(False)
