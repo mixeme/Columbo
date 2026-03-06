@@ -46,6 +46,29 @@ def join_path(path_parts: list[str]) -> str:
     return os.sep.join(path_parts)
 
 
+def resolve_relative_path(gathered_path: tuple[list[str], str], direction: types.ViewDirection):
+    path_parts, timestamp = gathered_path
+
+    if direction.source == direction.target:
+        # Skip root
+        source = join_path(path_parts[1:])
+    else:
+        if direction.by_date_to_unified():
+            # Add timestamp, skip root
+            copied = path_parts.copy()
+            copied.insert(1, timestamp)
+            source = join_path(copied[1:])
+
+            # Add timestamp to filename
+            path_parts[-1] = snapshot.set_timestamp(path_parts[-1], timestamp)
+        else:
+            # Skip root and snapshot folder
+            source = join_path(path_parts[2:])
+
+    target = join_path(path_parts[1:])
+    return source, target
+
+
 def normalize_path_parts(path: str, source_type: types.TreeType) -> list[str]:
     # Split path into components
     path_parts: list[str] = split_path(path)

@@ -5,8 +5,9 @@ from PyQt5.QtCore import QModelIndex
 from core import node
 
 
-def gather_path(node_index: QModelIndex) -> list[str]:
+def gather_path(node_index: QModelIndex) -> tuple[list[str], str]:
     path = [node_index.data()]                  # Prepare selected path, get data of the selected index
+    timestamp = node_index.siblingAtColumn(2).data()
 
     parent_index = node_index.parent()          # Get parent
     while parent_index.isValid():               # Loop for gathering path components
@@ -22,10 +23,10 @@ def gather_path(node_index: QModelIndex) -> list[str]:
 
     # Reverse components order: root should be the first component
     path.reverse()
-    return path
+    return path, timestamp
 
 
-def gather_subnodes_path(node_index: QModelIndex) -> list[list[str]]:
+def gather_subnodes_path(node_index: QModelIndex) -> list[tuple[list[str], str]]:
     nodes: list[QModelIndex] = node.traverse_depth_first(node_index, True)
     return [gather_path(n) for n in nodes]
 

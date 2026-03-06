@@ -248,7 +248,8 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
     def restore_file_action(self) -> None:
         # Get path to item
-        path_parts = data_model.gather_path(self.get_selected_row()[0])
+        gathered_path = data_model.gather_path(self.get_selected_row()[0])
+        path_parts, _ = gathered_path
         extension = file.get_file_extension(path_parts[-1])
 
         # Define file extension for dialog
@@ -258,25 +259,30 @@ class ApplicationUI(QtWidgets.QMainWindow):
             dialog_extension = "All Files (*)"
 
         # Get destination
-        path = file.join_path(path_parts)
-        destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", path, dialog_extension)
+        source, _ = file.resolve_relative_path(gathered_path, self.get_view_direction())
+        source = os.path.join(path_parts[0], source)
+        destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", source, dialog_extension)
 
         # Copy
         if destination_file:
-            shutil.copy(path, destination_file)
+            shutil.copy2(source, destination_file)
 
     def restore_dir_action(self) -> None:
         # Get path to item
-        path_parts = data_model.gather_subnodes_path(self.get_selected_row()[0])
+        gathered_paths = data_model.gather_subnodes_path(self.get_selected_row()[0])
 
         # Get destination
-        path = file.join_path(path_parts)
-        destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", path, dialog_extension)
+        selected_dir = QFileDialog.getExistingDirectory(self, "Select directory where restore to", None,
+                                                        QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
 
         # Copy
-        if destination_file:
-            shutil.copy(path, destination_file)
-
+        for gathered_path in gathered_paths:
+            parts_parts, _ = gathered_path
+            source_rel, target_rel = file.resolve_relative_path(gathered_path, self.get_view_direction())
+            source = os.path.join(parts_parts[0], source_rel)
+            target = os.path.join(selected_dir, target_rel)
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            shutil.copy2(source, target)
 
     def load_finished_action(self):
         self.switch_tree_buttons(True)
@@ -284,7 +290,8 @@ class ApplicationUI(QtWidgets.QMainWindow):
         self.statusbar.showMessage("File tree is loaded")
 
     def path_to_selected(self):
-        return file.join_path(data_model.gather_path(self.get_selected_row()[0]))
+        path_parts, _ = data_model.gather_path(self.get_selected_row()[0])
+        return file.join_path(path_parts)
 
     # Set timestamp bounds
     def set_bound(self, set_function) -> None:
@@ -349,7 +356,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
             if action == to_snapshot:
                 self.set_bound(self.set_bounds_to)
             if action == restore:
-                self.restore_action()
+                self.restore_file_action()
         else:   # If a folder is selected
             restore = context_menu.addAction("Restore")
             context_menu.addSeparator()
@@ -392,8 +399,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
                     subpath = file.join_path(parts[1:])
                 self.set_subpath(subpath)
             if action == restore:
-
-
+                self.restore_dir_action()
 
     def history_path_changed(self):
         # Drop lists if path is changed
