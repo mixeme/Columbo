@@ -27,10 +27,10 @@ py <path-to-the-unpacked-repo>/main.py
 CPython 3.9+ is required.
 
 > [!IMPORTANT]
-> CentOs 7 & Debain 10 Buster does not have Python 3.9+ in its repo. See instructions for Docker image [below](#docker-based-build-flow)
+> CentOS 7 & Debain 10 Buster does not have Python 3.9+ in its repo. See instructions for Docker image [below](#docker-based-build-flow).
 
 ```shell
-# Debian 11 Bullseye example
+# Debian 11 Bullseye flow example
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5
 git clone -b main https://github.com/mixeme/Columbo.git
 python3 Columbo/main.py
@@ -38,13 +38,13 @@ python3 Columbo/main.py
 
 ## Build binary
 ### Natively
-1. Check that you can successfully run Columbo from the source. See instructions in the section above;
+1. Check that you can successfully run Columbo from the source. See instructions in the section [above](#run-from-source);
 2. Install [PyInstaller](https://pyinstaller.org/) with `pip`
 ```shell
 py -m pip install pyinstaller         # For Windows  
 python3 -m pip install pyinstaller    # For Linux
 ```
-3. Run `scripts/build-win.bat` for Windows and `scripts/build-lnx.sh` for Linux;
+3. Run helper script `scripts/build-win.bat` for Windows and `scripts/build-lnx.sh` for Linux;
 4. Find your binary in `dist` folder.
 
 ### Another distribution
@@ -57,10 +57,13 @@ If you need to run Columbo in another environment than compiled binaries, prepar
 git clone -b main https://github.com/mixeme/Columbo.git
 cd Columbo
 ```
-3. Run helper script `scripts/helper/docker.sh`. This script relies on the set of the prepared images (available on [Docker Hub](https://hub.docker.com/r/mixeme/columbo)). You can inspect images through
+3. Run helper script [`scripts/helper/docker.sh`](scripts/helper/docker.sh). This script relies on the set of prepared images. You can inspect images using Dockerfiles
 > `scripts/docker/Dockerfile-deb11`          (Debian 11 Bullseye);
+>
 > `scripts/docker/Dockerfile-deb10`          (Debian 10 Buster);
+>
 > `scripts/docker/Dockerfile-centos7`        (CentOS 7);
+>
 > `scripts/docker/Dockerfile-centos7-python` (CentOS 7 with CPython 3.9+, auxiliary image for the one above);
 
 ### Flatpak-based build flow
