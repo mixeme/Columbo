@@ -50,4 +50,4 @@ In the release section, you can find binaries which are built with [PyInstaller]
 + Linux ARM64 (built on Debian 11 Bullseye & Debian 10 Buster);
 + Flatpak for x86_64 & ARM64.
 
-If you need another version, you can run Columbo from source or a build binary on your own. See instructions in `docs/build.md`.
+If you need another version, you can run Columbo from source or a build binary on your own. See instructions [here](docs/build.md).

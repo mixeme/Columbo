@@ -25,9 +25,11 @@ py <path-to-the-unpacked-repo>/main.py
 
 ### Linux
 CPython 3.9+ is required.
-```shell
-# CentOs 7 & Debain 10 Buster does not have Python 3.9+ in its repo. See instructions for Docker image below
 
+> [!IMPORTANT]
+> CentOs 7 & Debain 10 Buster does not have Python 3.9+ in its repo. See instructions for Docker image [below](#docker-based-build-flow)
+
+```shell
 # Debian 11 Bullseye example
 apt update -y && apt install -y git python3 python3-pip python3-pyqt5
 git clone -b main https://github.com/mixeme/Columbo.git
