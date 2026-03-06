@@ -57,11 +57,11 @@ If you need to run Columbo in another environment than compiled binaries, prepar
 git clone -b main https://github.com/mixeme/Columbo.git
 cd Columbo
 ```
-3. Run helper script [`scripts/helper/docker.sh`](../scripts/helper/docker.sh). This script relies on the set of prepared images. You can inspect images using [Dockerfiles](../scripts/docker)
-- `scripts/docker/Dockerfile-deb11`          (Debian 11 Bullseye);
-- `scripts/docker/Dockerfile-deb10`          (Debian 10 Buster);
-- `scripts/docker/Dockerfile-centos7`        (CentOS 7);
-- `scripts/docker/Dockerfile-centos7-python` (CentOS 7 with CPython 3.9+, auxiliary image for the one above);
+3. Run helper script [`scripts/helper/docker.sh`](../scripts/helper/docker.sh). This script relies on the set of prepared images. You can inspect images with [Dockerfiles](../scripts/docker)
+- `Dockerfile-deb11` - environment based on Debian 11 Bullseye;
+- `Dockerfile-deb10` - environment based on Debian 10 Buster;
+- `Dockerfile-centos7` - environment based on CentOS 7;
+- `Dockerfile-centos7-python` - CentOS 7 with CPython 3.9, auxiliary image for the one above. CPython is built from the source;
 
 ### Flatpak-based build flow
 1. [Install](https://flatpak.org/setup/) `flatpak` and `flatpak-builder`;
@@ -70,5 +70,5 @@ cd Columbo
 git clone -b main https://github.com/mixeme/Columbo.git
 cd Columbo
 ```
-3. Run helper script [`scripts/helper/flatpak.sh`](../scripts/helper/flatpak.sh). This script relies on the `scripts/flatpak/ru.mixeme.Columbo.yaml` description.
+3. Run helper script [`scripts/helper/flatpak.sh`](../scripts/helper/flatpak.sh). This script relies on the [`scripts/flatpak/ru.mixeme.Columbo.yaml`](../scripts/flatpak/ru.mixeme.Columbo.yaml) description.
 
