@@ -44,7 +44,7 @@ python3 Columbo/main.py
 py -m pip install pyinstaller         # For Windows  
 python3 -m pip install pyinstaller    # For Linux
 ```
-3. Run helper script `scripts/build-win.bat` for Windows and `scripts/build-lnx.sh` for Linux;
+3. Run helper script [`scripts/build-win.bat`](../scripts/build-win.bat) for Windows and [`scripts/build-lnx.sh`](..//scripts/build-lnx.sh) for Linux;
 4. Find your binary in `dist` folder.
 
 ### Another distribution
@@ -57,11 +57,11 @@ If you need to run Columbo in another environment than compiled binaries, prepar
 git clone -b main https://github.com/mixeme/Columbo.git
 cd Columbo
 ```
-3. Run helper script [`scripts/helper/docker.sh`](../scripts/helper/docker.sh). This script relies on the set of prepared images. You can inspect images with [Dockerfiles](../scripts/docker)
+3. Run helper script [`scripts/helper/docker.sh`](../scripts/helper/docker.sh). This script relies on the set of prepared images. You can inspect images with [Dockerfiles](../scripts/docker):
 - `Dockerfile-deb11` - environment based on Debian 11 Bullseye;
 - `Dockerfile-deb10` - environment based on Debian 10 Buster;
 - `Dockerfile-centos7` - environment based on CentOS 7;
-- `Dockerfile-centos7-python` - CentOS 7 with CPython 3.9, auxiliary image for the one above. CPython is built from the source;
+- `Dockerfile-centos7-python` - CentOS 7 with CPython 3.9, auxiliary image for `Dockerfile-centos7`. CPython is built from the source;
 
 ### Flatpak-based build flow
 1. [Install](https://flatpak.org/setup/) `flatpak` and `flatpak-builder`;
