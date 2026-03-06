@@ -1,5 +1,35 @@
 from PyQt5 import QtCore
 
+from PyQt5.QtCore import QModelIndex
+
+from core import node
+
+
+def gather_path(node_index: QModelIndex) -> tuple[list[str], str]:
+    path = [node_index.data()]                  # Prepare selected path, get data of the selected index
+    timestamp = node_index.siblingAtColumn(2).data()
+
+    parent_index = node_index.parent()          # Get parent
+    while parent_index.isValid():               # Loop for gathering path components
+        current_index = parent_index            # Store parent
+        parent_index = current_index.parent()   # Go up
+
+        if node.is_versioned_file_row(current_index):
+            # Skip a versioned file (by date -> Unified)
+            continue
+        else:
+            # Collect a component otherwise
+            path.append(current_index.data())
+
+    # Reverse components order: root should be the first component
+    path.reverse()
+    return path, timestamp
+
+
+def gather_subnodes_path(node_index: QModelIndex) -> list[tuple[list[str], str]]:
+    nodes: list[QModelIndex] = node.traverse_depth_first(node_index, True)
+    return [gather_path(n) for n in nodes]
+
 
 # Class for sorting tree view
 class FileSortFilterProxyModel(QtCore.QSortFilterProxyModel):
