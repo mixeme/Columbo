@@ -1,6 +1,8 @@
 # Columbo
 ## Definition
-Columbo is an observer of a syncronization/backup (futher just "sync") history. Such a history is produced by sync applications like rsync, rclone, GoodSync, etc.
+Columbo is an observer of a synchronization/backup (further just "sync") history. Such a history is produced by sync applications like rsync, rclone, GoodSync, etc.
+
+![Sreenshot](images/Columbo.PNG)
 
 ## What is the problem?
 Sync applications collect the history of changes (deleted, overwritten or, sometimes, moved files) in some folder (further a "history folder") in one of 2 ways: **unified** or **by date**.
