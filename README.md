@@ -38,7 +38,7 @@ history
 Both ways are reasonable. For example, the unified way helps to understand what and when has been changed in a certain place. The by date way helps to understand what has been changed at a certain time. So, sometimes it is needed to switch from one view to another. However, the history can be stored in the only one way.
 
 ## What does Columbo provide?
-Columbo aims to provide a cross-platform convenient graphical interface to investigate the syncronization history regardless of which a way has been used for the storage and which a way you currently prefer for an investigation.
+Columbo aims to provide a cross-platform convenient graphical interface to investigate the synchronization history regardless of which a way has been used for the storage and which a way you currently prefer for an investigation.
 
 ## Technology stack
 + Python 3.9+;
