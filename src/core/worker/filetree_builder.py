@@ -17,7 +17,7 @@ def get_start_pos(target: types.TreeType) -> int:
     return 0 if target == TreeType.BY_DATE else 1
 
 
-class FileTreeWBuilder(QRunnable):
+class FileTreeBuilder(QRunnable):
     columns = ["Name", "Last modified", "Snapshot"]
     signals = Signals()
 
@@ -50,7 +50,7 @@ class FileTreeWBuilder(QRunnable):
         # Create data model
         model = QStandardItemModel()
         model.invisibleRootItem().appendRow(root_row)
-        model.setHorizontalHeaderLabels(FileTreeWBuilder.columns)
+        model.setHorizontalHeaderLabels(FileTreeBuilder.columns)
 
         # Create proxy data model for sorting customization
         proxy_model = FileSortFilterProxyModel()

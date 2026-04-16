@@ -52,14 +52,15 @@ class FileTreeDeleter(QRunnable):
         self.signals.delete_finished.emit(self._operation)
 
     def delete_files(self):
-        files = self._loader.get_normalized_paths(self._direction.source)
+        dirs, files = self._loader.get_lists()
+        #files = self._loader.get_normalized_paths(self._direction.source)
         paths = [path for path, _ in files]
         self.delete_routine(paths, self._validator)
 
     def delete_empty_dirs(self):
         dirs, files = self._loader.get_lists()
-        validator = EmptyDirValidator(files)
-        self.delete_routine(dirs, validator)
+        #validator = EmptyDirValidator(files)
+        self.delete_routine(dirs, self._validator)
 
     def run(self) -> None:
         # Check loader status

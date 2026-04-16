@@ -9,6 +9,8 @@ class FileTreeLoader(QRunnable):
     signals = pyqtmiscellaneous.Signals()
 
     def __init__(self) -> None:
+        super().__init__()
+
         # Declare fields
         self._root = None
         self._dirs = []

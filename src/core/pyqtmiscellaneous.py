@@ -9,6 +9,7 @@ class Signals(QObject):
     load_finished = pyqtSignal()
     build_finished = pyqtSignal(OperationType, QStandardItemModel)
     delete_finished = pyqtSignal(OperationType)
+    restoration_finished = pyqtSignal(OperationType)
     progress = pyqtSignal(str)
 
 
