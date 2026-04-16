@@ -24,7 +24,9 @@ cd %SCRIPT%
 cd ..
 echo Switch to project home: %cd%
 
-SET BIN_NAME=columbo-win
+set /p VERSION=<src/version
+echo Version %VERSION%
+set "BIN_NAME=columbo-%VERSION%-win"
 
 :: Run PyInstaller
 python -m PyInstaller ^
@@ -33,6 +35,7 @@ python -m PyInstaller ^
  	--windowed ^
  	--noconfirm ^
 	--clean ^
+	--add-data="./src/version;./src" ^
 	--add-data="./src/gui;./src/gui" ^
 	--add-data="./resources/icons;./resources/icons" ^
 	--icon=resources/icons/search.ico ^
