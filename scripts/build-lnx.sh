@@ -7,9 +7,13 @@ cd "$(dirname "$0")" || exit 1;
 cd ..;
 echo "Project home: $PWD";
 
+# Get project version
+VERSION=$(cat src/version)
+echo "Project version: $VERSION"
+
 # Get a platform architecture
 ARCH=$(uname -m);
-BIN_NAME="columbo-$ARCH";
+BIN_NAME="columbo-$VERSION-$ARCH";
 echo "Platform architecture: $ARCH";
 
 # Resolve build mode
@@ -58,6 +62,7 @@ python3 -m PyInstaller \
 	--windowed \
 	--noconfirm \
 	--clean \
+	--add-data="./src/version:./src" \
 	--add-data="./src/gui:./src/gui" \
 	--add-data="./resources/icons:./resources/icons" \
 	--icon=resources/icons/search.ico \

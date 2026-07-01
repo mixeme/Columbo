@@ -1,0 +1,94 @@
+name: Build executables
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows executable
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.9"
+          cache: pip
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install PyQt5 pyinstaller
+
+      - name: Clean build outputs
+        shell: pwsh
+        run: |
+          Remove-Item -LiteralPath build -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -LiteralPath dist -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Build executable
+        shell: cmd
+        run: scripts\build-win.bat
+
+      - name: Verify executable
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem -LiteralPath dist -Filter "*.exe" -File
+          if (-not $exe) {
+            throw "Windows executable was not created in dist"
+          }
+          $exe | Format-Table Name, Length
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v7
+        with:
+          name: columbo-windows
+          path: dist/*.exe
+          if-no-files-found: error
+
+  linux:
+    name: Linux executable
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.9"
+          cache: pip
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install PyQt5 pyinstaller
+
+      - name: Clean build outputs
+        run: rm -rf build dist
+
+      - name: Build executable
+        run: bash scripts/build-lnx.sh onefile
+
+      - name: Verify executable
+        run: |
+          test -n "$(find dist -maxdepth 1 -type f -name 'columbo-*' ! -name '*.tar.gz' -print -quit)"
+          find dist -maxdepth 1 -type f -name 'columbo-*' ! -name '*.tar.gz' -exec ls -lh {} \;
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v7
+        with:
+          name: columbo-linux
+          path: dist/columbo-*
+          if-no-files-found: error

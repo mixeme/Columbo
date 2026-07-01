@@ -35,21 +35,17 @@ ARCH=$(uname -m);
 echo "Platform architecture: $ARCH";
 
 # Resolve a number of arguments
-case $# in
-	0 )
-	;;
-	1 )
-		OPTION_IMAGE=$1;
-	;;
-	2 )
-		OPTION_IMAGE=$1;
-		OPTION_COMMAND=$2;
-	;;
-	* )
-		echo "Incorrect number of arguments. Exit";
-		exit 1;
-	;;
-esac
+if [ $# -gt 0 ];
+then
+	OPTION_IMAGE=$1;
+	shift;
+fi
+
+if [ $# -gt 0 ];
+then
+	OPTION_COMMAND=$1;
+	shift;
+fi
 
 # Ask image option if it is not provided
 if [ ! -v OPTION_IMAGE ];
@@ -139,7 +135,16 @@ case $OPTION_COMMAND in
 	;;
 	3 | binary )
 		# Build binary
+		if [ $# -gt 0 ];
+		then
+			BINARY_TYPE=$1;
+			shift;
+		else
+			BINARY_TYPE=onedir;
+		fi
+		
 		echo "+ Build binary";
+		echo "  Binary type: $BINARY_TYPE"
 		docker run \
 			--user "$(id -u)":"$(id -g)" \
 			-it --rm \
@@ -148,7 +153,8 @@ case $OPTION_COMMAND in
 			-v /etc/group:/etc/group:ro \
 			-v /etc/shadow:/etc/shadow:ro \
 			-e TAG="$TAG" \
-			"$IMAGE_MAIN"
+			"$IMAGE_MAIN" \
+			bash /project/scripts/build-lnx.sh $BINARY_TYPE
 	;;
 	4 | push )
 		# Push images to Docker Hub

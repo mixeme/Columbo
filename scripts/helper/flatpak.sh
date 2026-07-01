@@ -5,11 +5,15 @@ cd "$(dirname "$0")" || exit 1;
 cd ../..;
 echo "Project home: $PWD";
 
+# Get project version
+VERSION=$(cat src/version)
+echo "Project version: $VERSION"
+
 # Define variables
 APP_ID=ru.mixeme.Columbo;
 MANIFEST=$PWD/scripts/flatpak/$APP_ID.yaml;
 ARCH=$(uname -m);
-BUNDLE=$PWD/dist/columbo-$ARCH.flatpak;
+BUNDLE=$PWD/dist/columbo-$VERSION-$ARCH.flatpak;
 BUILD_DIR=~/.cache/columbo;
 echo "Manifest: $MANIFEST";
 echo "Platform architecture: $ARCH";

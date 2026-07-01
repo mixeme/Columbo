@@ -2,15 +2,16 @@ import os
 import shutil
 
 from PyQt5 import QtWidgets, uic, QtGui
-from PyQt5.QtCore import QModelIndex, Qt
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtWidgets import QFileDialog, QMenu
 
 import core.snapshot
 from core import file, node, validator, data_model, pyqtmiscellaneous, types
-from core.worker.filetree_builder import FileTreeWBuilder
+from core.worker.filetree_builder import FileTreeBuilder
 from core.worker.filetree_loader import FileTreeLoader
 from core.worker.filetree_deleter import FileTreeDeleter
+from core.worker.restore_worker import RestoreWorker
 from core.types import TreeType, OperationType
 from gui import icons
 
@@ -26,8 +27,12 @@ class ApplicationUI(QtWidgets.QMainWindow):
         # Load icons
         icons.IconsLoader(project_home)
 
+        # Load version number
+        with open(os.path.join(project_home, "src", "version")) as f:
+            version = f.read()
+
         # Set window properties
-        self.setWindowTitle("Columbo - Synchronization history observer")
+        self.setWindowTitle("Columbo - Synchronization history observer [" + version + "]")
         self.setWindowIcon(QtGui.QIcon(os.path.join(project_home, 'resources/icons/search.png')))
         self.setAcceptDrops(True)
 
@@ -36,21 +41,27 @@ class ApplicationUI(QtWidgets.QMainWindow):
             load_finished.connect(self.load_finished_action)
 
         # Connect signals of file tree builder
-        FileTreeWBuilder.signals.\
+        FileTreeBuilder.signals.\
             build_finished.connect(self.update_tree)                # Connect to slot for finishing
-        FileTreeWBuilder.signals.\
+        FileTreeBuilder.signals.\
             build_finished.connect(self.switch_delete_buttons)      # Switch button for delete
 
         # Connect signals of files cleaning
-        FileTreeWBuilder.signals.\
+        FileTreeDeleter.signals.\
             progress.connect(lambda x: self.statusbar.showMessage(x))
-        FileTreeWBuilder.signals.\
-            delete_finished.connect(self.response_clear_finished)
+        FileTreeDeleter.signals.\
+            delete_finished.connect(self.response_delete_finished)
+
+        RestoreWorker.signals.\
+            progress.connect(lambda x: self.statusbar.showMessage(x))
+        RestoreWorker.signals.\
+            restoration_finished.connect(self.response_restore_finished)
 
         # Declare fields
         self.loader = FileTreeLoader()
-        self.builder = FileTreeWBuilder(self.loader)
+        self.builder = FileTreeBuilder(self.loader)
         self.deleter = FileTreeDeleter(self.loader)
+        self.restore_worker = RestoreWorker()
 
     # Group of methods for get/set value of GUI components
     # Getter and setter for history path field
@@ -229,7 +240,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
             worker.set_validator(self.create_validator(operation))
 
             # Run builder
-            pyqtmiscellaneous.RunnableWrapper.run_async(self.builder)
+            pyqtmiscellaneous.RunnableWrapper.run_async(worker)
 
             # Switch off tree buttons
             self.switch_tree_buttons(False)
@@ -249,10 +260,10 @@ class ApplicationUI(QtWidgets.QMainWindow):
     def restore_file_action(self) -> None:
         # Get path to item
         gathered_path = data_model.gather_path(self.get_selected_row()[0])
-        path_parts, _ = gathered_path
-        extension = file.get_file_extension(path_parts[-1])
 
         # Define file extension for dialog
+        path_parts, _ = gathered_path
+        extension = file.get_file_extension(path_parts[-1])
         if len(extension) > 0:
             dialog_extension = extension.upper() + " (*." + extension + ")"
         else:
@@ -264,25 +275,25 @@ class ApplicationUI(QtWidgets.QMainWindow):
         destination_file, _ = QFileDialog.getSaveFileName(self, "Restore file", source, dialog_extension)
 
         # Copy
-        if destination_file:
-            shutil.copy2(source, destination_file)
+        self.restore_worker.set_details(OperationType.RESTORE_FILE, self.get_view_direction(), source, destination_file)
+
+        # Run restoration
+        pyqtmiscellaneous.RunnableWrapper.run_async(self.restore_worker)
 
     def restore_dir_action(self) -> None:
         # Get path to item
         gathered_paths = data_model.gather_subnodes_path(self.get_selected_row()[0])
 
         # Get destination
-        selected_dir = QFileDialog.getExistingDirectory(self, "Select directory where restore to", None,
-                                                        QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
+        target_dir = QFileDialog.getExistingDirectory(self, "Select directory where restore to", None,
+                                                      QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
 
         # Copy
-        for gathered_path in gathered_paths:
-            parts_parts, _ = gathered_path
-            source_rel, target_rel = file.resolve_relative_path(gathered_path, self.get_view_direction())
-            source = os.path.join(parts_parts[0], source_rel)
-            target = os.path.join(selected_dir, target_rel)
-            os.makedirs(os.path.dirname(target), exist_ok=True)
-            shutil.copy2(source, target)
+        self.restore_worker.set_details(OperationType.RESTORE_DIR, self.get_view_direction(),
+                                        gathered_paths, target_dir)
+
+        # Run restoration
+        pyqtmiscellaneous.RunnableWrapper.run_async(self.restore_worker)
 
     def load_finished_action(self):
         self.switch_tree_buttons(True)
@@ -302,7 +313,7 @@ class ApplicationUI(QtWidgets.QMainWindow):
             timestamp = selected_node.siblingAtColumn(2).data() # Get value from its third column
         set_function(timestamp)                         # Set field text
 
-    def response_clear_finished(self, operation: OperationType):
+    def response_delete_finished(self, operation: OperationType):
         if operation == OperationType.DELETE_SNAPSHOTS:
             self.statusbar.showMessage("Snapshots are cleared")
         if operation == OperationType.DELETE_EMPTY_DIRS:
@@ -310,6 +321,15 @@ class ApplicationUI(QtWidgets.QMainWindow):
 
         # Drop lists
         self.loader.reset()
+
+        # Switch buttons
+        self.switch_tree_buttons(True)
+
+    def response_restore_finished(self, operation: OperationType):
+        if operation == OperationType.RESTORE_FILE:
+            self.statusbar.showMessage("File was restored")
+        if operation == OperationType.RESTORE_DIR:
+            self.statusbar.showMessage("Directory was restored")
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         if event.mimeData().hasUrls():

@@ -19,6 +19,8 @@ class OperationType(Enum):
     EMPTY_DIRS = 2
     DELETE_SNAPSHOTS = 3
     DELETE_EMPTY_DIRS = 4
+    RESTORE_FILE = 5
+    RESTORE_DIR = 6
 
 
 class ViewDirection:

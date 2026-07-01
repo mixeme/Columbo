@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "columbo"
+dynamic = ["version"]
+dependencies = [
+  "PyQt5",
+]
+requires-python = ">=3.9"
+authors = [
+  {name = "Mikhail Yenuchenko", email = "public@mixeme.ru"},
+]
+description = "Synchronization history observer"
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ["sync", "backup", "history", "PyQt5"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+py-modules = ["main"]
+license-files = ["LICEN[CS]E.*"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["core*", "gui*"]
+
+[tool.setuptools.package-data]
+gui = ["*.ui"]
+
+[tool.setuptools.dynamic]
+version = {file = ["src/version"]}
+
+[project.optional-dependencies]
+gui = ["PyQt5"]
+cli = [
+  "rich",
+  "click",
+]
+
+[project.urls]
+Repository = "https://github.com/mixeme/Columbo"
+#Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
