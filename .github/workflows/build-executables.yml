@@ -69,20 +69,11 @@ jobs:
       matrix:
         include:
           - target: deb11
-            dockerfile: Dockerfile-deb11
-            image: columbo:debian-bullseye-ci
-            base_dockerfile: ""
-            base_image: ""
+            image: mixeme/columbo:debian-bullseye-x86_64
           - target: deb10
-            dockerfile: Dockerfile-deb10
-            image: columbo:debian-buster-ci
-            base_dockerfile: ""
-            base_image: ""
+            image: mixeme/columbo:debian-buster-x86_64
           - target: centos7
-            dockerfile: Dockerfile-centos7
-            image: columbo:centos-7-ci
-            base_dockerfile: Dockerfile-centos7-python
-            base_image: mixeme/columbo:centos-7-python
+            image: mixeme/columbo:centos-7-x86_64
 
     steps:
       - name: Checkout
@@ -91,12 +82,8 @@ jobs:
       - name: Clean build outputs
         run: rm -rf build dist
 
-      - name: Build base Docker image
-        if: matrix.base_dockerfile != ''
-        run: docker build --tag "${{ matrix.base_image }}" --file "scripts/docker/${{ matrix.base_dockerfile }}" scripts/docker
-
-      - name: Build Docker image
-        run: docker build --tag "${{ matrix.image }}" --file "scripts/docker/${{ matrix.dockerfile }}" scripts/docker
+      - name: Pull Docker image
+        run: docker pull "${{ matrix.image }}"
 
       - name: Build executable
         run: |

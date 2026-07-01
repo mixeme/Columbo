@@ -63,6 +63,8 @@ cd Columbo
 - `Dockerfile-centos7` - environment based on CentOS 7;
 - `Dockerfile-centos7-python` - CentOS 7 with CPython 3.9, auxiliary image for `Dockerfile-centos7`. CPython is built from the source;
 
+The GitHub Actions executable workflow uses prepared images from Docker Hub repository `mixeme/columbo`.
+
 ### Flatpak-based build flow
 1. [Install](https://flatpak.org/setup/) `flatpak` and `flatpak-builder`;
 2. Clone Columbo repository
